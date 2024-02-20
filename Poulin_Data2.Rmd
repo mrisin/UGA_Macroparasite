@@ -1,0 +1,3979 @@
+---
+title: "Poulin_Data2"
+output: html_document
+date: "2023-06-14"
+---
+
+```{r setup, include=FALSE}
+library(magrittr)
+library(tidyverse)
+library(readxl)
+```
+
+```{r organize Dezfuli}
+#Open dataset
+Dezfuli <- readxl::read_excel("Macroparasite datasets/Dezfuli.xls")
+Dezfuli %<>% dplyr::select(1:15)
+
+#Fish to Individual
+Dezfuli %<>% dplyr::rename(Individual=FISH)
+
+# change abreviations to full parasite names
+Dezfuli %<>% rename("Pomphorhynchus laevis" = 8) %>% rename("Acanthocephalus clavula" = 9) %>% rename("Acanthocephalus anguillae" = 10) %>% rename("Acanthocephalus lucii" = 11) %>% rename("Echinorhynchus truttae" = 12) %>% rename("Neoechinorhynchus rutili" =13) %>% rename("Cyathocephalus truncatus" =14) %>% rename("Raphidascaris acus" = 15)
+
+#Include Fish (host species) species
+Dezfuli %<>% add_column("Host Species" = "Salmo trutta", .before ="Individual")
+
+#Seperate line lists by parasite name
+  ## Pomphorhynchus laevis
+Dezfuli2001a <- Dezfuli %>% select(1:8) 
+Dezfuli2001a %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Dezfuli2001a.csv", row.names = FALSE)
+
+  ## Acanthocephalus clavula
+Dezfuli2001b <- Dezfuli %>% select(-(8)) %>% select(-(9:14))
+Dezfuli2001b %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Dezfuli2001b.csv", row.names = FALSE)
+
+  ## Acanthocephalus anguillae
+Dezfuli2001c <- Dezfuli %>% select(-(8:9)) %>% select(-(9:13)) 
+Dezfuli2001c %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Dezfuli2001c.csv", row.names = FALSE)
+
+  ## Acanthocephalus lucii
+Dezfuli2001d <- Dezfuli %>% select(-(8:10)) %>% select(-(9:12)) 
+Dezfuli2001d %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Dezfuli2001d.csv", row.names = FALSE)
+
+  ## Echinorhynchus truttae
+Dezfuli2001e <- Dezfuli %>% select(-(8:11)) %>% select(-(9:11)) 
+Dezfuli2001e %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Dezfuli2001e.csv", row.names = FALSE)
+
+  ## Neoechinorhynchus rutili
+Dezfuli2001f <- Dezfuli %>% select(-(8:12)) %>% select(-(9:10)) 
+Dezfuli2001f %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Dezfuli2001f.csv", row.names = FALSE)
+
+  ## Cyathocephalus truncatus
+Dezfuli2001g <- Dezfuli %>% select(-(8:13)) %>% select(-(9)) 
+Dezfuli2001g %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Dezfuli2001g.csv", row.names = FALSE)
+
+  ## Raphidascaris acus
+Dezfuli2001h <- Dezfuli %>% select(-(8:14))
+Dezfuli2001h %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Dezfuli2001h.csv", row.names = FALSE)
+```
+
+```{r organize Dittmer1 and Dittmer 2}
+#Open datasets
+Dittmer1 <- readxl::read_excel("Macroparasite datasets/Dittmer1.xls")
+Dittmer2 <- readxl::read_excel("Macroparasite datasets/Dittmer2.xls")
+
+#Gender to sex
+Dittmer1 %<>% dplyr::rename(Sex=Gender)
+Dittmer2 %<>% dplyr::rename(Sex=Gender)
+
+#Accurid
+Dittmer1 %<>% dplyr::rename("Acuariid"="Acuariid Nematode (No)")
+Dittmer2 %<>% dplyr::rename("Acuariid"="Acuariid Nematode (No)")
+
+#Remove columns - information can be found in master data sheet
+Dittmer1  %<>% select(-(2:4))
+Dittmer2  %<>% select(-(2:4))
+
+#Include Fish (host species) species
+Dittmer1 %<>% add_column("Host Species" = "Macrophthalmus hirtipes", .before ="Individual")
+Dittmer2 %<>% add_column("Host Species" = "Hemigrapsus crenulatus", .before ="Individual")
+
+#Seperate line lists by host species - parasite name
+
+  ## Macrophthalmus hirtipes - Profilicollis novaezelandensis
+Dittmer2011a <- Dittmer1 %>% select(1:4) 
+Dittmer2011a %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Dittmer2011a.csv", row.names = FALSE)
+
+  ## Macrophthalmus hirtipes - Maritrema novaezealandensis
+Dittmer2011b <- Dittmer1 %>% select(-(4)) %>% select(-(5)) 
+Dittmer2011b %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Dittmer2011b.csv", row.names = FALSE)
+
+  ## Macrophthalmus hirtipes - Acuariid Nematode
+Dittmer2011c <- Dittmer1 %>% select(-(4:5)) 
+Dittmer2011c %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Dittmer2011c.csv", row.names = FALSE)
+
+  ## Hemigrapsus crenulatus - Profilicollis novaezelandensis
+Dittmer2011d <- Dittmer2 %>% select(1:4) 
+Dittmer2011d %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Dittmer2011d.csv", row.names = FALSE)
+
+  ## Hemigrapsus crenulatus - Maritrema novaezealandensis
+Dittmer2011e <- Dittmer2 %>% select(-(4)) %>% select(-(5)) 
+Dittmer2011e %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Dittmer2011e.csv", row.names = FALSE)
+  
+## Hemigrapsus crenulatus - Acuariid Nematode
+Dittmer2011f <- Dittmer2 %>% select(-(4:5)) 
+Dittmer2011f %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Dittmer2011f.csv", row.names = FALSE)
+```
+
+```{r organize Giari}
+#Open dataset
+Giari <- readxl::read_excel("Macroparasite datasets/Giari et al.xls")
+
+#Change to full parasite names
+Giari %<>% rename("Anguillicoloides crassus" = 7) %>% rename("Contracaecum rudolphii" = 8) %>% rename("Deropristis inflata" = 9) %>% rename("Helicometra fasciata" = 10) %>% rename("Bucephalus anguillae" = 11) %>% rename("Lecithochrium musculus" = 12) %>% rename("Tetraphyllidea" =13) %>% rename("Proteocephalus macrocephalus" =14) %>% rename("Telosentis exiguus" = 15)
+
+# Include Individual Column
+Giari %<>% add_column(Individual=NA, .before = "Sampling date") %>% mutate(Individual = 1:n())
+
+#Remove irrelevant columns
+Giari  %<>% select(-(3:4))
+
+#Include host species
+Giari %<>% add_column("Host Species" = "Anguilla anguilla", .before ="Individual")
+
+#Seperate line lists by parasite name
+  ## Anguillicoloides crassus
+Giari2020a <- Giari %>% select(1:6)
+Giari2020a %>% rename("Count" = 6) %>% write.csv(.,"Poulin Macroparasite Data/Giari2020a.csv", row.names = FALSE)
+
+  ## Contracaecum rudolphii
+Giari2020b <- Giari %>% select(-(6)) %>% select(-(7:13)) 
+Giari2020b %>% rename("Count" = 6) %>% write.csv(.,"Poulin Macroparasite Data/Giari2020b.csv", row.names = FALSE)
+
+  ## Deropristis inflata
+Giari2020c <- Giari %>% select(-(6:7)) %>% select(-(7:12))
+Giari2020c %>% rename("Count" = 6) %>% write.csv(.,"Poulin Macroparasite Data/Giari2020c.csv", row.names = FALSE)
+
+ ## Helicometra fasciata
+Giari2020d <- Giari %>% select(-(6:8)) %>% select(-(7:11)) 
+Giari2020d %>% rename("Count" = 6) %>% write.csv(.,"Poulin Macroparasite Data/Giari2020d.csv", row.names = FALSE)
+
+ ## Bucephalus anguillae
+Giari2020e <- Giari %>% select(-(6:9)) %>% select(-(7:10)) 
+Giari2020e %>% rename("Count" = 6) %>% write.csv(.,"Poulin Macroparasite Data/Giari2020e.csv", row.names = FALSE)
+
+ ## Lecithochrium musculus
+Giari2020f <- Giari %>% select(-(6:10)) %>% select(-(7:9)) 
+Giari2020f %>% rename("Count" = 6) %>% write.csv(.,"Poulin Macroparasite Data/Giari2020f.csv", row.names = FALSE)
+
+ ## Tetraphyllidea larvae
+Giari2020g <- Giari %>% select(-(6:11)) %>% select(-(7:8))
+Giari2020g %>% rename("Count" = 6) %>% write.csv(.,"Poulin Macroparasite Data/Giari2020g.csv", row.names = FALSE)
+
+ ## Proteocephalus macrocephalus
+Giari2020h <- Giari %>% select(-(6:12)) %>% select(-(7)) 
+Giari2020h %>% rename("Count" = 6) %>% write.csv(.,"Poulin Macroparasite Data/Giari2020h.csv", row.names = FALSE)
+
+ ## Telosentis exiguus
+Giari2020i <- Giari %>% select(-(6:13))
+Giari2020i %>% rename("Count" = 6) %>% write.csv(.,"Poulin Macroparasite Data/Giari2020i.csv", row.names = FALSE)
+```
+
+```{r organize Heaphy}
+#Open dataset
+Heaphy <- readxl::read_excel("Macroparasite datasets/Heaphy.xlsx")
+
+#Fix Headings
+Heaphy %<>% rename(Sample=1) %>% rename(Individual=2) %>% rename(Sex=3) %>% rename("Size(mm)"=4) %>% rename("Plagiorhynchus allisonae"=8) %>% rename("Dilepididae sp."=9)
+
+Heaphy %<>% select(-(5:7)) %>% slice(-1)
+
+Heaphy %<>% relocate("Sample", .after = Individual)
+
+#Include host species
+Heaphy %<>% add_column("Host Species" = "Transorchestis chiliensis", .before ="Individual")
+
+#Seperate line lists by parasite name
+
+ ## Plagiorhynchus allisonae
+Heaphy2016a <- Heaphy %>% select(1:5)
+Heaphy2016a %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Heaphy2016a.csv", row.names = FALSE)
+
+ ## Dilepididae sp.
+Heaphy2016b <- Heaphy %>% select(-(5)) 
+Heaphy2016b %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Heaphy2016b.csv", row.names = FALSE)
+```
+
+```{r organize Nichol}
+#Open dataset
+Nichol <- readxl::read_excel("Macroparasite datasets/Nichol.xls")
+
+# Correct column name
+Nichol %<>% rename("Acuariid nematode" = "Acuariidae nematodes")
+
+#No. to Individual
+Nichol %<>% rename(Individual="No.")
+
+#Include host species
+Nichol %<>% add_column("Host Species" = "Macrophthalmus hirtipes", .before ="Individual")
+
+#Seperate line lists by parasite name
+
+ ## Porfilicollis novaezealandensis
+Nichol2003a <- Nichol %>% select(1:3) 
+Nichol2003a %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Nichol2003a.csv", row.names = FALSE)
+
+ ## Maritrema novaezealandensis
+Nichol2003b <- Nichol %>% select(-(3)) %>% select(-(4)) 
+Nichol2003b %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Nichol2003b.csv", row.names = FALSE)
+
+ ## Acuariidae nematodes
+Nichol2003c <- Nichol %>% select(-(3:4)) 
+Nichol2003c %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Nichol2003c.csv", row.names = FALSE)
+```
+
+```{r organize Peoples 1 and 2}
+#Open datasets
+Peoples2011a <- readxl::read_excel("Macroparasite datasets/Peoples 1.xls")
+Peoples2011b <- readxl::read_excel("Macroparasite datasets/Peoples 2.xls")
+
+#Specimen # to Individual
+Peoples2011a %<>% rename(Individual="Specimen # (as appears in notebook)")
+Peoples2011b %<>% rename(Individual="Specimen # (as appears in notebook)")
+
+#Include host species
+Peoples2011a %<>% add_column("Host Species" = "Heteromastus filiformis", .before ="Individual")
+Peoples2011b %<>% add_column("Host Species" = "Abarenicola affinis", .before ="Individual")
+
+#name parasite
+Peoples2011a %<>% rename("Opecoelidae sp." = 5)
+Peoples2011b %<>% rename("Opecoelidae sp." = 5)
+
+  ##parasites to count
+Peoples2011a %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Peoples2011a.csv", row.names = FALSE)
+Peoples2011b %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Peoples2011b.csv", row.names = FALSE)
+```
+
+```{r organize Ruehle 1-3}
+#Open datasets
+Ruehle1 <- readxl::read_excel("Macroparasite datasets/Ruehle 1.xlsx")
+Ruehle2 <- readxl::read_excel("Macroparasite datasets/Ruehle 2.xlsx")
+Ruehle3 <- readxl::read_excel("Macroparasite datasets/Ruehle 3.xlsx")
+
+#FishID to Individual
+Ruehle1 %<>% rename(Individual=FishID)
+Ruehle2 %<>% rename(Individual=FishID)
+Ruehle3 %<>% rename(Individual=FishID)
+
+#Female to F and Male to M
+Ruehle1 %<>% mutate(Sex = ifelse(grepl("Female", Ruehle1$Sex), "F", Sex)) %>% mutate(Sex = ifelse(grepl("Male", Ruehle1$Sex), "M", Sex))
+
+Ruehle2 %<>% mutate(Sex = ifelse(grepl("Female", Ruehle2$Sex), "F", Sex)) %>% mutate(Sex = ifelse(grepl("Male", Ruehle2$Sex), "M", Sex))
+
+Ruehle3 %<>% mutate(Sex = ifelse(grepl("Female", Ruehle3$Sex), "F", Sex)) %>% mutate(Sex = ifelse(grepl("Male", Ruehle3$Sex), "M", Sex))
+
+#Include host species
+Ruehle1 %<>% add_column("Host Species" = "Gobiomorphus cotidianus", .before ="Individual")
+Ruehle2 %<>% add_column("Host Species" = "Gobiomorphus cotidianus", .before ="Individual")
+Ruehle3 %<>% add_column("Host Species" = "Gobiomorphus cotidianus", .before ="Individual")
+
+#Seperate line lists by host species - parasite name
+
+  ## Gobiomorphus cotidianus - Tylodelphys darbyi
+Ruehle2019a <- Ruehle1 %>% select(1:5) 
+Ruehle2019a %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Ruehle2019b.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Apatemon jamiesoni
+Ruehle2019b <- Ruehle1 %>% select(-(5)) %>% select(-(6:8)) 
+Ruehle2019b %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Ruehle2019b.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Stegodexamene anguillae
+Ruehle2019c <- Ruehle1 %>% select(-(5:6)) %>% select(-(6:7)) 
+Ruehle2019c %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Ruehle2019c.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Telogaster opisthorchis
+Ruehle2019d <- Ruehle1 %>% select(-(5:7)) %>% select(-(6)) 
+Ruehle2019d %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Ruehle2019d.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Eustrongylides sp.
+Ruehle2019e <- Ruehle1 %>% select(-(5:8)) 
+Ruehle2019e %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Ruehle2019e.csv", row.names = FALSE)
+
+## Gobiomorphus cotidianus - Tylodelphys darbyi
+Ruehle2020a <- Ruehle2 %>% select(1:5) 
+Ruehle2020a %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Ruehle2020a.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Apatemon jamiesoni
+Ruehle2020b <- Ruehle2 %>% select(-(5)) %>% select(-(6:8)) 
+Ruehle2020b %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Ruehle2020b.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Stegodexamene anguillae
+Ruehle2020c <- Ruehle2 %>% select(-(5:6)) %>% select(-(6:7)) 
+Ruehle2020c %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Ruehle2020c.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Telogaster opisthorchis
+Ruehle2020d <- Ruehle2 %>% select(-(5:7)) %>% select(-(6))
+Ruehle2020d %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Ruehle2020d.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus -Eustrongylides sp.
+Ruehle2020e <- Ruehle2 %>% select(-(5:8))
+Ruehle2020e %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Ruehle2020e.csv", row.names = FALSE)
+
+## Gobiomorphus cotidianus - Tylodelphys darbyi
+Ruehle2020f <- Ruehle3 %>% select(1:5) 
+Ruehle2020f %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Ruehle2020f.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Apatemon jamiesoni
+Ruehle2020g <- Ruehle3 %>% select(-(5)) %>% select(-(6:8)) 
+Ruehle2020g %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Ruehle2020g.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Stegodexamene anguillae
+Ruehle2020h <- Ruehle3 %>% select(-(5:6)) %>% select(-(6:7))
+Ruehle2020h %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Ruehle2020h.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Telogaster opisthorchis
+Ruehle2020i <- Ruehle3 %>% select(-(5:7)) %>% select(-(6)) 
+Ruehle2020i %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Ruehle2020i.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus -Eustrongylides sp.
+Ruehle2020j <- Ruehle3 %>% select(-(5:8)) 
+Ruehle2020j %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Ruehle2020j.csv", row.names = FALSE)
+```
+
+```{r organize Valtonen 1-15}
+#Open datasets
+Val1 <- readxl::read_excel("Macroparasite datasets/Valtonen 1.xls")
+Val2 <- readxl::read_excel("Macroparasite datasets/Valtonen 2.xls")
+Val3 <- readxl::read_excel("Macroparasite datasets/Valtonen 3.xls")
+Val4 <- readxl::read_excel("Macroparasite datasets/Valtonen 4.xls")
+Val5 <- readxl::read_excel("Macroparasite datasets/Valtonen 5.xls")
+Val6 <- readxl::read_excel("Macroparasite datasets/Valtonen 6.xls")
+Val7 <- readxl::read_excel("Macroparasite datasets/Valtonen 7.xls")
+Val8 <- readxl::read_excel("Macroparasite datasets/Valtonen 8.xls")
+Val9 <- readxl::read_excel("Macroparasite datasets/Valtonen 9.xls")
+Val10 <- readxl::read_excel("Macroparasite datasets/Valtonen 10.xlsx")
+Val11 <- readxl::read_excel("Macroparasite datasets/Valtonen 11.xls")
+Val12 <- readxl::read_excel("Macroparasite datasets/Valtonen 12.xlsx")
+Val13 <- readxl::read_excel("Macroparasite datasets/Valtonen 13.xls")
+Val14 <- readxl::read_excel("Macroparasite datasets/Valtonen 14.xlsx")
+Val15 <- readxl::read_excel("Macroparasite datasets/Valtonen 15.xls")
+
+#Change host to individual and include Host Species
+
+Val1 %<>% rename(Individual="Host = Coregonus albula")
+
+Val2 %<>% rename(Individual="Host = Esox lucius")
+
+Val3 %<>% rename(Individual="Host = Gasterosteus aculeatus")
+
+Val4 %<>% rename(Individual="Host = Gymnocephalus cernuus")
+
+Val5 %<>% rename(Individual="Host = Gadus morhua")
+
+Val6 %<>% rename(Individual="Host = Leuciscus leuciscus")
+
+Val7 %<>% rename(Individual="Host = Lota lota")
+
+Val8 %<>% rename(Individual="Host = Osmerus eperlanus")
+
+Val9 %<>% rename(Individual="Host = Perca fluviatilis")
+
+Val10 %<>% rename(Individual="Host = Pomatoschistus minutus")
+
+Val11 %<>% rename(Individual="Host = Pungitius pungitius")
+
+Val12 %<>% rename(Individual="Host = Rutilus rutilus")
+
+Val13 %<>% rename(Individual="Host = Salmo salar")
+
+Val14 %<>% rename(Individual="Host = Salmo trutta")
+
+Val15 %<>% rename(Individual="Host = Zoarces viviparus")
+
+#Correct Headings
+Val1 %<>% rename(Length=2) %>% rename("Proteocephalus exiguus"=3) %>% slice(-1)
+
+Val2 %<>% rename(Length=2) %>% rename("Triaenophorus nodulosus"=3) %>% rename("Triaenophorus crassus"=4) %>% rename("Raphidascaris acus"=5) %>% rename("Camallanus lacustris"=6) %>% rename("Neoechinorhynchus rutili"=7) %>% rename("Echinorhynchus bothniensis"=8) %>% rename("Azygia lucii"=9) %>% slice(-1)
+
+Val3 %<>% rename(Length=2) %>% rename("Proteocephalus filicollis"=3) %>% rename("Neoechinorhynchus rutili"=4) %>% slice(-1)
+
+Val4 %<>% rename(Length=2) %>% rename("Proteocephalus cernuae"=3) %>% rename("Bunodera luciopercae"=4) %>% rename("Camallanus lacustris"=5) %>% rename("Neoechinorhynchus rutili"=6) %>% slice(-1)
+
+Val5 %<>% rename(Length=2) %>% rename("Echinorhynchus gadi"=3) %>% rename("Echinorhynchus salmonis"=4) %>% slice(-1)
+
+Val6 %<>% rename(Length=2) %>% rename("Sphaerostoma globiporum"=3) %>% rename("Caryophyllaeides fennica"=4) %>% slice(-1)
+
+Val7 %<>% rename(Length=2) %>% rename("Proteocephalus ambiguus"=3) %>% rename("Eubothrium rugosum"=4) %>% rename("Raphidascaris acus"=5) %>% rename("Camallanus lacustris"=6) %>% rename("Pseudocapillaria salvelini"=7) %>% rename("Neoechinorhynchus rutili"=8) %>% rename("Echinorhynchus borealis"=9) %>% rename("Echinorhynchus salmonis"=10) %>% rename("Echinorhynchus bothniensis"=11) %>% slice(-1)
+
+Val8 %<>% rename(Length=2) %>% rename("Proteocephalus longicollis"=3) %>% rename("Cystidicola farionis"=4) %>% rename("Echinorhynchus salmonis"=5) %>% rename("Echinorhynchus bothniensis"=6) %>% slice(-1)
+
+Val9 %<>% rename(Length=2) %>% rename("Proteocephalus percae"=3) %>% rename("Bunodera luciopercae"=4) %>% rename("Camallanus lacustris"=5) %>% rename("Neoechinorhynchus rutili"=6) %>% slice(-1)
+
+Val10 %<>% rename(Length=2) %>% rename("Bunodera luciopercae"=3) %>% rename("Proteocephalus ambiguus"=4) %>% rename("Neoechinorhynchus rutili"=5) %>% slice(-1)
+
+Val11 %<>% rename(Length=2) %>% rename("Proteocephalus ambiguus"=3) %>% rename("Neoechinorhynchus rutili"=4) %>% slice(-1)
+
+Val12 %<>% rename(Length=2) %>% rename("Sphaerostoma globiporum"=3) %>% slice(-1)
+
+Val13 %<>% rename(Length=2) %>% rename("Eubothrium crassum"=3) %>% rename("Neoechinorhynchus rutili"=4) %>% rename("Echinorhynchus salmonis"=5) %>% slice(-1)
+
+Val14 %<>% rename(Length=2) %>% rename("Eubothrium crassum"=3) %>% rename("Echinorhynchus salmonis"=4)%>% rename("Echinorhynchus bothniensis"=5) %>% rename("Azygia lucii"=6) %>% rename("Pseudocapillaria salvelini"=7) %>% slice(-1)
+
+Val15 %<>% rename(Length=2) %>% rename("Echinorhynchus salmonis"=3) %>% rename("Proteocephalus ambiguus"=4) %>% slice(-1)
+
+#Include host species
+Val1 %<>% add_column("Host Species" = "Coregonus albula", .before ="Individual")
+Val2 %<>% add_column("Host Species" = "Esox lucius", .before ="Individual")
+Val3 %<>% add_column("Host Species" = "Gasterosteus aculeatus", .before ="Individual")
+Val4 %<>% add_column("Host Species" = "Gymnocephalus cernuus", .before ="Individual")
+Val5 %<>% add_column("Host Species" = "Gadus morhua", .before ="Individual")
+Val6 %<>% add_column("Host Species" = "Leuciscus leuciscus", .before ="Individual")
+Val7 %<>% add_column("Host Species" = "Lota lota", .before ="Individual")
+Val8 %<>% add_column("Host Species" = "Osmerus eperlanus", .before ="Individual")
+Val9 %<>% add_column("Host Species" = "Perca fluviatilis", .before ="Individual")
+Val10 %<>% add_column("Host Species" = "Pomatoschistus minutus", .before ="Individual")
+Val11 %<>% add_column("Host Species" = "Pungitius pungitius", .before ="Individual")
+Val12 %<>% add_column("Host Species" = "Rutilus rutilus", .before ="Individual")
+Val13 %<>% add_column("Host Species" = "Salmo salar", .before ="Individual")
+Val14 %<>% add_column("Host Species" = "Salmo trutta", .before ="Individual")
+Val15 %<>% add_column("Host Species" = "Zoarces viviparus", .before ="Individual")
+
+#Seperate line lists by host species - parasite name
+
+  ## Coregonus albula - Proteocephalus exiguus
+Valtonen2001a <- Val1 
+Valtonen2001a %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001a.csv", row.names = FALSE)
+
+  ## Esox lucius - Triaenophorus nodulosus
+Valtonen2001b <- Val2 %>% select(1:3)
+Valtonen2001b %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001b.csv", row.names = FALSE)
+  
+  ## Esox lucius - Triaenophorus crassus
+Valtonen2001c <- Val2 %>% select(-(3)) %>% select(-(4:8)) 
+Valtonen2001c %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001ac.csv", row.names = FALSE)
+  
+  ## Esox lucius - Raphidascaris acus
+Valtonen2001d <- Val2 %>% select(-(3:4)) %>% select(-(4:7)) 
+Valtonen2001d %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001d.csv", row.names = FALSE)
+  
+  ## Esox lucius - Camallanus lacustris
+Valtonen2001e <- Val2 %>% select(-(3:5)) %>% select(-(4:6)) 
+Valtonen2001e %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001e.csv", row.names = FALSE)
+  
+  ## Esox lucius - Neoechinorhynchus rutili
+Valtonen2001f <- Val2 %>% select(-(3:6)) %>% select(-(4:5)) 
+Valtonen2001f %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001f.csv", row.names = FALSE)
+  
+  ## Esox lucius - Echinorhynchus bothniensis
+Valtonen2001g <- Val2 %>% select(-(3:7)) %>% select(-(4)) 
+Valtonen2001g %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001g.csv", row.names = FALSE)
+  
+  ## Esox lucius - Azygia lucii
+Valtonen2001h <- Val2 %>% select(-(3:8)) 
+Valtonen2001h %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001h.csv", row.names = FALSE)
+
+  ## Gasterosteus aculeatus - Proteocephalus filicollis
+Valtonen2001i <- Val3 %>% select(-(4)) 
+Valtonen2001i %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001i.csv", row.names = FALSE)
+
+  ## Gasterosteus aculeatus - Neoechinorhynchus rutili
+Valtonen2001j <- Val3 %>% select(-(3)) 
+Valtonen2001j %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001j.csv", row.names = FALSE)
+
+ ## Gymnocephalus cernuus - Proteocephalus cernuae
+Valtonen2001k <- Val4 %>% select(1:3) 
+Valtonen2001k %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001k.csv", row.names = FALSE)
+  
+  ## Gymnocephalus cernuus - Bunodera luciopercae
+Valtonen2001l <- Val4 %>% select(-(3)) %>% select(-(4:5)) 
+Valtonen2001l %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001l.csv", row.names = FALSE)
+  
+  ## Gymnocephalus cernuus - Camallanus lacustris
+Valtonen2001m <- Val4 %>% select(-(3:4)) %>% select(-(4)) 
+Valtonen2001m %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001m.csv", row.names = FALSE)
+
+  ## Gymnocephalus cernuus - Neoechinorhynchus rutili
+Valtonen2001n <- Val4 %>% select(-(3:5)) 
+Valtonen2001n %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001n.csv", row.names = FALSE)
+
+  ## Gadus morhua - Echinorhynchus gadi
+Valtonen2001o <- Val5 %>% select(-(4)) 
+Valtonen2001o %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001o.csv", row.names = FALSE)
+
+  ## Gadus morhua - Echinorhynchus salmonis
+Valtonen2001p <- Val5 %>% select(-(3)) 
+Valtonen2001p %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001p", row.names = FALSE)
+
+  ## Leuciscus leuciscus - Sphaerostoma globiporum
+Valtonen2001q <- Val6 %>% select(-(4)) 
+Valtonen2001q %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001q.csv", row.names = FALSE)
+
+  ## Leuciscus leuciscus - Caryophyllaeides fennica
+Valtonen2001r <- Val6 %>% select(-(3)) 
+Valtonen2001r %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001r.csv", row.names = FALSE)
+
+  ## Lota lota - Proteocephalus ambiguus
+Valtonen2001s <- Val7 %>% select(1:3) 
+Valtonen2001s %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001s.csv", row.names = FALSE)
+  
+  ## Lota lota - Eubothrium rugosum
+Valtonen2001t <- Val7 %>% select(-(3)) %>% select(-(4:10)) 
+Valtonen2001t %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001t.csv", row.names = FALSE)
+  
+  ## Lota lota - Raphidascaris acus
+Valtonen2001u <- Val7 %>% select(-(3:4)) %>% select(-(4:9)) 
+Valtonen2001u %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001u.csv", row.names = FALSE)
+  
+  ## Lota lota - Camallanus lacustris
+Valtonen2001v <- Val7 %>% select(-(3:5)) %>% select(-(4:8)) 
+Valtonen2001v %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001v.csv", row.names = FALSE)
+  
+  ## Lota lota - Pseudocapillaria salvelini
+Valtonen2001w <- Val7 %>% select(-(3:6)) %>% select(-(4:7))
+Valtonen2001w %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001w.csv", row.names = FALSE)
+
+  ## Lota lota - Neoechinorhynchus rutili
+Valtonen2001x <- Val7 %>% select(-(3:7)) %>% select(-(4:6)) 
+Valtonen2001x %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001x.csv", row.names = FALSE)
+  
+  ## Lota lota - Echinorhynchus borealis
+Valtonen2001y <- Val7 %>% select(-(3:8)) %>% select(-(4:5)) 
+Valtonen2001y %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001y.csv", row.names = FALSE)
+  
+  ## Lota lota - Echinorhynchus salmonis
+Valtonen2001z <- Val7 %>% select(-(3:9)) %>% select(-(4)) 
+Valtonen2001z %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001z.csv", row.names = FALSE)
+  
+  ## Lota lota - Echinorhynchus bothniensis
+Valtonen2001aa <- Val7 %>% select(-(3:10)) 
+Valtonen2001aa %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001aa.csv", row.names = FALSE)
+
+ ## Osmerus eperlanus - Proteocephalus longicollis
+Valtonen2001ab <- Val8 %>% select(1:3) 
+Valtonen2001ab %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001ab.csv", row.names = FALSE)
+  
+  ## Osmerus eperlanus - Cystidicola farionis
+Valtonen2001ac <- Val8 %>% select(-(3)) %>% select(-(4:5)) 
+Valtonen2001ac %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001ac.csv", row.names = FALSE)
+  
+  ## Osmerus eperlanus - Echinorhynchus salmonis
+Valtonen2001ad <- Val8 %>% select(-(3:4)) %>% select(-(4)) 
+Valtonen2001ad %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001ad.csv", row.names = FALSE)
+
+  ## Osmerus eperlanus - Echinorhynchus bothniensis
+Valtonen2001ae <- Val8 %>% select(-(3:5)) 
+Valtonen2001ae %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001ad.csv", row.names = FALSE)
+
+ ## Perca fluviatilis - Proteocephalus percae
+Valtonen2001af <- Val9 %>% select(1:3) 
+Valtonen2001af %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001af.csv", row.names = FALSE)
+
+  ## Perca fluviatilis - Proteocephalus percae
+Valtonen2001ag <- Val9 %>% select(-(3)) %>% select(-(4:5)) 
+Valtonen2001ag %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001ag.csv", row.names = FALSE)
+  
+  ## Perca fluviatilis - Camallanus lacustris
+Valtonen2001ah <- Val9 %>% select(-(3:4)) %>% select(-(4)) 
+Valtonen2001ah %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001ah.csv", row.names = FALSE)
+
+  ## Perca fluviatilis - Neoechinorhynchus rutili
+Valtonen2001ai <- Val9 %>% select(-(3:5)) 
+Valtonen2001ai %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001ai.csv", row.names = FALSE)
+
+ ## Pomatoschistus minutus - Bunodera luciopercae
+Valtonen2001aj <- Val10 %>% select(1:3) 
+Valtonen2001aj %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001ai.csv", row.names = FALSE)
+  
+  ## Pomatoschistus minutus - Proteocephalus ambiguus
+Valtonen2001ak <- Val10 %>% select(-(3)) %>% select(-(4)) 
+Valtonen2001ak %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001ak.csv", row.names = FALSE)
+
+  ## Pomatoschistus minutus - Neoechinorhynchus rutili
+Valtonen2001al <- Val10 %>% select(-(3:4)) 
+Valtonen2001al %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001al.csv", row.names = FALSE)
+
+  ## Pungitius pungitius - Proteocephalus ambiguus
+Valtonen2001am <- Val11 %>% select(-(4)) 
+Valtonen2001am %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001am.csv", row.names = FALSE)
+
+  ## Pungitius pungitius - Neoechinorhynchus rutili
+Valtonen2001an <- Val11 %>% select(-(3)) 
+Valtonen2001an %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001an.csv", row.names = FALSE)
+
+  ## Rutilus rutilus - Proteocephalus ambiguus
+Valtonen2001ao <- Val12
+Valtonen2001ao %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001ao.csv", row.names = FALSE)
+
+ ## Salmo salar - Eubothrium crassum
+Valtonen2001ap <- Val13 %>% select(1:3) 
+Valtonen2001ap %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001ap.csv", row.names = FALSE)
+  
+  ## Salmo salar - Neoechinorhynchus rutili
+Valtonen2001aq <- Val13 %>% select(-(3)) %>% select(-(4)) 
+Valtonen2001aq %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001aq.csv", row.names = FALSE)
+
+  ## Salmo salar - Echinorhynchus salmonis
+Valtonen2001ar <- Val13 %>% select(-(3:4)) 
+Valtonen2001ar %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001ar.csv", row.names = FALSE)
+
+ ## Salmo trutta - Eubothrium crassum
+Valtonen2001as <- Val14 %>% select(1:3) 
+Valtonen2001as %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001as.csv", row.names = FALSE)
+  
+  ## Salmo trutta - Echinorhynchus salmonis
+Valtonen2001at <- Val14 %>% select(-(3)) %>% select(-(4:6)) 
+Valtonen2001at %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001at.csv", row.names = FALSE)
+  
+  ## Salmo trutta - Echinorhynchus bothniensis
+Valtonen2001au <- Val14 %>% select(-(3:4)) %>% select(-(4:5)) 
+Valtonen2001au %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001au.csv", row.names = FALSE)
+
+  ## Salmo trutta -  Azygia lucii
+Valtonen2001av <- Val14 %>% select(-(3:5)) %>% select(-(4)) 
+Valtonen2001av %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001av.csv", row.names = FALSE)
+
+  ## Salmo trutta - Pseudocapillaria salvelini
+Valtonen2001aw <- Val14 %>% select(-(3:6)) 
+Valtonen2001aw %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001aw.csv", row.names = FALSE)
+
+  ## Pungitius pungitius - Echinorhynchus salmonis
+Valtonen2001ax <- Val15 %>% select(-(4))
+Valtonen2001ax %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001ax.csv", row.names = FALSE)
+
+  ## Pungitius pungitius - Proteocephalus ambiguus
+Valtonen2001ay <- Val15 %>% select(-(3)) 
+Valtonen2001ay %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Valtonen2001ay.csv", row.names = FALSE)
+
+```
+
+```{r organize Lagrue}
+#Open dataset - multiple sheets
+Lagrue1 <- readxl::read_excel("Macroparasite datasets/Lagrue.xls", sheet="Common bully")
+Lagrue2 <- readxl::read_excel("Macroparasite datasets/Lagrue.xls", sheet="Black flounder")
+Lagrue3 <- readxl::read_excel("Macroparasite datasets/Lagrue.xls", sheet="Yellow-eyed mullet")
+Lagrue4 <- readxl::read_excel("Macroparasite datasets/Lagrue.xls", sheet="Smelt")
+Lagrue5 <- readxl::read_excel("Macroparasite datasets/Lagrue.xls", sheet="Trout")
+Lagrue6 <- readxl::read_excel("Macroparasite datasets/Lagrue.xls", sheet="Inanga")
+
+#Correct headings
+Lagrue1 %<>% rename(Individual=Fish) %>% rename(Length=2) %>% rename("Weight"=3) %>% rename("Gut Length"=4) %>% rename("Coitocaecum parvum"=Parasites) %>% rename("Acanthocephalus galaxii"=6) %>% rename("Hedruris spinigera"=7) %>% slice(-1) %>% slice(1:35) %>% add_column("Host Species" = "Gobiomorphus cotidianus", .before ="Individual")
+
+Lagrue2 %<>% rename(Individual=1) %>% rename(Length=2) %>% rename("Weight"=3) %>% rename("Gut Length"=4) %>% rename("Coitocaecum parvum"=Parasites) %>% rename("Acanthocephalus galaxii"=6) %>% rename("Hedruris spinigera"=7) %>% rename("Caelostoma zaelandicum"=8) %>% slice(-1) %>% add_column("Host Species" = "Rhombosolea retiaria", .before ="Individual")
+
+Lagrue3 %<>% rename(Individual=1) %>% rename(Length=2) %>% rename("Weight"=3) %>% rename("Gut Length"=4) %>% rename("Coitocaecum parvum"=Parasites) %>% rename("Acanthocephalus galaxii"=6) %>% rename("Hedruris spinigera"=7) %>% rename("Caelostoma zaelandicum"=8) %>% rename("Opecoelidae"=9) %>% slice(-1) %>% slice(1:29) %>% mutate(Opecoelidae = str_remove_all(Opecoelidae, " Opecoelidae")) %>% add_column("Host Species" = "Aldrichetta forsteri", .before ="Individual")
+
+Lagrue4 %<>% rename(Individual=1) %>% rename(Length=2) %>% rename("Weight"=3) %>% rename("Gut Length"=4) %>% rename("Coitocaecum parvum"=Parasites) %>% rename("Acanthocephalus galaxii"=6) %>% rename("Hedruris spinigera"=7) %>% slice(-1) %>% add_column("Host Species" = "Osmeridae", .before ="Individual")
+
+Lagrue5 %<>% rename(Individual=1) %>% rename(Length=2) %>% rename("Weight"=3) %>% rename("Gut Length"=4) %>% rename("Coitocaecum parvum"=Parasites) %>% rename("Acanthocephalus galaxii"=6) %>% rename("Hedruris spinigera"=7) %>% slice(-1) %>% slice(1:23) %>% add_column("Host Species" = "Trout", .before ="Individual")
+
+Lagrue6 %<>% rename(Individual=Fish) %>% rename(Length=2) %>% rename("Weight"=3) %>% rename("Gut Length"=4) %>% rename("Coitocaecum parvum"=Parasites) %>% rename("Acanthocephalus galaxii"=6) %>% rename("Hedruris spinigera"=7) %>% slice(-1) %>% slice(1:34) %>% add_column("Host Species" = "Galaxias maculatus", .before ="Individual")
+
+
+#Seperate line lists by host species - parasite name
+
+  ## Gobiomorphus cotidianus - C. parvum
+Lagrue2011a <- Lagrue1 %>% select(1:5) 
+Lagrue2011a %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011a.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Ac. Galaxii
+Lagrue2011b <- Lagrue1 %>% select(-(5)) %>% select(-(6))
+Lagrue2011b %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011b.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Hedruris spinigera
+Lagrue2011c <- Lagrue1 %>% select(-(5:6))  
+Lagrue2011c %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011c.csv", row.names = FALSE)
+
+  ## Rhombosolea retiaria - C. parvum
+Lagrue2011d <- Lagrue2 %>% select(1:5) 
+Lagrue2011d %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011d.csv", row.names = FALSE)
+
+  ## Rhombosolea retiaria - Ac. Galaxii
+Lagrue2011e <- Lagrue2 %>% select(-(5)) %>% select(-(6:7))
+Lagrue2011e %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011e.csv", row.names = FALSE)
+
+  ## Rhombosolea retiaria - Hedruris spinigera
+Lagrue2011f <- Lagrue2 %>% select(-(5:6)) %>% select(-(6))
+Lagrue2011f %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011f.csv", row.names = FALSE)
+
+  ## Rhombosolea retiaria - C. zaelandicum
+Lagrue2011g <- Lagrue2 %>% select(-(5:7))
+Lagrue2011g %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011g.csv", row.names = FALSE)
+
+  ## Aldrichetta forsteri - C. parvum
+Lagrue2011h <- Lagrue3 %>% select(1:5)
+Lagrue2011h %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011h.csv", row.names = FALSE)
+
+  ## Aldrichetta forsteri - Ac. Galaxii
+Lagrue2011i <- Lagrue3 %>% select(-(5)) %>% select(-(6:8))
+Lagrue2011i %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011i.csv", row.names = FALSE)
+
+  ## Aldrichetta forsteri - Hedruris spinigera
+Lagrue2011j <- Lagrue3 %>% select(-(5:6)) %>% select(-(6:7))
+Lagrue2011j %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011j.csv", row.names = FALSE)
+
+  ## Aldrichetta forsteri - C. zaelandicum
+Lagrue2011k <- Lagrue3 %>% select(-(5:7)) %>% select(-(6))
+Lagrue2011k %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011k.csv", row.names = FALSE)
+
+  ## Aldrichetta forsteri - Opecoelidae sp.
+Lagrue2011l <- Lagrue3 %>% select(-(5:8)) 
+Lagrue2011l %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011l.csv", row.names = FALSE)
+
+  ## Retropinna retropinna - C. parvum
+Lagrue2011m <- Lagrue4 %>% select(1:5)
+Lagrue2011m %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011m.csv", row.names = FALSE)
+
+  ## Retropinna retropinna - Ac. Galaxii
+Lagrue2011n <- Lagrue4 %>% select(-(5)) %>% select(-(6))
+Lagrue2011n %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011n.csv", row.names = FALSE)
+
+  ## Retropinna retropinna - Hedruris spinigera
+Lagrue2011o <- Lagrue4 %>% select(-(5:6)) 
+Lagrue2011o %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011o.csv", row.names = FALSE)
+
+  ## Salmo trutta - C. parvum
+Lagrue2011p <- Lagrue5 %>% select(1:5)
+Lagrue2011p %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011p.csv", row.names = FALSE)
+
+  ## Salmo trutta - Ac. Galaxii
+Lagrue2011q <- Lagrue5 %>% select(-(5)) %>% select(-(6))
+Lagrue2011q %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011q.csv", row.names = FALSE)
+
+  ## Salmo trutta - Hedruris spinigera
+Lagrue2011r <- Lagrue5 %>% select(-(5:6))
+Lagrue2011r %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011r.csv", row.names = FALSE)
+
+  ## Galaxias maculatus - C. parvum
+Lagrue2011s <- Lagrue6 %>% select(1:5) 
+Lagrue2011s %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011s.csv", row.names = FALSE)
+
+  ## Galaxias maculatus - Ac. Galaxii
+Lagrue2011t <- Lagrue6 %>% select(-(5)) %>% select(-(6))
+Lagrue2011t %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011t.csv", row.names = FALSE)
+
+  ## Galaxias maculatusa - Hedruris spinigera
+Lagrue2011u <- Lagrue6 %>% select(-(5:6))
+Lagrue2011u %>% rename("Count" = 5) %>% write.csv(.,"Poulin Macroparasite Data/Lagrue2011u.csv", row.names = FALSE)
+```
+
+```{r organize Maceda_Veiga}
+# open data sets
+MacVe1 <- readxl::read_excel("Macroparasite datasets/Maceda_Veiga.xls", sheet="Hayes Sept12")
+MacVe2 <- readxl::read_excel("Macroparasite datasets/Maceda_Veiga.xls", sheet="Hayes Jan13")
+MacVe3 <- readxl::read_excel("Macroparasite datasets/Maceda_Veiga.xls", sheet="Hayes May13")
+MacVe4 <- readxl::read_excel("Macroparasite datasets/Maceda_Veiga.xls", sheet="Waihola Sept12")
+MacVe5 <- readxl::read_excel("Macroparasite datasets/Maceda_Veiga.xls", sheet="Waihola Jan13")
+MacVe6 <- readxl::read_excel("Macroparasite datasets/Maceda_Veiga.xls", sheet="Waihola May13")
+MacVe7 <- readxl::read_excel("Macroparasite datasets/Maceda_Veiga.xls", sheet="Tomahawk Sept12")
+MacVe8 <- readxl::read_excel("Macroparasite datasets/Maceda_Veiga.xls", sheet="Tomahawk Jan13")
+MacVe9 <- readxl::read_excel("Macroparasite datasets/Maceda_Veiga.xls", sheet="Tomahawk May13 ")
+
+#Correct headings
+MacVe1 %<>% rename(Individual=Fish) %>% rename("Host Species"=2) %>% rename("Fork Length(mm)"=3) %>% rename("Weight(g)"=4) %>% rename("Life Stage"=5) %>% rename("Season"=Sample) %>% rename("Lake"=7) %>% rename(Site=8) %>% rename("Apatemon sp."="Parasite (#)") %>% rename("Stegodexamene anguillae(Mc;Np)"=10) %>% rename("Stegodexamene anguillae(Mc;P)"=11) %>% rename("Telogaster opisthorchis"=12) %>% rename("Tylodelphys sp."=13) %>% rename("Eustrongylides sp."=14)  %>% rename("Deretrema sp."=15) %>% rename("Coitocaecum parvum"=16) %>% slice(-1) %>% select(-(2)) %>% mutate(Individual = 1:n())
+
+MacVe2 %<>% rename(Individual=Fish) %>% rename("Host Species"=2) %>% rename("Fork Length(mm)"=3) %>% rename("Weight(g)"=4) %>% rename("Life Stage"=5) %>% rename("Season"=Sample) %>% rename("Lake"=7) %>% rename(Site=8) %>% rename("Apatemon sp."="Parasite (#)") %>% rename("Stegodexamene anguillae(Mc;Np)"=10) %>% rename("Stegodexamene anguillae(Mc;P)"=11) %>% rename("Telogaster opisthorchis"=12) %>% rename("Tylodelphys sp."=13) %>% rename("Eustrongylides sp."=14)  %>% rename("Deretrema sp."=15) %>% rename("Coitocaecum parvum"=16) %>% slice(-1) %>% select(-(2)) %>% mutate(Individual = 1:n())
+
+MacVe3 %<>% rename(Individual=Fish) %>% rename("Host Species"=2) %>% rename("Fork Length(mm)"=3) %>% rename("Weight(g)"=4) %>% rename("Life Stage"=5) %>% rename("Season"=Sample) %>% rename("Lake"=7) %>% rename(Site=8) %>% rename("Apatemon sp."="Parasite (#)") %>% rename("Stegodexamene anguillae(Mc;Np)"=10) %>% rename("Stegodexamene anguillae(Mc;P)"=11) %>% rename("Telogaster opisthorchis"=12) %>% rename("Tylodelphys sp."=13) %>% rename("Eustrongylides sp."=14)  %>% rename("Deretrema sp."=15) %>% rename("Coitocaecum parvum"=16) %>% slice(-1) %>% select(-(2)) %>% mutate(Individual = 1:n())
+
+MacVe4 %<>% rename(Individual=Fish) %>% rename("Host Species"=2) %>% rename("Fork Length(mm)"=3) %>% rename("Weight(g)"=4) %>% rename("Life Stage"=5) %>% rename("Season"=Sample) %>% rename("Lake"=7) %>% rename(Site=8) %>% rename("Apatemon sp."="Parasite (#)") %>% rename("Stegodexamene anguillae(Mc;Np)"=10) %>% rename("Stegodexamene anguillae(Mc;P)"=11) %>% rename("Telogaster opisthorchis"=12) %>% rename("Tylodelphys sp."=13) %>% rename("Eustrongylides sp."=14)  %>% rename("Deretrema sp."=15) %>% rename("Coitocaecum parvum"=16) %>% slice(-1) %>% select(-(2)) %>% mutate(Individual = 1:n())
+
+MacVe5 %<>% rename(Individual=Fish) %>% rename("Host Species"=2) %>% rename("Fork Length(mm)"=3) %>% rename("Weight(g)"=4) %>% rename("Life Stage"=5) %>% rename("Season"=Sample) %>% rename("Lake"=7) %>% rename(Site=8) %>% rename("Apatemon sp."="Parasite (#)") %>% rename("Stegodexamene anguillae(Mc;Np)"=10) %>% rename("Stegodexamene anguillae(Mc;P)"=11) %>% rename("Telogaster opisthorchis"=12) %>% rename("Tylodelphys sp."=13) %>% rename("Eustrongylides sp."=14)  %>% rename("Deretrema sp."=15) %>% rename("Coitocaecum parvum"=16) %>% slice(-1) %>% select(-(2)) %>% mutate(Individual = 1:n())
+
+MacVe6 %<>% rename(Individual=Fish) %>% rename("Host Species"=2) %>% rename("Fork Length(mm)"=3) %>% rename("Weight(g)"=4) %>% rename("Life Stage"=5) %>% rename("Season"=Sample) %>% rename("Lake"=7) %>% rename(Site=8) %>% rename("Apatemon sp."="Parasite (#)") %>% rename("Stegodexamene anguillae(Mc;Np)"=10) %>% rename("Stegodexamene anguillae(Mc;P)"=11) %>% rename("Telogaster opisthorchis"=12) %>% rename("Tylodelphys sp."=13) %>% rename("Eustrongylides sp."=14)  %>% rename("Deretrema sp."=15) %>% rename("Coitocaecum parvum"=16) %>% slice(-1) %>% select(-(2)) %>% mutate(Individual = 1:n())
+
+MacVe7 %<>% rename(Individual=Fish) %>% rename("Host Species"=2) %>% rename("Fork Length(mm)"=3) %>% rename("Weight(g)"=4) %>% rename("Life Stage"=5) %>% rename("Season"=Sample) %>% rename("Lake"=7) %>% rename(Site=8) %>% rename("Apatemon sp."="Parasite (#)") %>% rename("Stegodexamene anguillae(Mc;Np)"=10) %>% rename("Stegodexamene anguillae(Mc;P)"=11) %>% rename("Telogaster opisthorchis"=12) %>% rename("Tylodelphys sp."=13) %>% rename("Eustrongylides sp."=14)  %>% rename("Deretrema sp."=15) %>% rename("Coitocaecum parvum"=16) %>% slice(-1) %>% select(-(2)) %>% mutate(Individual = 1:n())
+
+MacVe8 %<>% rename(Individual=Fish) %>% rename("Host Species"=2) %>% rename("Fork Length(mm)"=3) %>% rename("Weight(g)"=4) %>% rename("Life Stage"=5) %>% rename("Season"=Sample) %>% rename("Lake"=7) %>% rename(Site=8) %>% rename("Apatemon sp."="Parasite (#)") %>% rename("Stegodexamene anguillae(Mc;Np)"=10) %>% rename("Stegodexamene anguillae(Mc;P)"=11) %>% rename("Telogaster opisthorchis"=12) %>% rename("Tylodelphys sp."=13) %>% rename("Eustrongylides sp."=14)  %>% rename("Deretrema sp."=15) %>% rename("Coitocaecum parvum"=16) %>% slice(-1) %>% select(-(2)) %>% mutate(Individual = 1:n())
+
+MacVe9 %<>% rename(Individual=Fish) %>% rename("Host Species"=2) %>% rename("Fork Length(mm)"=3) %>% rename("Weight(g)"=4) %>% rename("Life Stage"=5) %>% rename("Season"=Sample) %>% rename("Lake"=7) %>% rename(Site=8) %>% rename("Apatemon sp."="Parasite (#)") %>% rename("Stegodexamene anguillae(Mc;Np)"=10) %>% rename("Stegodexamene anguillae(Mc;P)"=11) %>% rename("Telogaster opisthorchis"=12) %>% rename("Tylodelphys sp."=13) %>% rename("Eustrongylides sp."=14)  %>% rename("Deretrema sp."=15) %>% rename("Coitocaecum parvum"=16) %>% slice(-1) %>% select(-(2)) %>% mutate(Individual = 1:n())
+
+#Sum Stegodexamene anguillae columns
+  # Mac_Ve 1
+MacVe1$`Stegodexamene anguillae(Mc;Np)` %<>% as.numeric()
+MacVe1$`Stegodexamene anguillae(Mc;P)` %<>% as.numeric()
+
+MacVe1 %<>% mutate(`Stegodexamene anguillae(Mc;Np)` = ifelse(is.na(MacVe1$`Stegodexamene anguillae(Mc;Np)`), 0, `Stegodexamene anguillae(Mc;Np)`)) %>% mutate(`Stegodexamene anguillae(Mc;P)` = ifelse(is.na(MacVe1$`Stegodexamene anguillae(Mc;P)`), 0, `Stegodexamene anguillae(Mc;P)`))
+
+MacVe1 %<>% add_column("Stegodexamene anguillae" = NA) %>% mutate(`Stegodexamene anguillae` = `Stegodexamene anguillae(Mc;Np)` + `Stegodexamene anguillae(Mc;P)`) %>% select(-(9:10))
+
+  # Mac_Ve 2
+MacVe2$`Stegodexamene anguillae(Mc;Np)` %<>% as.numeric()
+MacVe2$`Stegodexamene anguillae(Mc;P)` %<>% as.numeric()
+
+MacVe2 %<>% mutate(`Stegodexamene anguillae(Mc;Np)` = ifelse(is.na(MacVe2$`Stegodexamene anguillae(Mc;Np)`), 0, `Stegodexamene anguillae(Mc;Np)`)) %>% mutate(`Stegodexamene anguillae(Mc;P)` = ifelse(is.na(MacVe2$`Stegodexamene anguillae(Mc;P)`), 0, `Stegodexamene anguillae(Mc;P)`))
+
+MacVe2 %<>% add_column("Stegodexamene anguillae" = NA) %>% mutate(`Stegodexamene anguillae` = `Stegodexamene anguillae(Mc;Np)` + `Stegodexamene anguillae(Mc;P)`) %>% select(-(9:10))
+
+  # Mac_Ve 3
+MacVe3$`Stegodexamene anguillae(Mc;Np)` %<>% as.numeric()
+MacVe3$`Stegodexamene anguillae(Mc;P)` %<>% as.numeric()
+
+MacVe3 %<>% mutate(`Stegodexamene anguillae(Mc;Np)` = ifelse(is.na(MacVe3$`Stegodexamene anguillae(Mc;Np)`), 0, `Stegodexamene anguillae(Mc;Np)`)) %>% mutate(`Stegodexamene anguillae(Mc;P)` = ifelse(is.na(MacVe3$`Stegodexamene anguillae(Mc;P)`), 0, `Stegodexamene anguillae(Mc;P)`))
+
+MacVe3 %<>% add_column("Stegodexamene anguillae" = NA) %>% mutate(`Stegodexamene anguillae` = `Stegodexamene anguillae(Mc;Np)` + `Stegodexamene anguillae(Mc;P)`) %>% select(-(9:10))
+
+  # Mac_Ve 4
+MacVe4$`Stegodexamene anguillae(Mc;Np)` %<>% as.numeric()
+MacVe4$`Stegodexamene anguillae(Mc;P)` %<>% as.numeric()
+
+MacVe4 %<>% mutate(`Stegodexamene anguillae(Mc;Np)` = ifelse(is.na(MacVe4$`Stegodexamene anguillae(Mc;Np)`), 0, `Stegodexamene anguillae(Mc;Np)`)) %>% mutate(`Stegodexamene anguillae(Mc;P)` = ifelse(is.na(MacVe4$`Stegodexamene anguillae(Mc;P)`), 0, `Stegodexamene anguillae(Mc;P)`))
+
+MacVe4 %<>% add_column("Stegodexamene anguillae" = NA) %>% mutate(`Stegodexamene anguillae` = `Stegodexamene anguillae(Mc;Np)` + `Stegodexamene anguillae(Mc;P)`) %>% select(-(9:10))
+
+  # Mac_Ve 5
+MacVe5$`Stegodexamene anguillae(Mc;Np)` %<>% as.numeric()
+MacVe5$`Stegodexamene anguillae(Mc;P)` %<>% as.numeric()
+
+MacVe5 %<>% mutate(`Stegodexamene anguillae(Mc;Np)` = ifelse(is.na(MacVe5$`Stegodexamene anguillae(Mc;Np)`), 0, `Stegodexamene anguillae(Mc;Np)`)) %>% mutate(`Stegodexamene anguillae(Mc;P)` = ifelse(is.na(MacVe5$`Stegodexamene anguillae(Mc;P)`), 0, `Stegodexamene anguillae(Mc;P)`))
+
+MacVe5 %<>% add_column("Stegodexamene anguillae" = NA) %>% mutate(`Stegodexamene anguillae` = `Stegodexamene anguillae(Mc;Np)` + `Stegodexamene anguillae(Mc;P)`) %>% select(-(9:10))
+
+  # Mac_Ve 6
+MacVe6$`Stegodexamene anguillae(Mc;Np)` %<>% as.numeric()
+MacVe6$`Stegodexamene anguillae(Mc;P)` %<>% as.numeric()
+
+MacVe6 %<>% mutate(`Stegodexamene anguillae(Mc;Np)` = ifelse(is.na(MacVe6$`Stegodexamene anguillae(Mc;Np)`), 0, `Stegodexamene anguillae(Mc;Np)`)) %>% mutate(`Stegodexamene anguillae(Mc;P)` = ifelse(is.na(MacVe6$`Stegodexamene anguillae(Mc;P)`), 0, `Stegodexamene anguillae(Mc;P)`))
+
+MacVe6 %<>% add_column("Stegodexamene anguillae" = NA) %>% mutate(`Stegodexamene anguillae` = `Stegodexamene anguillae(Mc;Np)` + `Stegodexamene anguillae(Mc;P)`) %>% select(-(9:10))
+
+  # Mac_Ve 7
+MacVe7$`Stegodexamene anguillae(Mc;Np)` %<>% as.numeric()
+MacVe7$`Stegodexamene anguillae(Mc;P)` %<>% as.numeric()
+
+MacVe7 %<>% mutate(`Stegodexamene anguillae(Mc;Np)` = ifelse(is.na(MacVe7$`Stegodexamene anguillae(Mc;Np)`), 0, `Stegodexamene anguillae(Mc;Np)`)) %>% mutate(`Stegodexamene anguillae(Mc;P)` = ifelse(is.na(MacVe7$`Stegodexamene anguillae(Mc;P)`), 0, `Stegodexamene anguillae(Mc;P)`))
+
+MacVe7 %<>% add_column("Stegodexamene anguillae" = NA) %>% mutate(`Stegodexamene anguillae` = `Stegodexamene anguillae(Mc;Np)` + `Stegodexamene anguillae(Mc;P)`) %>% select(-(9:10))
+
+  # Mac_Ve 8
+MacVe8$`Stegodexamene anguillae(Mc;Np)` %<>% as.numeric()
+MacVe8$`Stegodexamene anguillae(Mc;P)` %<>% as.numeric()
+
+MacVe8 %<>% mutate(`Stegodexamene anguillae(Mc;Np)` = ifelse(is.na(MacVe8$`Stegodexamene anguillae(Mc;Np)`), 0, `Stegodexamene anguillae(Mc;Np)`)) %>% mutate(`Stegodexamene anguillae(Mc;P)` = ifelse(is.na(MacVe8$`Stegodexamene anguillae(Mc;P)`), 0, `Stegodexamene anguillae(Mc;P)`))
+
+MacVe8 %<>% add_column("Stegodexamene anguillae" = NA) %>% mutate(`Stegodexamene anguillae` = `Stegodexamene anguillae(Mc;Np)` + `Stegodexamene anguillae(Mc;P)`) %>% select(-(9:10))
+
+  # Mac_Ve 9
+MacVe9$`Stegodexamene anguillae(Mc;Np)` %<>% as.numeric()
+MacVe9$`Stegodexamene anguillae(Mc;P)` %<>% as.numeric()
+
+MacVe9 %<>% mutate(`Stegodexamene anguillae(Mc;Np)` = ifelse(is.na(MacVe9$`Stegodexamene anguillae(Mc;Np)`), 0, `Stegodexamene anguillae(Mc;Np)`)) %>% mutate(`Stegodexamene anguillae(Mc;P)` = ifelse(is.na(MacVe9$`Stegodexamene anguillae(Mc;P)`), 0, `Stegodexamene anguillae(Mc;P)`))
+
+MacVe9 %<>% add_column("Stegodexamene anguillae" = NA) %>% mutate(`Stegodexamene anguillae` = `Stegodexamene anguillae(Mc;Np)` + `Stegodexamene anguillae(Mc;P)`) %>% select(-(9:10))
+
+#Seperate line lists by host species - parasite name
+
+### Mac_Ve1
+  ## Gobiomorphus cotidianus - Apatemon sp.
+
+Maceda_Veiga2016a <- MacVe1 %>% select(1:8) 
+Maceda_Veiga2016a %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016a.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Telogaster opisthorchis
+
+Maceda_Veiga2016b <- MacVe1 %>% select(-(8)) %>% select(-(9:13))
+Maceda_Veiga2016b  %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016b.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Tylodelphys sp.
+
+Maceda_Veiga2016c <- MacVe1 %>% select(-(8:9)) %>% select(-(9:12))
+Maceda_Veiga2016c %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016c.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Eustrongylides sp.
+
+Maceda_Veiga2016d <- MacVe1 %>% select(-(8:10)) %>% select(-(9:11)) 
+Maceda_Veiga2016d %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016d.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Stegodexamene anguillae
+
+Maceda_Veiga2016e <- MacVe1 %>% select(-(8:13))
+Maceda_Veiga2016e %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016e.csv", row.names = FALSE)
+
+### Mac_Ve2
+  ## Gobiomorphus cotidianus - Apatemon sp.
+
+Maceda_Veiga2016f <- MacVe2 %>% select(1:8)
+Maceda_Veiga2016f %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016f.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Telogaster opisthorchis
+
+Maceda_Veiga2016g <- MacVe2 %>% select(-(8)) %>% select(-(9:13))
+Maceda_Veiga2016g %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016g.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Tylodelphys sp.
+
+Maceda_Veiga2016h <- MacVe2 %>% select(-(8:9)) %>% select(-(9:12))
+Maceda_Veiga2016h %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016h.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Eustrongylides sp.
+
+Maceda_Veiga2016i <- MacVe2 %>% select(-(8:10)) %>% select(-(9:11))
+Maceda_Veiga2016i %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016i.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Stegodexamene anguillae
+
+Maceda_Veiga2016j <- MacVe2 %>% select(-(8:13)) 
+Maceda_Veiga2016j %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016j.csv", row.names = FALSE) 
+
+### Mac_Ve3
+  ## Gobiomorphus cotidianus - Apatemon sp.
+
+Maceda_Veiga2016k <- MacVe3 %>% select(1:8) 
+Maceda_Veiga2016k %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016k.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Telogaster opisthorchis
+
+Maceda_Veiga2016l <- MacVe3 %>% select(-(8)) %>% select(-(9:13))
+Maceda_Veiga2016l %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016l.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Tylodelphys sp.
+
+Maceda_Veiga2016m <- MacVe3 %>% select(-(8:9)) %>% select(-(9:12)) 
+Maceda_Veiga2016m %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016m.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Eustrongylides sp.
+
+Maceda_Veiga2016n <- MacVe3 %>% select(-(8:10)) %>% select(-(9:11)) 
+Maceda_Veiga2016n %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016n.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Stegodexamene anguillae
+
+Maceda_Veiga2016o <- MacVe3 %>% select(-(8:13)) 
+Maceda_Veiga2016o %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016o.csv", row.names = FALSE)
+
+### Mac_Ve4
+  ## Gobiomorphus cotidianus - Apatemon sp.
+
+Maceda_Veiga2016p <- MacVe4 %>% select(1:8)
+Maceda_Veiga2016p %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016p.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Telogaster opisthorchis
+
+Maceda_Veiga2016q <- MacVe4 %>% select(-(8)) %>% select(-(9:13)) 
+Maceda_Veiga2016q %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016q.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Eustrongylides sp.
+
+Maceda_Veiga2016r <- MacVe4 %>% select(-(8:10)) %>% select(-(9:11)) 
+Maceda_Veiga2016r %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016r.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Coitocaecum parvum.
+
+Maceda_Veiga2016s <- MacVe4 %>% select(-(8:12)) %>% select(-(9))
+Maceda_Veiga2016s  %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016s.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Stegodexamene anguillae
+
+Maceda_Veiga2016t <- MacVe4 %>% select(-(8:13)) 
+Maceda_Veiga2016t %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016t.csv", row.names = FALSE)
+
+### Mac_Ve5
+  ## Gobiomorphus cotidianus - Apatemon sp.
+
+Maceda_Veiga2016u <- MacVe5 %>% select(1:8) 
+Maceda_Veiga2016u %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016u.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Telogaster opisthorchis
+
+Maceda_Veiga2016v <- MacVe5 %>% select(-(8)) %>% select(-(9:13)) 
+Maceda_Veiga2016v %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016v.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Eustrongylides sp.
+
+Maceda_Veiga2016w <- MacVe5 %>% select(-(8:10)) %>% select(-(9:11)) 
+Maceda_Veiga2016w %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016w.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Deretrema sp
+
+Maceda_Veiga2016x <- MacVe5 %>% select(-(8:11)) %>% select(-(9:10)) 
+Maceda_Veiga2016x %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016x.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Coitocaecum parvum.
+
+Maceda_Veiga2016y <- MacVe5 %>% select(-(8:12)) %>% select(-(0)) 
+Maceda_Veiga2016y %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016y.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Stegodexamene anguillae
+
+Maceda_Veiga2016z <- MacVe5 %>% select(-(8:13)) 
+Maceda_Veiga2016z %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016z.csv", row.names = FALSE)
+
+### Mac_Ve6
+  ## Gobiomorphus cotidianus - Apatemon sp.
+
+Maceda_Veiga2016aa <- MacVe6 %>% select(1:8) 
+Maceda_Veiga2016aa %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016aa.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Telogaster opisthorchis
+
+Maceda_Veiga2016ab <- MacVe6 %>% select(-(8)) %>% select(-(9:13)) 
+Maceda_Veiga2016ab %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016ab.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Eustrongylides sp.
+
+Maceda_Veiga2016ac <- MacVe6 %>% select(-(8:10)) %>% select(-(9:11)) 
+Maceda_Veiga2016ac %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016ac.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Coitocaecum parvum.
+
+Maceda_Veiga2016ad <- MacVe6 %>% select(-(8:12)) %>% select(-(9)) 
+Maceda_Veiga2016ad %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016ad.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Stegodexamene anguillae
+
+Maceda_Veiga2016ae <- MacVe6 %>% select(-(8:13)) 
+Maceda_Veiga2016ae %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016ae.csv", row.names = FALSE)
+
+### Mac_Ve7
+  ## Gobiomorphus cotidianus - Apatemon sp.
+
+Maceda_Veiga2016af <- MacVe7 %>% select(1:8) 
+Maceda_Veiga2016af %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016af.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Telogaster opisthorchis
+
+Maceda_Veiga2016ag <- MacVe7 %>% select(-(8)) %>% select(-(9:13)) 
+Maceda_Veiga2016ag %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016ag.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Eustrongylides sp.
+
+Maceda_Veiga2016ah <- MacVe7 %>% select(-(8:10)) %>% select(-(9:11)) 
+Maceda_Veiga2016ah %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016ah.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Coitocaecum parvum.
+
+Maceda_Veiga2016ai <- MacVe7 %>% select(-(8:12)) %>% select(-(9)) 
+Maceda_Veiga2016ai %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016ai.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Stegodexamene anguillae
+
+Maceda_Veiga2016aj <- MacVe7 %>% select(-(8:13)) 
+Maceda_Veiga2016aj %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016aj.csv", row.names = FALSE)
+
+### Mac_Ve8
+  ## Gobiomorphus cotidianus - Apatemon sp.
+
+Maceda_Veiga2016ak <- MacVe8 %>% select(1:8) 
+Maceda_Veiga2016ak %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016ak.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Telogaster opisthorchis
+
+Maceda_Veiga2016al <- MacVe8 %>% select(-(8)) %>% select(-(9:13)) 
+Maceda_Veiga2016al %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016al.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Eustrongylides sp.
+
+Maceda_Veiga2016am <- MacVe8 %>% select(-(8:10)) %>% select(-(9:11)) 
+Maceda_Veiga2016am %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016am.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Coitocaecum parvum.
+
+Maceda_Veiga2016an <- MacVe8 %>% select(-(8:12)) %>% select(-(9)) 
+Maceda_Veiga2016an %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016an.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Stegodexamene anguillae
+
+Maceda_Veiga2016ao <- MacVe8 %>% select(-(8:13)) 
+Maceda_Veiga2016ao %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016ao.csv", row.names = FALSE)
+
+### Mac_Ve9
+  ## Gobiomorphus cotidianus - Apatemon sp.
+
+Maceda_Veiga2016ap <- MacVe9 %>% select(1:8) 
+Maceda_Veiga2016ap %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016ap.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Telogaster opisthorchis
+
+Maceda_Veiga2016aq <- MacVe9 %>% select(-(8)) %>% select(-(9:13)) 
+Maceda_Veiga2016aq %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016aq.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Eustrongylides sp.
+
+Maceda_Veiga2016ar <- MacVe9 %>% select(-(8:10)) %>% select(-(9:11)) 
+Maceda_Veiga2016ar %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016ar.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Coitocaecum parvum.
+
+Maceda_Veiga2016as <- MacVe9 %>% select(-(8:12)) %>% select(-(9)) 
+Maceda_Veiga2016as %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016as.csv", row.names = FALSE)
+
+  ## Gobiomorphus cotidianus - Stegodexamene anguillae
+
+Maceda_Veiga2016at <- MacVe9 %>% select(-(8:13)) 
+Maceda_Veiga2016at %>% rename("Count" = 8) %>% write.csv(.,"Poulin Macroparasite Data/Maceda_Veiga2016at.csv", row.names = FALSE)
+
+```
+
+```{r organize Luque Folder}
+# Open datasets
+Luq1 <- readxl::read_excel("Macroparasite datasets/Luque folder/Aluterus monoceros.xls")
+Luq2 <- readxl::read_excel("Macroparasite datasets/Luque folder/Archosargus rhomboidalis.xls")
+Luq3 <- readxl::read_excel("Macroparasite datasets/Luque folder/Balistes capriscus.xls")
+Luq4 <- readxl::read_excel("Macroparasite datasets/Luque folder/Balistes vetula.xls")
+Luq5 <- readxl::read_excel("Macroparasite datasets/Luque folder/Caranx hippos.xls")
+Luq6 <- readxl::read_excel("Macroparasite datasets/Luque folder/Caranx latus.xls")
+Luq7 <- readxl::read_excel("Macroparasite datasets/Luque folder/Chaetodipterus faber.xls")
+Luq8 <- readxl::read_excel("Macroparasite datasets/Luque folder/Cynoscion guatucupa.xls")
+Luq9 <- readxl::read_excel("Macroparasite datasets/Luque folder/Dactylopterus volitans.xls")
+Luq10 <- readxl::read_excel("Macroparasite datasets/Luque folder/Euthynnus alleteratus.xls")
+Luq11 <- readxl::read_excel("Macroparasite datasets/Luque folder/Genypterus brasiliensis.xls")
+Luq12 <- readxl::read_excel("Macroparasite datasets/Luque folder/Gymnothorax moringa.xls")
+Luq13 <- readxl::read_excel("Macroparasite datasets/Luque folder/Haemulon steindachneri.xls")
+Luq14 <- readxl::read_excel("Macroparasite datasets/Luque folder/Macrodon ancylodon.xls") %>% slice(-1)
+Luq15 <- readxl::read_excel("Macroparasite datasets/Luque folder/Menticirrhus americanus.xls")
+Luq16 <- readxl::read_excel("Macroparasite datasets/Luque folder/Micropogonias furnieri.xls")
+Luq17 <- readxl::read_excel("Macroparasite datasets/Luque folder/Mugil platanus.xls")
+Luq18 <- readxl::read_excel("Macroparasite datasets/Luque folder/Mullus argentinae.xls")
+Luq19 <- readxl::read_excel("Macroparasite datasets/Luque folder/Netuma barba.xls")
+Luq20 <- readxl::read_excel("Macroparasite datasets/Luque folder/Oligoplites palometa.xls")
+Luq21 <- readxl::read_excel("Macroparasite datasets/Luque folder/Oligoplites saliens.xls")
+Luq22 <- readxl::read_excel("Macroparasite datasets/Luque folder/Oligoplites saurus.xls")
+Luq23 <- readxl::read_excel("Macroparasite datasets/Luque folder/Orthopristis ruber.xls")
+Luq24 <- readxl::read_excel("Macroparasite datasets/Luque folder/Paralichthys isosceles.xls")
+Luq25 <- readxl::read_excel("Macroparasite datasets/Luque folder/Paralochurus brasiliensis.xls")
+Luq26 <- readxl::read_excel("Macroparasite datasets/Luque folder/Peprilus paru.xls")
+Luq27 <- readxl::read_excel("Macroparasite datasets/Luque folder/Pomatomus saltator.xls")
+Luq28 <- readxl::read_excel("Macroparasite datasets/Luque folder/Priacanthus arenatus.xls")
+Luq29 <- readxl::read_excel("Macroparasite datasets/Luque folder/Prionotus punctatus.xls")
+Luq30 <- readxl::read_excel("Macroparasite datasets/Luque folder/Sciadeichthys luniscutus.xls")
+Luq31 <- readxl::read_excel("Macroparasite datasets/Luque folder/Scomber japonicus.xls")
+Luq32.1 <- readxl::read_excel("Macroparasite datasets/Luque folder/Selene setapinnis.xls",sheet="Plan1")
+Luq32.2 <- readxl::read_excel("Macroparasite datasets/Luque folder/Selene setapinnis.xls",sheet="tab.2")
+Luq33 <- readxl::read_excel("Macroparasite datasets/Luque folder/Trichiurus lepturus.xls")
+Luq34 <- readxl::read_excel("Macroparasite datasets/Luque folder/Tylosurus acus.xls")
+Luq35 <- readxl::read_excel("Macroparasite datasets/Luque folder/Umbrina canosai.xls")
+Luq36 <- readxl::read_excel("Macroparasite datasets/Luque folder/Urophycis brasiliensis.xls")
+Luq37 <- readxl::read_excel("Macroparasite datasets/Luque folder/Urophycis mystaceus.xls")
+
+#Include Individual column
+Luq1 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n()) 
+Luq2 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n()) 
+Luq3 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq4 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq5 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq6 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq7 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq8 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq9 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq10 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq11 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq12 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq13 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq14 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq15 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq16 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq17 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq18 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq19 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq20 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq21 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq22 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq23 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq24 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq25 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq26 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq27 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq28 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq29 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq30 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq31 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq32.1 %<>% rename(Individual=HOSP.)
+Luq33 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq34 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq35 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq36 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+Luq37 %<>% add_column(Individual=NA, .before = "Size") %>% mutate(Individual = 1:n())
+
+#Correct Luq32.1 and combine with 32.2
+Luq32.1 %<>% rename("Size"=`COMP.(cm)`) %>% rename("Sex"=SEXO)
+Luq32.1 %<>% mutate(Sex= ifelse(grepl("1", Luq32.1$Sex), "Male", Sex)) %>% mutate(Sex= ifelse(grepl("2", Luq32.1$Sex), "Female", Sex)) %>% mutate(Sex= ifelse(grepl("3", Luq32.1$Sex), NA, Sex))
+Luq32.1 %<>% slice(1:89)
+
+Luq32.2 %<>% select(-(1))
+
+Luq32 <- bind_cols(Luq32.1, Luq32.2)
+
+#Delete empty columns
+Luq8 %<>% select(-(3))
+Luq29 %<>% select (-(8))
+Luq32.1 %<>% select (-(24))
+
+Luq35 %<>% rename("Procamallanus sp."="Procamallanus (S) sp.")
+Luq36 %<>% rename("Aponurus laguncula"="Aponurus lag") %>% rename("Phyllobotrid"="Phyllobotrid larval")
+Luq37 %<>% rename("Phyllobothrid"="Phyllobothriid larval")
+
+#Include Host Species
+Luq1 %<>% add_column("Host Species"="Aluterus monoceros",.before = "Individual")
+Luq2 %<>% add_column("Host Species"="Archosargus rhomboidalis",.before = "Individual")
+Luq3 %<>% add_column("Host Species"="Balistes capriscus",.before = "Individual") 
+Luq4 %<>% add_column("Host Species"="Balistes vetula",.before = "Individual")
+Luq5 %<>% add_column("Host Species"="Caranx hippos",.before = "Individual")
+Luq6 %<>% add_column("Host Species"="Caranx latus",.before = "Individual")
+Luq7 %<>% add_column("Host Species"="Chaetodipterus faber",.before = "Individual")
+Luq8 %<>% add_column("Host Species"="Cynoscion guatucupa",.before = "Individual")
+Luq9 %<>% add_column("Host Species"="Dactylopterus volitans",.before = "Individual")
+Luq10 %<>% add_column("Host Species"="Euthynnus alleteratus",.before = "Individual")
+Luq11 %<>% add_column("Host Species"="Genypterus brasiliensis",.before = "Individual")
+Luq12 %<>% add_column("Host Species"="Gymnothorax moringa",.before = "Individual")
+Luq13 %<>% add_column("Host Species"="Gymnothorax moringa",.before = "Individual")
+Luq14 %<>% add_column("Host Species"="Macrodon ancylodon",.before = "Individual")
+Luq15 %<>% add_column("Host Species"="Menticirrhus americanus",.before = "Individual")
+Luq16 %<>% add_column("Host Species"="Micropogonias furnieri",.before = "Individual")
+Luq17 %<>% add_column("Host Species"="Mugil platanus",.before = "Individual")
+Luq18 %<>% add_column("Host Species"="Mullus argentinae",.before = "Individual")
+Luq19 %<>% add_column("Host Species"="Netuma barba",.before = "Individual")
+Luq20 %<>% add_column("Host Species"="Oligoplites palometa",.before = "Individual")
+Luq21 %<>% add_column("Host Species"="Oligoplites saliens",.before = "Individual")
+Luq22 %<>% add_column("Host Species"="Oligoplites saurus",.before = "Individual")
+Luq23 %<>% add_column("Host Species"="Orthopristis ruber",.before = "Individual")
+Luq24 %<>% add_column("Host Species"="Paralichthys isosceles",.before = "Individual")
+Luq25 %<>% add_column("Host Species"="Paralochurus brasiliensis",.before = "Individual")
+Luq26 %<>% add_column("Host Species"="Peprilus paru",.before = "Individual")
+Luq27 %<>% add_column("Host Species"="Pomatomus saltator",.before = "Individual")
+Luq28 %<>% add_column("Host Species"="Priacanthus arenatus",.before = "Individual")
+Luq29 %<>% add_column("Host Species"="Priacanthus arenatus",.before = "Individual")
+Luq30 %<>% add_column("Host Species"= "Sciadeichthys luniscutus",.before = "Individual")
+Luq31 %<>% add_column("Host Species"="Scomber japonicus",.before = "Individual")
+Luq32 %<>% add_column("Host Species"="Selene setapinnis",.before = "Individual")
+Luq33 %<>% add_column("Host Species"="Trichiurus lepturus",.before = "Individual")
+Luq34 %<>% add_column("Host Species"="Tylosurus acus",.before = "Individual")
+Luq35 %<>% add_column("Host Species"="Umbrina canosai",.before = "Individual")
+Luq36 %<>% add_column("Host Species"="Urophycis brasiliensis",.before = "Individual")
+Luq37 %<>% add_column("Host Species"="Urophycis mystaceus",.before = "Individual")
+
+#Seperate line lists by host species - parasite name
+
+  ## Aluterus monoceros - Aponurus laguncula
+
+Luque2003a <- Luq1 %>% select(1:3)
+Luque2003a  %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003a.csv", row.names = FALSE)
+
+  ## Aluterus monoceros - Parantorchis sp.
+
+Luque2003b <- Luq1 %>% select(-(3)) %>% select(-(4:6)) 
+Luque2003b %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003b.csv", row.names = FALSE)
+
+  ## Aluterus monoceros - Tetrochetus sp.
+
+Luque2003c <- Luq1 %>% select(-(3:4)) %>% select(-(4:5))
+Luque2003c %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003c.csv", row.names = FALSE)
+Luque2003c
+
+  ## Aluterus monoceros - Lecithocladium sp. 
+
+Luque2003d <- Luq1 %>% select(-(3:5)) %>% select(-(4)) 
+Luque2003d %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003d.csv", row.names = FALSE)
+
+  ## Aluterus monoceros - Anonchocephalus sp.
+
+Luque2003e <- Luq1 %>% select(-(3:6)) 
+Luque2003e %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003e.csv", row.names = FALSE)
+
+ ## Archosargus rhomboidalis - Podocotyle sp.
+
+Luque2003f <- Luq2 %>% select(1:3)
+Luque2003f %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003f.csv", row.names = FALSE)
+
+  ## Archosargus rhomboidalis - Multitestis incontans
+
+Luque2003g <- Luq2 %>% select(-(3)) %>% select(-(4:6))
+Luque2003g %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003g.csv", row.names = FALSE)
+
+  ## Archosargus rhomboidalis - Opecoeloides sp.
+
+Luque2003h <- Luq2 %>% select(-(3:4)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003h.csv", row.names = FALSE)
+Luque2003h %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003h.csv", row.names = FALSE)
+
+  ## Archosargus rhomboidalis - Megasolena hysterospina 
+
+Luque2003i <- Luq2 %>% select(-(3:5)) %>% select(-(4)) 
+Luque2003i %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003i.csv", row.names = FALSE)
+
+  ## Archosargus rhomboidalis - Lecithochirium sp..
+
+Luque2003j <- Luq2 %>% select(-(3:6)) 
+Luque2003j %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003j.csv", row.names = FALSE)
+
+ ## Balistes capriscus - 
+
+Luque2003k <- Luq3 %>% select(1:3) 
+Luque2003k %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003k.csv", row.names = FALSE)
+
+  ## Balistes capriscus - 
+
+Luque2003l <- Luq3 %>% select(-(3)) %>% select(-(4:6)) 
+Luque2003l %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003l.csv", row.names = FALSE)
+
+  ## Balistes capriscus - 
+
+Luque2003m <- Luq3 %>% select(-(3:4)) %>% select(-(4:5)) 
+Luque2003m %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003m.csv", row.names = FALSE)
+
+  ## Balistes capriscus - 
+
+Luque2003n <- Luq3 %>% select(-(3:5)) %>% select(-(4)) 
+Luque2003n %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003n.csv", row.names = FALSE)
+
+ ## Balistes capriscus - 
+
+Luque2003o <- Luq3 %>% select(-(3)) %>% select(-(4:6)) 
+Luque2003o %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003o.csv", row.names = FALSE)
+
+  ## Balistes capriscus - 
+
+Luque2003p <- Luq3 %>% select(-(3:4)) %>% select(-(4:5)) 
+Luque2003p %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003p.csv", row.names = FALSE)
+
+  ## Balistes capriscus - 
+
+Luque2003q <- Luq3 %>% select(-(3:5)) %>% select(-(4)) 
+Luque2003q %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003q.csv", row.names = FALSE)
+
+ ## Balistes capriscus - 
+
+Luque2003r <- Luq3 %>% select(-(3)) %>% select(-(4:6)) 
+Luque2003r %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003r.csv", row.names = FALSE)
+
+  ## Balistes capriscus - 
+
+Luque2003s <- Luq3 %>% select(-(3:4)) %>% select(-(4:5)) 
+Luque2003s %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003s.csv", row.names = FALSE)
+
+  ## Balistes capriscus - 
+
+Luque2003t <- Luq3 %>% select(-(3:5)) %>% select(-(4)) 
+Luque2003t %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003t.csv", row.names = FALSE)
+
+  ## Balistes capriscus - 
+
+Luque2003u <- Luq3 %>% select(-(3:6)) 
+Luque2003u %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003u.csv", row.names = FALSE)
+
+  ## Balistes vetula - 
+
+Luque2003v <- Luq4 %>% select(1:3) 
+Luque2003v %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003v.csv", row.names = FALSE)
+
+  ## Balistes vetula - 
+
+Luque2003w <- Luq4 %>% select(-(3)) %>% select(-(4:8)) 
+Luque2003w %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003w.csv", row.names = FALSE)
+
+  ## Balistes vetula - 
+
+Luque2003x <- Luq4 %>% select(-(3:4)) %>% select(-(4:7)) 
+Luque2003x %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003x.csv", row.names = FALSE)
+
+  ## Balistes vetula - 
+
+Luque2003y <- Luq4 %>% select(-(3:5)) %>% select(-(4:6)) 
+Luque2003y %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003y.csv", row.names = FALSE)
+
+  ## Balistes vetula - 
+
+Luque2003z <- Luq4 %>% select(-(3:6)) %>% select(-(4:5)) 
+Luque2003z %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003z.csv", row.names = FALSE)
+
+  ## Balistes vetula - 
+
+Luque2003aa <- Luq4 %>% select(-(3:7)) %>% select(-(4)) 
+Luque2003aa %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003aa.csv", row.names = FALSE)
+
+  ## Balistes vetula - 
+
+Luque2003ab <- Luq4 %>% select(-(3:8)) 
+Luque2003ab %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ab.csv", row.names = FALSE)
+
+  ## Caranx hippos - 
+
+Luque2003ac <- Luq5 %>% select(1:3) 
+Luque2003ac %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ac.csv", row.names = FALSE)
+
+  ## Caranx hippos - 
+
+Luque2003ad <- Luq5 %>% select(-(3)) %>% select(-(4:7)) 
+Luque2003ad %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ad.csv", row.names = FALSE)
+
+  ## Caranx hippos - 
+
+Luque2003ae <- Luq5 %>% select(-(3:4)) %>% select(-(4:6)) 
+Luque2003ae %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ae.csv", row.names = FALSE)
+
+  ## Caranx hippos - 
+
+Luque2003af <- Luq5 %>% select(-(3:5)) %>% select(-(4:5)) 
+Luque2003af %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003af.csv", row.names = FALSE)
+
+  ## Caranx hippos - 
+
+Luque2003ag <- Luq5 %>% select(-(3:6)) %>% select(-(4)) 
+Luque2003ag %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ag.csv", row.names = FALSE)
+
+  ## Caranx hippos - 
+
+Luque2003ah <- Luq5 %>% select(-(3:7)) 
+Luque2003ah %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ah.csv", row.names = FALSE)
+
+  ## Caranx latus - 
+
+Luque2003ai <- Luq6 %>% select(1:3) 
+Luque2003ai %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ai.csv", row.names = FALSE)
+
+  ## Caranx latus - 
+
+Luque2003aj <- Luq6 %>% select(-(3)) %>% select(-(4:8)) 
+Luque2003aj %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003aj.csv", row.names = FALSE)
+
+  ## Caranx latus - 
+
+Luque2003ak <- Luq6 %>% select(-(3:4)) %>% select(-(4:7)) 
+Luque2003ak %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ak.csv", row.names = FALSE)
+
+  ## Caranx latus - 
+
+Luque2003al <- Luq6 %>% select(-(3:5)) %>% select(-(4:6)) 
+Luque2003al %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003al.csv", row.names = FALSE)
+
+  ## Caranx latus - 
+
+Luque2003am <- Luq6 %>% select(-(3:6)) %>% select(-(4:5)) 
+Luque2003am %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003am.csv", row.names = FALSE)
+
+  ## Caranx latus - 
+
+Luque2003an <- Luq6 %>% select(-(3:7)) %>% select(-(4)) 
+Luque2003an %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003an.csv", row.names = FALSE)
+
+  ## Caranx latus - 
+
+Luque2003ao <- Luq6 %>% select(-(3:8)) 
+Luque2003ao %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ao.csv", row.names = FALSE)
+
+  ## Chaetodipterus faber - 
+
+Luque2003ap <- Luq7 %>% select(1:3) 
+Luque2003ap %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ap.csv", row.names = FALSE)
+ 
+## Chaetodipterus faber - 
+
+Luque2003aq <- Luq7 %>% select(-(3)) %>% select(-(4:5)) 
+Luque2003aq %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003aq.csv", row.names = FALSE)
+
+  ## Chaetodipterus faber - 
+
+Luque2003ar <- Luq7 %>% select(-(3:4)) %>% select(-(4)) 
+Luque2003ar %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ar.csv", row.names = FALSE)
+
+  ## Chaetodipterus faber - 
+
+Luque2003as <- Luq7 %>% select(-(3:5)) 
+Luque2003as %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003as.csv", row.names = FALSE)
+
+  ## Cynoscion guatucupa - 
+
+Luque2003at <- Luq8 %>% select(1:3) 
+Luque2003at %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003at.csv", row.names = FALSE)
+
+  ## Cynoscion guatucupa - 
+
+Luque2003au <- Luq8 %>% select(-(3)) %>% select(-(4:8)) 
+Luque2003au %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003au.csv", row.names = FALSE)
+
+  ## Cynoscion guatucupa - 
+
+Luque2003av <- Luq8 %>% select(-(3:4)) %>% select(-(4:7)) 
+Luque2003av %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003av.csv", row.names = FALSE)
+
+  ## Cynoscion guatucupa - 
+
+Luque2003aw <- Luq8 %>% select(-(3:5)) %>% select(-(4:6)) 
+Luque2003aw %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003aw.csv", row.names = FALSE)
+
+  ## Cynoscion guatucupa - 
+
+Luque2003ax <- Luq8 %>% select(-(3:6)) %>% select(-(4:5)) 
+Luque2003ax %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ax.csv", row.names = FALSE)
+
+  ## Cynoscion guatucupa - 
+
+Luque2003ay <- Luq8 %>% select(-(3:7)) %>% select(-(4)) 
+Luque2003ay %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ay.csv", row.names = FALSE)
+
+  ## Cynoscion guatucupa - 
+
+Luque2003az <- Luq8 %>% select(-(3:8)) 
+Luque2003az %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003az.csv", row.names = FALSE)
+
+ ## Dactylopterus volitans - 
+
+Luque2003ba <- Luq9 %>% select(1:3) 
+Luque2003ba %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ba.csv", row.names = FALSE)
+
+ ## Dactylopterus volitans - 
+
+Luque2003bb <- Luq9 %>% select(-(3)) %>% select(-(4:14)) 
+Luque2003bb %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bb.csv", row.names = FALSE)
+
+ ## Dactylopterus volitans - 
+
+Luque2003bc <- Luq9 %>% select(-(3:4)) %>% select(-(4:13)) 
+Luque2003bc %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bc.csv", row.names = FALSE)
+
+ ## Dactylopterus volitans - 
+
+Luque2003bd <- Luq9 %>% select(-(3:5)) %>% select(-(4:12)) 
+Luque2003bd %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bd.csv", row.names = FALSE)
+
+ ## Dactylopterus volitans - 
+
+Luque2003be <- Luq9 %>% select(-(3:6)) %>% select(-(4:11)) 
+Luque2003be %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003be.csv", row.names = FALSE)
+
+ ## Dactylopterus volitans - 
+
+Luque2003bf <- Luq9 %>% select(-(3:7)) %>% select(-(4:10)) 
+Luque2003bf %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bf.csv", row.names = FALSE)
+
+ ## Dactylopterus volitans - 
+
+Luque2003bg <- Luq9 %>% select(-(3:8)) %>% select(-(4:9)) 
+Luque2003bg %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bg.csv", row.names = FALSE)
+
+ ## Dactylopterus volitans - 
+
+Luque2003bh <- Luq9 %>% select(-(3:9)) %>% select(-(4:8)) 
+Luque2003bh %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bh.csv", row.names = FALSE)
+ 
+## Dactylopterus volitans - 
+
+Luque2003bi <- Luq9 %>% select(-(3:10)) %>% select(-(4:7)) 
+Luque2003bi %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bi.csv", row.names = FALSE)
+
+ ## Dactylopterus volitans - 
+
+Luque2003bj <- Luq9 %>% select(-(3:11)) %>% select(-(4:6)) 
+Luque2003bj %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bj.csv", row.names = FALSE)
+
+ ## Dactylopterus volitans - 
+
+Luque2003bk <- Luq9 %>% select(-(3:12)) %>% select(-(4:5)) 
+Luque2003bk %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bk.csv", row.names = FALSE)
+
+ ## Dactylopterus volitans - 
+
+Luque2003bl <- Luq9 %>% select(-(3:13)) %>% select(-(4)) 
+Luque2003bl %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bl.csv", row.names = FALSE)
+
+ ## Dactylopterus volitans - 
+
+Luque2003bm <- Luq9 %>% select(-(3:14)) 
+Luque2003bm %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bm.csv", row.names = FALSE)
+
+## Euthynnus alleteratus - 
+
+Luque2003bn <- Luq10 %>% select(1:3) 
+Luque2003bn %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bn.csv", row.names = FALSE)
+
+  ## Euthynnus alleteratus - 
+
+Luque2003bo <- Luq10 %>% select(-(3)) %>% select(-(4:7))
+Luque2003bo  %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bo.csv", row.names = FALSE)
+
+  ## Euthynnus alleteratus - 
+
+Luque2003bp <- Luq10 %>% select(-(3:4)) %>% select(-(4:6)) 
+Luque2003bp %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bp.csv", row.names = FALSE)
+
+  ## Euthynnus alleteratus - 
+
+Luque2003bq <- Luq10 %>% select(-(3:5)) %>% select(-(4:5)) 
+Luque2003bq %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bq.csv", row.names = FALSE)
+
+  ## Euthynnus alleteratus - 
+
+Luque2003br <- Luq10 %>% select(-(3:6)) %>% select(-(4)) 
+Luque2003br %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003br.csv", row.names = FALSE)
+
+  ## Euthynnus alleteratus -  
+
+Luque2003bs <- Luq10 %>% select(-(3:7)) 
+Luque2003bs %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bs.csv", row.names = FALSE)
+
+ ## Genypterus brasiliensis - 
+
+Luque2003bt <- Luq11 %>% select(1:3)
+Luque2003bt %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bt.csv", row.names = FALSE)
+
+ ## Genypterus brasiliensis - 
+
+Luque2003bu <- Luq11 %>% select(-(3)) %>% select(-(4:5)) 
+Luque2003bu %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003b.csv", row.names = FALSE)
+
+ ## Genypterus brasiliensis - 
+
+Luque2003bv <- Luq11 %>% select(-(3:4)) %>% select(-(4)) 
+Luque2003bv %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bv.csv", row.names = FALSE)
+
+ ## Genypterus brasiliensis - 
+
+Luque2003bw <- Luq11 %>% select(-(3:5)) 
+Luque2003bw %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bw.csv", row.names = FALSE)
+
+ ## Gymnothorax moringa - 
+
+Luque2003bx <- Luq12 %>% select(1:3) 
+Luque2003bx %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bx.csv", row.names = FALSE)
+
+ ## Gymnothorax moringa - 
+
+Luque2003by <- Luq12 %>% select(-(3)) %>% select(-(4:6)) 
+Luque2003by %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003by.csv", row.names = FALSE)
+
+ ## Gymnothorax moringa - 
+
+Luque2003bz <- Luq12 %>% select(-(3:4)) %>% select(-(4:5)) 
+Luque2003bz %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003bz.csv", row.names = FALSE)
+
+ ## Gymnothorax moringa - 
+
+Luque2003ca <- Luq12 %>% select(-(3:5)) %>% select(-(4)) 
+Luque2003ca %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ca.csv", row.names = FALSE)
+
+ ## Gymnothorax moringa -  
+
+Luque2003cb <- Luq12 %>% select(-(3:6)) 
+Luque2003cb %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cb.csv", row.names = FALSE)
+
+  ## Haemulon steindachneri - 
+
+Luque2003cc <- Luq13 %>% select(1:3) 
+Luque2003cc %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cc.csv", row.names = FALSE)
+
+  ## Haemulon steindachneri - 
+
+Luque2003cd <- Luq13 %>% select(-(3)) %>% select(-(4:9)) 
+Luque2003cd %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cd.csv", row.names = FALSE)
+
+  ## Haemulon steindachneri - 
+
+Luque2003ce <- Luq13 %>% select(-(3:4)) %>% select(-(4:8)) 
+Luque2003ce %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ce.csv", row.names = FALSE)
+
+  ## Haemulon steindachneri - 
+
+Luque2003cf <- Luq13 %>% select(-(3:5)) %>% select(-(4:7)) 
+Luque2003cf %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cf.csv", row.names = FALSE)
+
+  ## Haemulon steindachneri - 
+
+Luque2003cg <- Luq13 %>% select(-(3:6)) %>% select(-(4:6)) 
+Luque2003cg %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cg.csv", row.names = FALSE)
+
+  ## Haemulon steindachneri - 
+
+Luque2003ch <- Luq13 %>% select(-(3:7)) %>% select(-(4:5)) 
+Luque2003ch %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ch.csv", row.names = FALSE)
+
+  ## Haemulon steindachneri - 
+
+Luque2003ci <- Luq13 %>% select(-(3:8)) %>% select(-(4)) 
+Luque2003ci %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ci.csv", row.names = FALSE)
+
+  ## Haemulon steindachneri - 
+
+Luque2003cj <- Luq13 %>% select(-(3:9))
+Luque2003cj %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cj.csv", row.names = FALSE)
+
+  ## Macrodon ancylodon - 
+
+Luque2003ck <- Luq14 %>% select(1:3) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ck.csv", row.names = FALSE)
+Luque2003ck %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ck.csv", row.names = FALSE)
+
+  ## Macrodon ancylodon - 
+
+Luque2003cl <- Luq14 %>% select(-(3)) %>% select(-(4:8)) 
+Luque2003cl %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cl.csv", row.names = FALSE)
+
+  ## Macrodon ancylodon -  
+
+Luque2003cm <- Luq14 %>% select(-(3:4)) %>% select(-(4:7)) 
+Luque2003cm %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cm.csv", row.names = FALSE)
+
+  ## Macrodon ancylodon -  
+
+Luque2003cn <- Luq14 %>% select(-(3:5)) %>% select(-(4:6)) 
+Luque2003cn %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003c.csv", row.names = FALSE)
+
+  ## Macrodon ancylodon - 
+
+Luque2003co <- Luq14 %>% select(-(3:6)) %>% select(-(4:5)) 
+Luque2003co %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003co.csv", row.names = FALSE)
+
+  ## Macrodon ancylodon - 
+
+Luque2003cp <- Luq14 %>% select(-(3:7)) %>% select(-(4)) 
+Luque2003cp %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cp.csv", row.names = FALSE)
+
+  ## Macrodon ancylodon - 
+
+Luque2003cq <- Luq14 %>% select(-(3:8)) 
+Luque2003cq %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cq.csv", row.names = FALSE)
+
+  ## Menticirrhus americanus - 
+
+Luque2003cr <- Luq15 %>% select(1:3) 
+Luque2003cr %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cr.csv", row.names = FALSE)
+
+  ## Menticirrhus americanus - 
+
+Luque2003cs <- Luq15 %>% select(-(3)) %>% select(-(4:10)) 
+Luque2003cs %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cs.csv", row.names = FALSE)
+
+  ## Menticirrhus americanus - 
+
+Luque2003ct <- Luq15 %>% select(-(3:4)) %>% select(-(4:9)) 
+Luque2003ct %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ct.csv", row.names = FALSE)
+
+  ## Menticirrhus americanus - 
+
+Luque2003cu <- Luq15 %>% select(-(3:5)) %>% select(-(4:8)) 
+Luque2003cu %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cu.csv", row.names = FALSE)
+
+  ## Menticirrhus americanus - 
+
+Luque2003cv <- Luq15 %>% select(-(3:6)) %>% select(-(4:7)) 
+Luque2003cv %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cv.csv", row.names = FALSE)
+
+  ## Menticirrhus americanus - 
+
+Luque2003cw <- Luq15 %>% select(-(3:7)) %>% select(-(4:6)) 
+Luque2003cw %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cw.csv", row.names = FALSE)
+
+  ## Menticirrhus americanus - 
+
+Luque2003cx <- Luq15 %>% select(-(3:8)) %>% select(-(4:5)) 
+Luque2003cx %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cx.csv", row.names = FALSE)
+
+  ## Menticirrhus americanus - 
+
+Luque2003cy <- Luq15 %>% select(-(3:9)) %>% select(-(4)) 
+Luque2003cy %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cy.csv", row.names = FALSE)
+
+  ## Menticirrhus americanus - 
+
+Luque2003cz <- Luq15 %>% select(-(3:10)) 
+Luque2003cz %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003cz.csv", row.names = FALSE)
+
+ ## Micropogonias furnieri - 
+
+Luque2003da <- Luq16 %>% select(1:3) 
+Luque2003da %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003da.csv", row.names = FALSE)
+
+ ## Micropogonias furnieri - 
+
+Luque2003db <- Luq16 %>% select(-(3)) %>% select(-(4:11)) 
+Luque2003db %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003db.csv", row.names = FALSE)
+
+ ## Micropogonias furnieri - 
+
+Luque2003dc <- Luq16 %>% select(-(3:4)) %>% select(-(4:10)) 
+Luque2003dc %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dc.csv", row.names = FALSE)
+
+ ## Micropogonias furnieri -  
+
+Luque2003dd <- Luq16 %>% select(-(3:5)) %>% select(-(4:9)) 
+Luque2003dd %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dd.csv", row.names = FALSE)
+
+ ## Micropogonias furnieri - 
+
+Luque2003de <- Luq16 %>% select(-(3:6)) %>% select(-(4:8)) 
+Luque2003de %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003de.csv", row.names = FALSE)
+
+ ## Micropogonias furnieri - 
+
+Luque2003df <- Luq16 %>% select(-(3:7)) %>% select(-(4:7)) 
+Luque2003df %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003df.csv", row.names = FALSE)
+
+## Micropogonias furnieri - 
+
+Luque2003dg <- Luq16 %>% select(-(3:8)) %>% select(-(4:6))
+Luque2003dg  %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dg.csv", row.names = FALSE)
+
+ ## Micropogonias furnieri -  
+
+Luque2003dh <- Luq16 %>% select(-(3:9)) %>% select(-(4:5)) 
+Luque2003dh %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dh.csv", row.names = FALSE)
+
+ ## Micropogonias furnieri - 
+
+Luque2003di <- Luq16 %>% select(-(3:10)) %>% select(-(4)) 
+Luque2003di %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003di.csv", row.names = FALSE)
+
+ ## Micropogonias furnieri - 
+
+Luque2003dj <- Luq16 %>% select(-(3:11)) 
+Luque2003dj %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dj.csv", row.names = FALSE)
+
+## Mugil platanus - 
+
+Luque2003dk <- Luq17 %>% select(1:3) 
+Luque2003dk %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dk.csv", row.names = FALSE)
+
+## Mugil platanus - 
+
+Luque2003dl <- Luq17 %>% select(-(3)) %>% select(-(4:13)) 
+Luque2003dl %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dl.csv", row.names = FALSE)
+
+## Mugil platanus - 
+
+Luque2003dm <- Luq17 %>% select(-(3:4)) %>% select(-(4:12)) 
+Luque2003dm %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dm.csv", row.names = FALSE)
+
+## Mugil platanus -  
+
+Luque2003dn <- Luq17 %>% select(-(3:5)) %>% select(-(4:11)) 
+Luque2003dn %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dn.csv", row.names = FALSE)
+
+## Mugil platanus - 
+
+Luque2003do <- Luq17 %>% select(-(3:6)) %>% select(-(4:10)) 
+Luque2003do %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003do.csv", row.names = FALSE)
+
+## Mugil platanus - 
+
+Luque2003dp <- Luq17 %>% select(-(3:7)) %>% select(-(4:9)) 
+Luque2003dp %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dp.csv", row.names = FALSE)
+ 
+## Mugil platanus - 
+
+Luque2003dq <- Luq17 %>% select(-(3:8)) %>% select(-(4:8))
+Luque2003dq %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dq.csv", row.names = FALSE)
+
+## Mugil platanus - 
+
+Luque2003dr <- Luq17 %>% select(-(3:9)) %>% select(-(4:7))
+Luque2003dr  %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dr.csv", row.names = FALSE)
+ 
+## Mugil platanus - 
+
+Luque2003ds <- Luq17 %>% select(-(3:10)) %>% select(-(4:6)) 
+Luque2003ds %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ds.csv", row.names = FALSE)
+
+## Mugil platanus -  
+
+Luque2003dt <- Luq17 %>% select(-(3:11)) %>% select(-(4:5)) 
+Luque2003dt %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dt.csv", row.names = FALSE)
+
+## Mugil platanus - 
+
+Luque2003du <- Luq17 %>% select(-(3:12)) %>% select(-(4)) 
+Luque2003du %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003du.csv", row.names = FALSE)
+
+## Mugil platanus - 
+
+Luque2003dv <- Luq17 %>% select(-(3:13)) 
+Luque2003dv %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dv.csv", row.names = FALSE)
+
+## Mullus argentinae - 
+
+Luque2003dw <- Luq18 %>% select(1:3) 
+Luque2003dw %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dw.csv", row.names = FALSE)
+
+## Mullus argentinae - 
+
+Luque2003dx <- Luq18 %>% select(-(3)) %>% select(-(4:6)) 
+Luque2003dx %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dx.csv", row.names = FALSE)
+
+## Mullus argentinae - 
+
+Luque2003dy <- Luq18 %>% select(-(3:4)) %>% select(-(4:5)) 
+Luque2003dy %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dy.csv", row.names = FALSE)
+
+## Mullus argentinae - 
+
+Luque2003dz <- Luq18 %>% select(-(3:5)) %>% select(-(4))
+Luque2003dz %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003dz.csv", row.names = FALSE)
+
+## Mullus argentinae - 
+
+Luque2003ea <- Luq18 %>% select(-(3:6)) 
+Luque2003ea %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ea.csv", row.names = FALSE)
+
+## Netuma barba - 
+
+Luque2003eb <- Luq19 %>% select(1:3) 
+Luque2003eb %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003eb.csv", row.names = FALSE)
+
+## Netuma barba - 
+
+Luque2003ec <- Luq19 %>% select(-(3)) %>% select(-(4:6)) 
+Luque2003ec %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ec.csv", row.names = FALSE)
+
+## Netuma barba - 
+
+Luque2003ed <- Luq19 %>% select(-(3:4)) %>% select(-(4:5)) 
+Luque2003ed %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ed.csv", row.names = FALSE)
+
+## Netuma barba - 
+
+Luque2003ee <- Luq19 %>% select(-(3:5)) %>% select(-(4)) 
+Luque2003ee %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ee.csv", row.names = FALSE)
+
+## Netuma barba - 
+
+Luque2003ef <- Luq19 %>% select(-(3:6)) 
+Luque2003ef %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ef.csv", row.names = FALSE)
+
+## Oligoplites palometa - 
+
+Luque2003eg <- Luq20 %>% select(1:3) 
+Luque2003eg %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003eg.csv", row.names = FALSE)
+
+## Oligoplites palometa - 
+
+Luque2003eh <- Luq20 %>% select(-(3)) %>% select(-(4:7)) 
+Luque2003eh %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003he.csv", row.names = FALSE)
+
+## Oligoplites palometa - 
+
+Luque2003ei <- Luq20 %>% select(-(3:4)) %>% select(-(4:6)) 
+Luque2003ei %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ei.csv", row.names = FALSE)
+
+## Oligoplites palometa - 
+
+Luque2003ej <- Luq20 %>% select(-(3:5)) %>% select(-(4:5)) 
+Luque2003ej %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ej.csv", row.names = FALSE)
+
+## Oligoplites palometa - 
+
+Luque2003ek <- Luq20 %>% select(-(3:6)) %>% select(-(4)) 
+Luque2003ek %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ek.csv", row.names = FALSE)
+
+## Oligoplites palometa - 
+
+Luque2003el <- Luq20 %>% select(-(3:7))
+Luque2003el %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003el.csv", row.names = FALSE)
+
+## Oligoplites saliens - 
+
+Luque2003em <- Luq21 %>% select(1:3) 
+Luque2003em %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003em.csv", row.names = FALSE)
+
+## Oligoplites saliens - 
+
+Luque2003en <- Luq21 %>% select(-(3)) %>% select(-(4:6)) 
+Luque2003en %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003en.csv", row.names = FALSE)
+
+## Oligoplites saliens - 
+
+Luque2003eo <- Luq21 %>% select(-(3:4)) %>% select(-(4:5)) 
+Luque2003eo %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003eo.csv", row.names = FALSE)
+
+## Oligoplites saliens - 
+
+Luque2003ep <- Luq21 %>% select(-(3:5)) %>% select(-(4)) 
+Luque2003ep %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ep.csv", row.names = FALSE)
+
+## Oligoplites saliens - 
+
+Luque2003eq <- Luq21 %>% select(-(3:6)) 
+Luque2003eq %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003eq.csv", row.names = FALSE)
+
+## Oligoplites saurus - 
+
+Luque2003er <- Luq22 %>% select(1:3)
+Luque2003er %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003er.csv", row.names = FALSE)
+
+## Oligoplites saurus - 
+
+Luque2003es <- Luq22 %>% select(-(3)) %>% select(-(4:7)) 
+Luque2003es %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003es.csv", row.names = FALSE)
+
+## Oligoplites saurus - 
+
+Luque2003et <- Luq22 %>% select(-(3:4)) %>% select(-(4:6)) 
+Luque2003et %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003et.csv", row.names = FALSE)
+
+## Oligoplites saurus - 
+
+Luque2003eu <- Luq22 %>% select(-(3:5)) %>% select(-(4:5)) 
+Luque2003eu %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003eu.csv", row.names = FALSE)
+
+## Oligoplites saurus - 
+
+Luque2003ev <- Luq22 %>% select(-(3:6)) %>% select(-(4)) 
+Luque2003ev %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ev.csv", row.names = FALSE)
+
+## Oligoplites saurus - 
+
+Luque2003ew <- Luq22 %>% select(-(3:7)) 
+Luque2003ew %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ew.csv", row.names = FALSE)
+
+## Orthopristis ruber - 
+
+Luque2003ex <- Luq23 %>% select(1:3) 
+Luque2003ex %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ex.csv", row.names = FALSE)
+
+## Orthopristis ruber -  
+
+Luque2003ew <- Luq23 %>% select(-(3)) %>% select(-(4:10)) 
+Luque2003ew %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ew.csv", row.names = FALSE)
+
+## Orthopristis ruber - 
+
+Luque2003ez <- Luq23 %>% select(-(3:4)) %>% select(-(4:9)) 
+Luque2003ez %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ez.csv", row.names = FALSE)
+
+## Orthopristis ruber - 
+
+Luque2003fa <- Luq23 %>% select(-(3:5)) %>% select(-(4:8)) 
+Luque2003fa %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fa.csv", row.names = FALSE)
+
+## Orthopristis ruber - 
+
+Luque2003fb <- Luq23 %>% select(-(3:6)) %>% select(-(4:7)) 
+Luque2003fb %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fb.csv", row.names = FALSE)
+
+## Orthopristis ruber - 
+
+Luque2003fc <- Luq23 %>% select(-(3:7)) %>% select(-(4:6)) 
+Luque2003fc %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fc.csv", row.names = FALSE)
+
+## Orthopristis ruber - 
+
+Luque2003fd <- Luq23 %>% select(-(3:8)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fd.csv", row.names = FALSE)
+
+## Orthopristis ruber - 
+
+Luque2003fe <- Luq23 %>% select(-(3:9)) %>% select(-(4)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fe.csv", row.names = FALSE)
+
+## Orthopristis ruber - 
+
+Luque2003ff <- Luq23 %>% select(-(3:10)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ff.csv", row.names = FALSE)
+
+## Paralichthys isosceles - 
+
+Luque2003fg <- Luq24 %>% select(1:3) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fg.csv", row.names = FALSE)
+
+## Paralichthys isosceles -  
+
+Luque2003fh <- Luq24 %>% select(-(3)) %>% select(-(4:6)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fh.csv", row.names = FALSE)
+
+## Paralichthys isosceles - 
+
+Luque2003fi <- Luq24 %>% select(-(3:4)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fi.csv", row.names = FALSE)
+
+## Paralichthys isosceles - 
+
+Luque2003fj <- Luq24 %>% select(-(3:5)) %>% select(-(4)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fj.csv", row.names = FALSE)
+
+## Paralichthys isosceles - 
+
+Luque2003fk <- Luq24 %>% select(-(3:6)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fk.csv", row.names = FALSE)
+
+## Paralochurus brasiliensis - 
+
+Luque2003fl <- Luq25 %>% select(1:3) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fl.csv", row.names = FALSE)
+
+## Paralochurus brasiliensis -  
+
+Luque2003fm <- Luq25 %>% select(-(3)) %>% select(-(4:7)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fm.csv", row.names = FALSE)
+
+## Paralochurus brasiliensis -  
+
+Luque2003fn <- Luq25 %>% select(-(3:4)) %>% select(-(4:6)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fn.csv", row.names = FALSE)
+
+## Paralochurus brasiliensis -  
+
+Luque2003fo <- Luq25 %>% select(-(3:5)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fo.csv", row.names = FALSE)
+
+## Paralochurus brasiliensis - 
+
+Luque2003fp <- Luq25 %>% select(-(3:6)) %>% select(-(4)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fp.csv", row.names = FALSE)
+
+## Paralochurus brasiliensis -  
+
+Luque2003fq <- Luq25 %>% select(-(3:7)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fq.csv", row.names = FALSE)
+
+## Peprilus paru - 
+
+Luque2003fr <- Luq26 %>% select(1:3) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fr.csv", row.names = FALSE)
+
+## Peprilus paru - 
+
+Luque2003fs <- Luq26 %>% select(-(3)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fs.csv", row.names = FALSE)
+
+## Peprilus paru -  
+
+Luque2003ft <- Luq26 %>% select(-(3:4)) %>% select(-(4)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ft.csv", row.names = FALSE)
+
+## Peprilus paru -  
+
+Luque2003fu <- Luq26 %>% select(-(3:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fu.csv", row.names = FALSE)
+
+## Pomatomus saltator - 
+
+Luque2003fv <- Luq27 %>% select(1:3) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fv.csv", row.names = FALSE)
+
+## Pomatomus saltator - 
+
+Luque2003fw <- Luq27 %>% select(-(3)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fw.csv", row.names = FALSE)
+
+## Pomatomus saltator -  
+
+Luque2003fx <- Luq27 %>% select(-(3:4)) %>% select(-(4)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fx.csv", row.names = FALSE)
+
+## Pomatomus saltator -  
+
+Luque2003fy <- Luq27 %>% select(-(3:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fy.csv", row.names = FALSE)
+
+## Priacanthus arenatus - 
+
+Luque2003fz <- Luq28 %>% select(1:3) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003fz.csv", row.names = FALSE)
+
+## Priacanthus arenatus - 
+
+Luque2003ga <- Luq28 %>% select(-(3)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ag.csv", row.names = FALSE)
+
+## Priacanthus arenatus -  
+
+Luque2003gb <- Luq28 %>% select(-(3:4)) %>% select(-(4)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gb.csv", row.names = FALSE)
+
+## Priacanthus arenatus -  
+
+Luque2003gc <- Luq28 %>% select(-(3:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gc.csv", row.names = FALSE)
+
+## Prionotus punctatus - 
+
+Luque2003gd <- Luq29 %>% select(1:3) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gd.csv", row.names = FALSE)
+
+## Prionotus punctatus -  
+
+Luque2003ge <- Luq29 %>% select(-(3)) %>% select(-(4:6)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ge.csv", row.names = FALSE)
+
+## Prionotus punctatus - 
+
+Luque2003gf <- Luq29 %>% select(-(3:4)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gf.csv", row.names = FALSE)
+
+## Prionotus punctatus -   
+
+Luque2003gg <- Luq29 %>% select(-(3:5)) %>% select(-(4)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gg.csv", row.names = FALSE)
+
+## Prionotus punctatus -  
+
+Luque2003gh <- Luq29 %>% select(-(3:6)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gh.csv", row.names = FALSE)
+
+## Sciadeichthys luniscutus - 
+
+Luque2003gi <- Luq30 %>% select(1:3) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gi.csv", row.names = FALSE)
+
+## Sciadeichthys luniscutus - 
+
+Luque2003gj <- Luq30 %>% select(-(3)) %>% select(-(4:7)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gj.csv", row.names = FALSE)
+
+## Sciadeichthys luniscutus - 
+
+Luque2003gk <- Luq30 %>% select(-(3:4)) %>% select(-(4:6)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gk.csv", row.names = FALSE)
+
+## Sciadeichthys luniscutus - 
+
+Luque2003gl <- Luq30 %>% select(-(3:5)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gl.csv", row.names = FALSE)
+
+## Sciadeichthys luniscutus - 
+
+Luque2003gm <- Luq30 %>% select(-(3:6)) %>% select(-(4)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gm.csv", row.names = FALSE)
+
+## Sciadeichthys luniscutus - 
+
+Luque2003gn <- Luq30 %>% select(-(3:7)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gn.csv", row.names = FALSE)
+
+## Scomber japonicus - 
+
+Luque2003go <- Luq31 %>% select(1:3) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003go.csv", row.names = FALSE)
+
+## Scomber japonicus - 
+
+Luque2003gp <- Luq31 %>% select(-(3)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gp.csv", row.names = FALSE)
+
+## Scomber japonicus -  
+
+Luque2003gq <- Luq31 %>% select(-(3:4)) %>% select(-(4)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gq.csv", row.names = FALSE)
+
+## Scomber japonicus -  
+
+Luque2003gr <- Luq31 %>% select(-(3:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gr.csv", row.names = FALSE)
+
+## Trichiurus lepturu - 
+
+Luque2003gs <- Luq33 %>% select(1:3) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gs.csv", row.names = FALSE)
+
+## Trichiurus lepturu - 
+
+Luque2003gt <- Luq33 %>% select(-(3)) %>% select(-(4:8)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gt.csv", row.names = FALSE)
+
+## Trichiurus lepturu - 
+
+Luque2003gu <- Luq33 %>% select(-(3:4)) %>% select(-(4:7)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gu.csv", row.names = FALSE)
+
+## Trichiurus lepturu - 
+
+Luque2003gv <- Luq33 %>% select(-(3:5)) %>% select(-(4:6)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gv.csv", row.names = FALSE)
+
+## Trichiurus lepturu - 
+
+Luque2003gw <- Luq33 %>% select(-(3:6)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gw.csv", row.names = FALSE)
+
+## Trichiurus lepturu - 
+
+Luque2003gx <- Luq33 %>% select(-(3:7)) %>% select(-(4)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gx.csv", row.names = FALSE)
+
+## Trichiurus lepturu - 
+
+Luque2003gy <- Luq33 %>% select(-(3:8)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gy.csv", row.names = FALSE)
+
+## Tylosurus acus - 
+
+Luque2003gz <- Luq34 %>% select(1:3) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003gz.csv", row.names = FALSE)
+
+## Tylosurus acus - 
+
+Luque2003ha <- Luq34 %>% select(-(3)) %>% select(-(4:6)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ha.csv", row.names = FALSE)
+
+## Tylosurus acus - 
+
+Luque2003hb <- Luq34 %>% select(-(3:4)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hb.csv", row.names = FALSE)
+
+## Tylosurus acus -  
+
+Luque2003hc <- Luq34 %>% select(-(3:5)) %>% select(-(4)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hc.csv", row.names = FALSE)
+
+## Tylosurus acus - 
+
+Luque2003hd <- Luq34 %>% select(-(3:6)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hd.csv", row.names = FALSE)
+
+## Umbrina canosai - 
+
+Luque2003he <- Luq35 %>% select(1:3) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003he.csv", row.names = FALSE)
+
+## Umbrina canosai - 
+
+Luque2003hf <- Luq35 %>% select(-(3)) %>% select(-(4:8)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hf.csv", row.names = FALSE)
+
+## Umbrina canosai - 
+
+Luque2003hg <- Luq35 %>% select(-(3:4)) %>% select(-(4:7)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hg.csv", row.names = FALSE)
+
+## Umbrina canosai - 
+
+Luque2003hh <- Luq35 %>% select(-(3:5)) %>% select(-(4:6)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hh.csv", row.names = FALSE)
+
+## Umbrina canosai - 
+
+Luque2003hi <- Luq35 %>% select(-(3:6)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003h.csv", row.names = FALSE)
+
+## Umbrina canosai - 
+
+Luque2003hj <- Luq35 %>% select(-(3:7)) %>% select(-(4)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hj.csv", row.names = FALSE)
+
+## Umbrina canosai - 
+
+Luque2003hk <- Luq35 %>% select(-(3:8)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hk.csv", row.names = FALSE)
+
+## Urophycis brasiliensis - 
+
+Luque2003hl <- Luq36 %>% select(1:3) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hl.csv", row.names = FALSE)
+
+## Urophycis brasiliensis - 
+
+Luque2003hm <- Luq36 %>% select(-(3)) %>% select(-(4:10)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hm.csv", row.names = FALSE)
+
+## Urophycis brasiliensis - 
+
+Luque2003hn <- Luq36 %>% select(-(3:4)) %>% select(-(4:9)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hn.csv", row.names = FALSE)
+
+## Urophycis brasiliensis - 
+
+Luque2003ho <- Luq36 %>% select(-(3:5)) %>% select(-(4:8)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ho.csv", row.names = FALSE)
+
+## Urophycis brasiliensis - 
+
+Luque2003hp <- Luq36 %>% select(-(3:6)) %>% select(-(4:7)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hp.csv", row.names = FALSE)
+
+## Urophycis brasiliensis - 
+
+Luque2003hq <- Luq36 %>% select(-(3:7)) %>% select(-(4:6)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hq.csv", row.names = FALSE)
+
+## Urophycis brasiliensis - 
+
+Luque2003hr <- Luq36 %>% select(-(3:8)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hr.csv", row.names = FALSE)
+
+## Urophycis brasiliensis - 
+
+Luque2003hs <- Luq36 %>% select(-(3:9)) %>% select(-(4)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hs.csv", row.names = FALSE)
+
+## Urophycis brasiliensis - 
+
+Luque2003ht <- Luq36 %>% select(-(3:10)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ht.csv", row.names = FALSE)
+
+## Urophycis mystaceus - 
+
+Luque2003hu <- Luq37 %>% select(1:3) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hu.csv", row.names = FALSE)
+
+## Urophycis mystaceus -  
+
+Luque2003hv <- Luq37 %>% select(-(3)) %>% select(-(4:7)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hv.csv", row.names = FALSE)
+
+## Urophycis mystaceus - 
+
+Luque2003hw <- Luq37 %>% select(-(3:4)) %>% select(-(4:6)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hw.csv", row.names = FALSE)
+
+## Urophycis mystaceus - 
+
+Luque2003hx <- Luq37 %>% select(-(3:5)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hx.csv", row.names = FALSE)
+
+## Urophycis mystaceus - 
+
+Luque2003hy <- Luq37 %>% select(-(3:6)) %>% select(-(4)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hy.csv", row.names = FALSE)
+
+## Urophycis mystaceus - 
+
+Luque2003hz <- Luq37 %>% select(-(3:7)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003hz.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003ia <- Luq32.1 %>% select(1:4) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ia.csv", row.names = FALSE)
+
+## Selene setapinnis -  
+
+Luque2003ib <- Luq32.1 %>% select(-(4)) %>% select(-(5:22)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ib.csv", row.names = FALSE)
+
+## Selene setapinnis -  
+
+Luque2003ic <- Luq32.1 %>% select(-(4:5)) %>% select(-(5:21)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ic.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003id <- Luq32.1 %>% select(-(4:6)) %>% select(-(5:20)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003id.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003ie <- Luq32.1 %>% select(-(4:7)) %>% select(-(5:19)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ie.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003if <- Luq32.1 %>% select(-(4:8)) %>% select(-(5:18)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003if.csv", row.names = FALSE)
+
+## Selene setapinnis -  
+
+Luque2003ig <- Luq32.1 %>% select(-(4:9)) %>% select(-(5:17)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ig.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003ih <- Luq32.1 %>% select(-(4:10)) %>% select(-(5:16)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ih.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003ii <- Luq32.1 %>% select(-(4:11)) %>% select(-(5:15)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ii.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003ij <- Luq32.1 %>% select(-(4:12)) %>% select(-(5:14)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ij.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003ik <- Luq32.1 %>% select(-(4:13)) %>% select(-(5:13)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ik.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003il <- Luq32.1 %>% select(-(4:14)) %>% select(-(5:12)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003il.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003im <- Luq32.1 %>% select(-(4:15)) %>% select(-(5:11)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003im.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003in <- Luq32.1 %>% select(-(4:16)) %>% select(-(5:10)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003in.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003io <- Luq32.1 %>% select(-(4:17)) %>% select(-(5:9)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003io.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003ip <- Luq32.1 %>% select(-(4:18)) %>% select(-(5:8)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ip.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003iq <- Luq32.1 %>% select(-(4:19)) %>% select(-(5:7)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003iq.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003ir <- Luq32.1 %>% select(-(4:20)) %>% select(-(5:6)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ir.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003is <- Luq32.1 %>% select(-(4:21)) %>% select(-(5)) %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003is.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003it <- Luq32.1 %>% select(-(4:22)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003it.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003iu <- Luq32.2 %>% select(1:3) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003iu.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003iv <- Luq32.2 %>% select(-(3)) %>% select(-(4:9)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003iv.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003iw <- Luq32.2 %>% select(-(3:4)) %>% select(-(4:8)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003iw.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003ix <- Luq32.2 %>% select(-(3:5)) %>% select(-(4:7)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ix.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003iy <- Luq32.2 %>% select(-(3:6)) %>% select(-(4:6)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003iy.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003iz <- Luq32.2 %>% select(-(3:7)) %>% select(-(4:5)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003iz.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003ja <- Luq32.2 %>% select(-(3:8)) %>% select(-(4)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003ja.csv", row.names = FALSE)
+
+## Selene setapinnis - 
+
+Luque2003jb <- Luq32.2 %>% select(-(3:9)) %>% rename("Count" = 3) %>% write.csv(.,"Poulin Macroparasite Data/Luque2003jb.csv", row.names = FALSE)
+```
+
+```{r organize Munoz folder}
+#Open datasets and combine sheets in each file
+Munoz1 <- bind_cols(readxl::read_excel("Macroparasite datasets/Muñoz folder/Cheilinus chlorourus.xls", sheet = "Cchlo-ectoNUM"),readxl::read_excel("Macroparasite datasets/Muñoz folder/Cheilinus chlorourus.xls", sheet = "Cchlo-endoNUM", range = "C1:T24"))
+
+Munoz2 <- bind_cols(readxl::read_excel("Macroparasite datasets/Muñoz folder/Cheilinus fasciatus.xls", sheet = "Cfas-ectoNUM"),readxl::read_excel("Macroparasite datasets/Muñoz folder/Cheilinus fasciatus.xls", sheet = "Cfas-endoNUM", range = "C1:L19"))
+
+Munoz3 <- bind_cols(readxl::read_excel("Macroparasite datasets/Muñoz folder/Cheilinus trilobatus.xls", sheet = "Ctril-ectoNUM"),readxl::read_excel("Macroparasite datasets/Muñoz folder/Cheilinus trilobatus.xls", sheet = "Ctrilo-endoNUM", range = "C1:P20"))
+
+Munoz4 <- bind_cols(readxl::read_excel("Macroparasite datasets/Muñoz folder/Coris batuensis.xls", sheet = "Cbatu-ectoNUM", range = "C1:J33"),readxl::read_excel("Macroparasite datasets/Muñoz folder/Coris batuensis.xls", sheet = "Cbatu-endoNUM", range = "C1:R33"))
+
+Munoz5 <- bind_cols(readxl::read_excel("Macroparasite datasets/Muñoz folder/Epibulus insidiator.xls", sheet = "Einsi-ectoNUM"),readxl::read_excel("Macroparasite datasets/Muñoz folder/Epibulus insidiator.xls", sheet = "Einsi-endoNUM", range = "C1:K20"))
+
+Munoz6 <- bind_cols(readxl::read_excel("Macroparasite datasets/Muñoz folder/Gomphosus varius.xls", sheet = "Gvari-ectoNUM"),readxl::read_excel("Macroparasite datasets/Muñoz folder/Gomphosus varius.xls", sheet = "Gvari-endoNUM", range = "C1:X17"))
+
+Munoz7 <- readxl::read_excel("Macroparasite datasets/Muñoz folder/Halichoeres melanurus.xls", sheet = "Hamelanu-endoNUM")
+
+Munoz8 <- bind_cols(readxl::read_excel("Macroparasite datasets/Muñoz folder/Hemigymnus melapterus.xls", sheet = "Hemela-ectoNUM"),readxl::read_excel("Macroparasite datasets/Muñoz folder/Hemigymnus melapterus.xls", sheet = "Hemela-endoNUM", range = "C1:AB21"))
+
+Munoz9 <- bind_cols(readxl::read_excel("Macroparasite datasets/Muñoz folder/Oxycheilinus diagramma.xls", sheet = "Odiag-ectoNUM"),readxl::read_excel("Macroparasite datasets/Muñoz folder/Oxycheilinus diagramma.xls", sheet = "Odiag-endoNUM", range = "C1:P15"))
+
+Munoz10 <- readxl::read_excel("Macroparasite datasets/Muñoz folder/Stethojulis bandanensis.xls", sheet = "Sband-endoNUM")
+
+Munoz11 <- readxl::read_excel("Macroparasite datasets/Muñoz folder/Stethojulis strigiventer.xls", sheet = "Sstrij-endoNUM")
+
+Munoz12 <- bind_cols(readxl::read_excel("Macroparasite datasets/Muñoz folder/Thalassoma hardwicke.xls", sheet = "Thard-ectoNUM"),readxl::read_excel("Macroparasite datasets/Muñoz folder/Thalassoma hardwicke.xls", sheet = "Thard-endoNUM", range = "C1:X17"))
+
+Munoz13 <- readxl::read_excel("Macroparasite datasets/Muñoz folder/thalassoma jansenii.xls", sheet = "Tjan-endoNUM")
+
+Munoz14 <- readxl::read_excel("Macroparasite datasets/Muñoz folder/Thalassoma lunare.xls", sheet = "Tlun-endoNUM")
+
+#Correct LT and Weight heading inconsistencies
+Munoz1 %<>% rename("Length (cm)" = 1)
+
+Munoz2 %<>% rename("Weight (g)" = Weight) %>% rename("Length (cm)" = "LT(cm)")
+
+Munoz3 %<>% rename("Weight (g)" = Weight) %>% rename("Length (cm)" = "LT(cm)")
+
+Munoz4 %<>% rename("Length (cm)" = 1)
+
+Munoz5 %<>% rename("Weight (g)" = "Weigth (g)") %>% rename("Length (cm)" = 1)
+
+Munoz6 %<>% rename("Weight (g)" = "Weigt (g)")%>% rename("Length (cm)" = 1)
+
+Munoz7 %<>% rename("Length (cm)" = 1)
+
+Munoz8 %<>% rename("Weight (g)" = "Weigth")  %>% rename("Length (cm)" = 1)
+
+Munoz9 %<>% rename("Weight (g)" = "Weight")  %>% rename("Length (cm)" = 1)
+
+Munoz10 %<>% rename("Weight (g)" = "weight (g)")  %>% rename("Length (cm)" = 1)
+
+Munoz11 %<>% rename("Length (cm)" = 1)
+
+Munoz12 %<>% rename("Length (cm)" = 1)
+
+Munoz13 %<>% rename("Length (cm)" = 1)
+
+Munoz14 %<>% rename("Length (cm)" = 1)
+
+#Include Host Species and Individual
+
+Munoz1 %<>% add_column(Individual = NA, .before = "Length (cm)") %>% mutate(Individual = 1:n()) %>% add_column("Host Species" = "Cheilinus chlorourus", .before ="Individual")
+
+Munoz2 %<>% add_column(Individual = NA, .before = "Length (cm)") %>% mutate(Individual = 1:n()) %>% add_column("Host Species" = "Cheilinus fasciatus", .before ="Individual")
+
+Munoz3 %<>% add_column(Individual = NA, .before = "Length (cm)") %>% mutate(Individual = 1:n()) %>% add_column("Host Species" = "Cheilinus trilobatus", .before ="Individual")
+
+Munoz4 %<>% add_column(Individual = NA, .before = "Length (cm)") %>% mutate(Individual = 1:n()) %>% add_column("Host Species" = "Coris batuensis", .before ="Individual")
+
+Munoz5 %<>% add_column(Individual = NA, .before = "Length (cm)") %>% mutate(Individual = 1:n()) %>% add_column("Host Species" = "Epibulus insidiator", .before ="Individual")
+
+Munoz6 %<>% add_column(Individual = NA, .before = "Length (cm)") %>% mutate(Individual = 1:n()) %>% add_column("Host Species" = "Gomphosus varius", .before ="Individual")
+
+Munoz7 %<>% add_column(Individual = NA, .before = "Length (cm)") %>% mutate(Individual = 1:n()) %>% add_column("Host Species" = "Halichoeres melanurus", .before ="Individual")
+
+Munoz8 %<>% add_column(Individual = NA, .before = "Length (cm)") %>% mutate(Individual = 1:n()) %>% add_column("Host Species" = "Hemigymnus melapterus", .before ="Individual")
+
+Munoz9 %<>% add_column(Individual = NA, .before = "Length (cm)") %>% mutate(Individual = 1:n()) %>% add_column("Host Species" = "Oxycheilinus diagramma", .before ="Individual")
+
+Munoz10 %<>% add_column(Individual = NA, .before = "Length (cm)") %>% mutate(Individual = 1:n()) %>% add_column("Host Species" = "Stethojulis bandanensis", .before ="Individual")
+
+Munoz11 %<>% add_column(Individual = NA, .before = "Length (cm)") %>% mutate(Individual = 1:n()) %>% add_column("Host Species" = "Stethojulis strigiventer", .before ="Individual")
+
+Munoz12 %<>% add_column(Individual = NA, .before = "Length (cm)") %>% mutate(Individual = 1:n()) %>% add_column("Host Species" = "Thalassoma hardwicke", .before ="Individual")
+
+Munoz13 %<>% add_column(Individual = NA, .before = "Length (cm)") %>% mutate(Individual = 1:n()) %>% add_column("Host Species" = "Thalassoma jansenii", .before ="Individual")
+
+Munoz14 %<>% add_column(Individual = NA, .before = "Length (cm)") %>% mutate(Individual = 1:n()) %>% add_column("Host Species" = "Thalassoma lunare", .before ="Individual")
+
+#Delete guessed parasite species
+
+Munoz1 %<>% select(-(4:6)) %>% select(-(9)) %>% select(-(26))
+Munoz2 %<>% select(-(4:6))
+Munoz3 %<>% select(-(4:6)) %>% select(-(25))
+Munoz4 %<>% select(-(4:6))
+Munoz5 %<>% select(-(4:8))
+Munoz6 %<>% select(-(4:5))
+Munoz8 %<>% select(-(4:6)) %>% select(-(22))
+Munoz9 %<>% select(-(4:7)) %>% select(-(21))
+Munoz10 %<>% select(-(19))
+Munoz12 %<>% select(-(4:5))
+Munoz13 %<>% select(-(24))
+Munoz14 %<>% select(-(23)) %>% select(-(29:30))
+
+#Seperate line lists by host species - parasite name
+
+  ## Cheilinus chlorourus - 
+
+Muñoz2006a <- Munoz1 %>% select(1:4) 
+Muñoz2006a %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006a.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006b <- Munoz1 %>% select(-(4)) %>% select(-(5:24)) 
+Muñoz2006b %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006b.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006c <- Munoz1 %>% select(-(4:5)) %>% select(-(5:23))
+Muñoz2006c %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006c.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006d <- Munoz1 %>% select(-(4:6)) %>% select(-(5:22)) 
+Muñoz2006d %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006d.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006e <- Munoz1 %>% select(-(4:7)) %>% select(-(5:21)) 
+Muñoz2006e %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006e.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006f <- Munoz1 %>% select(-(4:8)) %>% select(-(5:20)) 
+Muñoz2006f %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006f.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006g <- Munoz1 %>% select(-(4:9)) %>% select(-(5:19)) 
+Muñoz2006g %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006g.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006h <- Munoz1 %>% select(-(4:10)) %>% select(-(5:18)) 
+Muñoz2006h %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006h.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006i <- Munoz1 %>% select(-(4:11)) %>% select(-(5:17)) 
+Muñoz2006i %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006i.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006j <- Munoz1 %>% select(-(4:12)) %>% select(-(5:16)) 
+Muñoz2006j %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006j.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006k <- Munoz1 %>% select(-(4:13)) %>% select(-(5:15)) 
+Muñoz2006k %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006k.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006l <- Munoz1 %>% select(-(4:14)) %>% select(-(5:14)) 
+Muñoz2006l %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006l.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006m <- Munoz1 %>% select(-(4:15)) %>% select(-(5:13)) 
+Muñoz2006m %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006m.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006n <- Munoz1 %>% select(-(4:16)) %>% select(-(5:12)) 
+Muñoz2006n %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006n.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006o <- Munoz1 %>% select(-(4:17)) %>% select(-(5:11)) 
+Muñoz2006o %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006o.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006p <- Munoz1 %>% select(-(4:18)) %>% select(-(5:10)) 
+Muñoz2006p %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006p.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006q <- Munoz1 %>% select(-(4:19)) %>% select(-(5:9)) 
+Muñoz2006q %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006q.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006r <- Munoz1 %>% select(-(4:20)) %>% select(-(5:8)) 
+Muñoz2006r %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006r.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006s <- Munoz1 %>% select(-(4:21)) %>% select(-(5:7)) 
+Muñoz2006s %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006s.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006t <- Munoz1 %>% select(-(4:22)) %>% select(-(5:6)) 
+Muñoz2006t %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006t.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006u <- Munoz1 %>% select(-(4:23)) %>% select(-(5)) 
+Muñoz2006u %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006u.csv", row.names = FALSE)
+
+  ## Cheilinus chlorourus -
+
+Muñoz2006v <- Munoz1 %>% select(-(4:24))
+Muñoz2006v %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006w <- Munoz2 %>% select(1:4) 
+Muñoz2006w %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006w.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006x <- Munoz2 %>% select(-(4)) %>% select(-(5:26)) 
+Muñoz2006x %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006x.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006y <- Munoz2 %>% select(-(4:5)) %>% select(-(5:25))
+Muñoz2006y %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006y.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006z <- Munoz2 %>% select(-(4:6)) %>% select(-(5:24)) 
+Muñoz2006z %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006z.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006aa <- Munoz2 %>% select(-(4:7)) %>% select(-(5:23)) 
+Muñoz2006aa %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006aa.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006ab <- Munoz2 %>% select(-(4:8)) %>% select(-(5:22)) 
+Muñoz2006ab %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ab.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006ac <- Munoz2 %>% select(-(4:9)) %>% select(-(5:21)) 
+Muñoz2006ac %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ac.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006ad <- Munoz2 %>% select(-(4:10)) %>% select(-(5:20)) 
+Muñoz2006ad %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ad.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006ae <- Munoz2 %>% select(-(4:11)) %>% select(-(5:19)) 
+Muñoz2006ae %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ae.csv", row.names = FALSE)
+ 
+## Cheilinus fasciatus - 
+
+Muñoz2006af <- Munoz2 %>% select(-(4:12)) %>% select(-(5:18)) 
+Muñoz2006af %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006af.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006ag <- Munoz2 %>% select(-(4:13)) %>% select(-(5:17)) 
+Muñoz2006ag %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ag.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006ah <- Munoz2 %>% select(-(4:14)) %>% select(-(5:16)) 
+Muñoz2006ah %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ah.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006ai <- Munoz2 %>% select(-(4:15)) %>% select(-(5:15)) 
+Muñoz2006ai %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ai.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006aj <- Munoz2 %>% select(-(4:16)) %>% select(-(5:14)) 
+Muñoz2006aj %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006aj.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006ak <- Munoz2 %>% select(-(4:17)) %>% select(-(5:13)) 
+Muñoz2006ak %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ak.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006al <- Munoz2 %>% select(-(4:18)) %>% select(-(5:12)) 
+Muñoz2006al %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006al.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006am <- Munoz2 %>% select(-(4:19)) %>% select(-(5:11)) 
+Muñoz2006am %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006am.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006an <- Munoz2 %>% select(-(4:20)) %>% select(-(5:10)) 
+Muñoz2006an %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006an.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006ao <- Munoz2 %>% select(-(4:21)) %>% select(-(5:9)) 
+Muñoz2006ao %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ao.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006ap <- Munoz2 %>% select(-(4:22)) %>% select(-(5:8)) 
+Muñoz2006ap %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ap.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006aq <- Munoz2 %>% select(-(4:23)) %>% select(-(5:7)) 
+Muñoz2006aq %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006aq.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006ar <- Munoz2 %>% select(-(4:24)) %>% select(-(5:6)) 
+Muñoz2006ar %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ar.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006as <- Munoz2 %>% select(-(4:25)) %>% select(-(5)) 
+Muñoz2006as %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006as.csv", row.names = FALSE)
+
+ ## Cheilinus fasciatus - 
+
+Muñoz2006at <- Munoz2 %>% select(-(4:26))
+Muñoz2006at %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006at.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006au <- Munoz3 %>% select(1:4) 
+Muñoz2006au %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006au.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006av <- Munoz3 %>% select(-(4)) %>% select(-(5:23)) 
+Muñoz2006av %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006av.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006aw <- Munoz3 %>% select(-(4:5)) %>% select(-(5:22))
+Muñoz2006aw %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006aw.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006ax <- Munoz3 %>% select(-(4:6)) %>% select(-(5:21)) 
+Muñoz2006ax %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ax.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006ay <- Munoz3 %>% select(-(4:7)) %>% select(-(5:20)) 
+Muñoz2006ay %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ay.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006az <- Munoz3 %>% select(-(4:8)) %>% select(-(5:19)) 
+Muñoz2006az %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006az.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006ba <- Munoz3 %>% select(-(4:9)) %>% select(-(5:18)) 
+Muñoz2006ba %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ba.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006bb <- Munoz3 %>% select(-(4:10)) %>% select(-(5:17)) 
+Muñoz2006bb %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bb.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006bc <- Munoz3 %>% select(-(4:11)) %>% select(-(5:16)) 
+Muñoz2006bc %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bc.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006bd <- Munoz3 %>% select(-(4:12)) %>% select(-(5:15)) 
+Muñoz2006bd %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bd.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006be <- Munoz3 %>% select(-(4:13)) %>% select(-(5:14)) 
+Muñoz2006be %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006be.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006bf <- Munoz3 %>% select(-(4:14)) %>% select(-(5:13)) 
+Muñoz2006bf %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bf.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006bg <- Munoz3 %>% select(-(4:15)) %>% select(-(5:12)) 
+Muñoz2006bg %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bg.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006bh <- Munoz3 %>% select(-(4:16)) %>% select(-(5:11)) 
+Muñoz2006bh %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bh.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006bi <- Munoz3 %>% select(-(4:17)) %>% select(-(5:10)) 
+Muñoz2006bi %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bi.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006bj <- Munoz3 %>% select(-(4:18)) %>% select(-(5:9)) 
+Muñoz2006bj %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bj.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006bk <- Munoz3 %>% select(-(4:19)) %>% select(-(5:8)) 
+Muñoz2006bk %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bk.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006bl <- Munoz3 %>% select(-(4:20)) %>% select(-(5:7)) 
+Muñoz2006bl %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bl.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006bm <- Munoz3 %>% select(-(4:21)) %>% select(-(5:6)) 
+Muñoz2006bm %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bm.csv", row.names = FALSE)
+
+  ## Cheilinus trilobatus - 
+
+Muñoz2006bn <- Munoz3 %>% select(-(4:22)) %>% select(-(5)) 
+Muñoz2006bn %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bn.csv", row.names = FALSE)
+ 
+ ## Cheilinus trilobatus - 
+
+Muñoz2006bo <- Munoz3 %>% select(-(4:23))
+Muñoz2006bo %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bo.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006bp <- Munoz4 %>% select(1:4) 
+Muñoz2006bp %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bp.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006bq <- Munoz4 %>% select(-(4)) %>% select(-(5:21)) 
+Muñoz2006bq %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bq.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006br <- Munoz4 %>% select(-(4:5)) %>% select(-(5:20))
+Muñoz2006br %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006br.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006bs <- Munoz4 %>% select(-(4:6)) %>% select(-(5:19)) 
+Muñoz2006bs %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bs.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006bt <- Munoz4 %>% select(-(4:7)) %>% select(-(5:18)) 
+Muñoz2006bt %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bt.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006bu <- Munoz4 %>% select(-(4:8)) %>% select(-(5:17)) 
+Muñoz2006bu %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bu.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006bv <- Munoz4 %>% select(-(4:9)) %>% select(-(5:16)) 
+Muñoz2006bv %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bv.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006bw <- Munoz4 %>% select(-(4:10)) %>% select(-(5:15)) 
+Muñoz2006bw %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bw.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006bx <- Munoz4 %>% select(-(4:11)) %>% select(-(5:14)) 
+Muñoz2006bx %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bx.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006by <- Munoz4 %>% select(-(4:12)) %>% select(-(5:13)) 
+Muñoz2006by %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006by.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006bz <- Munoz4 %>% select(-(4:13)) %>% select(-(5:12)) 
+Muñoz2006bz %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bz.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006ca <- Munoz4 %>% select(-(4:14)) %>% select(-(5:11)) 
+Muñoz2006ca %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bca.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006cb <- Munoz4 %>% select(-(4:15)) %>% select(-(5:10)) 
+Muñoz2006cb %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cb.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006cc <- Munoz4 %>% select(-(4:16)) %>% select(-(5:9)) 
+Muñoz2006cc %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cc.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006cd <- Munoz4 %>% select(-(4:17)) %>% select(-(5:8)) 
+Muñoz2006cd %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cd.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006ce <- Munoz4 %>% select(-(4:18)) %>% select(-(5:7)) 
+Muñoz2006ce %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ce.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006cf <- Munoz4 %>% select(-(4:19)) %>% select(-(5:6)) 
+Muñoz2006cf %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cf.csv", row.names = FALSE)
+
+  ## Coris batuensis - 
+
+Muñoz2006cg <- Munoz4 %>% select(-(4:20)) %>% select(-(5)) 
+Muñoz2006cg %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cg.csv", row.names = FALSE)
+ 
+  ## Coris batuensis - 
+
+Muñoz2006ch <- Munoz4 %>% select(-(4:21))
+Muñoz2006ch %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ch.csv", row.names = FALSE)
+
+  ## Epibulus insidiator - 
+
+Muñoz2006ci <- Munoz5 %>% select(1:4) 
+Muñoz2006ci %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ci.csv", row.names = FALSE)
+
+  ## Epibulus insidiator - 
+
+Muñoz2006cj <- Munoz5 %>% select(-(4)) %>% select(-(5:16)) 
+Muñoz2006cj %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cj.csv", row.names = FALSE)
+
+  ## Epibulus insidiator - 
+
+Muñoz2006ck <- Munoz5 %>% select(-(4:5)) %>% select(-(5:15))
+Muñoz2006ck %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ck.csv", row.names = FALSE)
+
+  ## Epibulus insidiator - 
+
+Muñoz2006cl <- Munoz5 %>% select(-(4:6)) %>% select(-(5:14)) 
+Muñoz2006cl %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cl.csv", row.names = FALSE)
+
+  ## Epibulus insidiator - 
+
+Muñoz2006cm <- Munoz5 %>% select(-(4:7)) %>% select(-(5:13)) 
+Muñoz2006cm %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cm.csv", row.names = FALSE)
+
+  ## Epibulus insidiator - 
+
+Muñoz2006cn <- Munoz5 %>% select(-(4:8)) %>% select(-(5:12)) 
+Muñoz2006cn %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cn.csv", row.names = FALSE)
+
+  ## Epibulus insidiator - 
+
+Muñoz2006co <- Munoz5 %>% select(-(4:9)) %>% select(-(5:11)) 
+Muñoz2006co %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006co.csv", row.names = FALSE)
+
+  ## Epibulus insidiator - 
+
+Muñoz2006cp <- Munoz5 %>% select(-(4:10)) %>% select(-(5:10)) 
+Muñoz2006cp %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cp.csv", row.names = FALSE)
+
+  ## Epibulus insidiator - 
+
+Muñoz2006cq <- Munoz5 %>% select(-(4:11)) %>% select(-(5:9)) 
+Muñoz2006cq %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cq.csv", row.names = FALSE)
+
+  ## Epibulus insidiator - 
+
+Muñoz2006cr <- Munoz5 %>% select(-(4:12)) %>% select(-(5:8)) 
+Muñoz2006cr %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cr.csv", row.names = FALSE)
+
+  ## Epibulus insidiator - 
+
+Muñoz2006cs <- Munoz5 %>% select(-(4:13)) %>% select(-(5:7)) 
+Muñoz2006cs %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cs.csv", row.names = FALSE)
+
+  ## Epibulus insidiator - 
+
+Muñoz2006ct <- Munoz5 %>% select(-(4:14)) %>% select(-(5:6)) 
+Muñoz2006ct %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bct.csv", row.names = FALSE)
+
+  ## Epibulus insidiator - 
+
+Muñoz2006cu <- Munoz5 %>% select(-(4:15)) %>% select(-(5)) 
+Muñoz2006cu %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cu.csv", row.names = FALSE)
+ 
+  ## Epibulus insidiator - 
+
+Muñoz2006cv <- Munoz5 %>% select(-(4:16))
+Muñoz2006cv %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cv.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006cw <- Munoz6 %>% select(1:4) 
+Muñoz2006cw %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cw.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006cx <- Munoz6 %>% select(-(4)) %>% select(-(5:26)) 
+Muñoz2006cx %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cx.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006cy <- Munoz6 %>% select(-(4:5)) %>% select(-(5:25))
+Muñoz2006cy %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cy.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006cz <- Munoz6 %>% select(-(4:6)) %>% select(-(5:24)) 
+Muñoz2006cz %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006cz.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006da <- Munoz6 %>% select(-(4:7)) %>% select(-(5:23)) 
+Muñoz2006da %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006da.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006db <- Munoz6 %>% select(-(4:8)) %>% select(-(5:22)) 
+Muñoz2006db %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006db.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006dc <- Munoz6 %>% select(-(4:9)) %>% select(-(5:21)) 
+Muñoz2006dc %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dc.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006dd <- Munoz6 %>% select(-(4:10)) %>% select(-(5:20)) 
+Muñoz2006dd %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dd.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006de <- Munoz6 %>% select(-(4:11)) %>% select(-(5:19)) 
+Muñoz2006de %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006de.csv", row.names = FALSE)
+ 
+## Gomphosus varius - 
+
+Muñoz2006df <- Munoz6 %>% select(-(4:12)) %>% select(-(5:18)) 
+Muñoz2006df %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006df.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006dg <- Munoz6 %>% select(-(4:13)) %>% select(-(5:17)) 
+Muñoz2006dg %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dg.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006dh <- Munoz6 %>% select(-(4:14)) %>% select(-(5:16)) 
+Muñoz2006dh %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dh.csv", row.names = FALSE)
+
+## Gomphosus varius -  
+
+Muñoz2006di <- Munoz6 %>% select(-(4:15)) %>% select(-(5:15)) 
+Muñoz2006di %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006di.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006dj <- Munoz6 %>% select(-(4:16)) %>% select(-(5:14)) 
+Muñoz2006dj %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dj.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006dk <- Munoz6 %>% select(-(4:17)) %>% select(-(5:13)) 
+Muñoz2006dk %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dk.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006dl <- Munoz6 %>% select(-(4:18)) %>% select(-(5:12)) 
+Muñoz2006dl %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dl.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006dm <- Munoz6 %>% select(-(4:19)) %>% select(-(5:11)) 
+Muñoz2006dm %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dm.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006dn <- Munoz6 %>% select(-(4:20)) %>% select(-(5:10)) 
+Muñoz2006dn %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dn.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006do <- Munoz6 %>% select(-(4:21)) %>% select(-(5:9)) 
+Muñoz2006do %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006do.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006dp <- Munoz6 %>% select(-(4:22)) %>% select(-(5:8)) 
+Muñoz2006dp %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dp.csv", row.names = FALSE)
+
+## Gomphosus varius -  
+
+Muñoz2006dq <- Munoz6 %>% select(-(4:23)) %>% select(-(5:7)) 
+Muñoz2006dq %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dq.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006dr <- Munoz6 %>% select(-(4:24)) %>% select(-(5:6)) 
+Muñoz2006dr %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dr.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006ds <- Munoz6 %>% select(-(4:25)) %>% select(-(5)) 
+Muñoz2006ds %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ds.csv", row.names = FALSE)
+
+## Gomphosus varius - 
+
+Muñoz2006dt <- Munoz6 %>% select(-(4:26))
+Muñoz2006dt %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dt.csv", row.names = FALSE)
+
+  ## Halichoeres melanurus - 
+
+Muñoz2006du <- Munoz7 %>% select(1:4) 
+Muñoz2006du %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006du.csv", row.names = FALSE)
+
+  ## Halichoeres melanurus - 
+
+Muñoz2006dv <- Munoz7 %>% select(-(4)) %>% select(-(5:12)) 
+Muñoz2006dv %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dv.csv", row.names = FALSE)
+
+  ## Halichoeres melanurus - 
+
+Muñoz2006dw <- Munoz7 %>% select(-(4:5)) %>% select(-(5:11))
+Muñoz2006dw %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dw.csv", row.names = FALSE)
+
+  ## Halichoeres melanurus - 
+
+Muñoz2006dx <- Munoz7 %>% select(-(4:6)) %>% select(-(5:10)) 
+Muñoz2006dx %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dx.csv", row.names = FALSE)
+
+  ## Halichoeres melanurus - 
+
+Muñoz2006dy <- Munoz7 %>% select(-(4:7)) %>% select(-(5:9)) 
+Muñoz2006dy %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dy.csv", row.names = FALSE)
+
+  ## Halichoeres melanurus - 
+
+Muñoz2006dz <- Munoz7 %>% select(-(4:8)) %>% select(-(5:8)) 
+Muñoz2006dz %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006dx.csv", row.names = FALSE)
+
+  ## Halichoeres melanurus - 
+
+Muñoz2006ea <- Munoz7 %>% select(-(4:9)) %>% select(-(5:7)) 
+Muñoz2006ea %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ea.csv", row.names = FALSE)
+
+  ## Halichoeres melanurus - 
+
+Muñoz2006eb <- Munoz7 %>% select(-(4:10)) %>% select(-(5:6)) 
+Muñoz2006eb %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006eb.csv", row.names = FALSE)
+
+  ## Halichoeres melanurus - 
+
+Muñoz2006ec <- Munoz7 %>% select(-(4:11)) %>% select(-(5)) 
+Muñoz2006ec %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ec.csv", row.names = FALSE)
+ 
+  ## Halichoeres melanurus - 
+
+Muñoz2006ed <- Munoz7 %>% select(-(4:12))
+Muñoz2006ed %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ed.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006ee <- Munoz8 %>% select(1:4) 
+Muñoz2006ee %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ee.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006ef <- Munoz8 %>% select(-(4)) %>% select(-(5:31)) 
+Muñoz2006ef %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ef.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006eg <- Munoz8 %>% select(-(4:5)) %>% select(-(5:30))
+Muñoz2006eg %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006eg.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006eh <- Munoz8 %>% select(-(4:6)) %>% select(-(5:29)) 
+Muñoz2006eh %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006eh.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006ei <- Munoz8 %>% select(-(4:7)) %>% select(-(5:28)) 
+Muñoz2006ei %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ei.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006ej <- Munoz8 %>% select(-(4:8)) %>% select(-(5:27)) 
+Muñoz2006ej %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ej.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006ek <- Munoz8 %>% select(-(4:9)) %>% select(-(5:26)) 
+Muñoz2006ek %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ek.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006el <- Munoz8 %>% select(-(4:10)) %>% select(-(5:25)) 
+Muñoz2006el %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006el.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006em <- Munoz8 %>% select(-(4:11)) %>% select(-(5:24)) 
+Muñoz2006em %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006em.csv", row.names = FALSE)
+ 
+## Hemigymnus melapterus -  
+
+Muñoz2006en <- Munoz8 %>% select(-(4:12)) %>% select(-(5:23)) 
+Muñoz2006en %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006en.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus -  
+
+Muñoz2006eo <- Munoz8 %>% select(-(4:13)) %>% select(-(5:22)) 
+Muñoz2006eo %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006eo.csv", row.names = FALSE)
+
+## Hemigymnus melapterus - 
+Muñoz2006ep <- Munoz8 %>% select(-(4:14)) %>% select(-(5:21)) 
+Muñoz2006ep %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ep.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006eq <- Munoz8 %>% select(-(4:15)) %>% select(-(5:20)) 
+Muñoz2006eq %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006eq.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006er <- Munoz8 %>% select(-(4:16)) %>% select(-(5:19)) 
+Muñoz2006er %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006er.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006es <- Munoz8 %>% select(-(4:17)) %>% select(-(5:18)) 
+Muñoz2006es %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006es.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006et <- Munoz8 %>% select(-(4:18)) %>% select(-(5:17)) 
+Muñoz2006et %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006et.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006eu <- Munoz8 %>% select(-(4:19)) %>% select(-(5:16)) 
+Muñoz2006eu %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006eu.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006ev <- Munoz8 %>% select(-(4:20)) %>% select(-(5:15)) 
+Muñoz2006ev %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ev.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006ew <- Munoz8 %>% select(-(4:21)) %>% select(-(5:14)) 
+Muñoz2006ew %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ew.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006ex <- Munoz8 %>% select(-(4:22)) %>% select(-(5:13)) 
+Muñoz2006ex %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ex.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006ey <- Munoz8 %>% select(-(4:23)) %>% select(-(5:12)) 
+Muñoz2006ey %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ey.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006ez <- Munoz8 %>% select(-(4:24)) %>% select(-(5:11)) 
+Muñoz2006ez %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ez.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006fa <- Munoz8 %>% select(-(4:25)) %>% select(-(5:10)) 
+Muñoz2006fa %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fa.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006fb <- Munoz8 %>% select(-(4:26)) %>% select(-(5:9)) 
+Muñoz2006fb %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fb.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006fc <- Munoz8 %>% select(-(4:27)) %>% select(-(5:8)) 
+Muñoz2006fc %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fc.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006fd <- Munoz8 %>% select(-(4:28)) %>% select(-(5:7)) 
+Muñoz2006fd %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fd.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006fe <- Munoz8 %>% select(-(4:29)) %>% select(-(5:6)) 
+Muñoz2006fe %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fe.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006ff <- Munoz8 %>% select(-(4:30)) %>% select(-(5)) 
+Muñoz2006ff %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ff.csv", row.names = FALSE)
+
+ ## Hemigymnus melapterus - 
+
+Muñoz2006fg <- Munoz8 %>% select(-(4:31))
+Muñoz2006fg %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fg.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fh <- Munoz9 %>% select(1:4) 
+Muñoz2006fh %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fh.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fi <- Munoz9 %>% select(-(4)) %>% select(-(5:22)) 
+Muñoz2006fi %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fi.csv", row.names = FALSE)
+
+## Oxycheilinus diagramma - 
+
+Muñoz2006fj <- Munoz9 %>% select(-(4:5)) %>% select(-(5:21))
+Muñoz2006fj %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fj.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fk <- Munoz9 %>% select(-(4:6)) %>% select(-(5:20)) 
+Muñoz2006fk %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fk.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fl <- Munoz9 %>% select(-(4:7)) %>% select(-(5:19)) 
+Muñoz2006fl %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fl.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fm <- Munoz9 %>% select(-(4:8)) %>% select(-(5:18)) 
+Muñoz2006fm %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fm.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fn <- Munoz9 %>% select(-(4:10)) %>% select(-(5:16)) 
+Muñoz2006fn %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fn.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fo <- Munoz9 %>% select(-(4:11)) %>% select(-(5:15)) 
+Muñoz2006fo %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fo.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fp <- Munoz9 %>% select(-(4:12)) %>% select(-(5:14)) 
+Muñoz2006fp %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fp.csv", row.names = FALSE)
+ 
+## Oxycheilinus diagramma - 
+
+Muñoz2006fq <- Munoz9 %>% select(-(4:13)) %>% select(-(5:13)) 
+Muñoz2006fq %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fq.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fr <- Munoz9 %>% select(-(4:14)) %>% select(-(5:12)) 
+Muñoz2006fr %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bfr.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fs <- Munoz9 %>% select(-(4:15)) %>% select(-(5:11)) 
+Muñoz2006fs %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fs.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006ft <- Munoz9 %>% select(-(4:16)) %>% select(-(5:10)) 
+Muñoz2006ft %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ft.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fu <- Munoz9 %>% select(-(4:17)) %>% select(-(5:9)) 
+Muñoz2006fu %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fu.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fv <- Munoz9 %>% select(-(4:18)) %>% select(-(5:8)) 
+Muñoz2006fv %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fv.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fw <- Munoz9 %>% select(-(4:19)) %>% select(-(5:7)) 
+Muñoz2006fw %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fw.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fx <- Munoz9 %>% select(-(4:20)) %>% select(-(5:6)) 
+Muñoz2006fx %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fx.csv", row.names = FALSE)
+
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fy <- Munoz9 %>% select(-(4:21)) %>% select(-(5)) 
+Muñoz2006fy %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fy.csv", row.names = FALSE)
+ 
+ ## Oxycheilinus diagramma - 
+
+Muñoz2006fz <- Munoz9 %>% select(-(4:22))
+Muñoz2006fz %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fz.csv", row.names = FALSE)
+
+  ## Stethojulis bandanensis - 
+
+Muñoz2006ga <- Munoz10 %>% select(1:4) 
+Muñoz2006ga %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006fz.csv", row.names = FALSE)
+
+  ## Stethojulis bandanensis - 
+
+Muñoz2006gb <- Munoz10 %>% select(-(4)) %>% select(-(5:17)) 
+Muñoz2006gb %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gb.csv", row.names = FALSE)
+
+  ## Stethojulis bandanensis - 
+
+Muñoz2006gc <- Munoz10 %>% select(-(4:5)) %>% select(-(5:16))
+Muñoz2006gc %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gc.csv", row.names = FALSE)
+
+  ## Stethojulis bandanensis - 
+
+Muñoz2006gd <- Munoz10 %>% select(-(4:6)) %>% select(-(5:15)) 
+Muñoz2006gd %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gd.csv", row.names = FALSE)
+
+  ## Stethojulis bandanensis - 
+
+Muñoz2006ge <- Munoz10 %>% select(-(4:7)) %>% select(-(5:14)) 
+Muñoz2006ge %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ge.csv", row.names = FALSE)
+
+  ## Stethojulis bandanensis - 
+
+Muñoz2006gf <- Munoz10 %>% select(-(4:8)) %>% select(-(5:13)) 
+Muñoz2006gf %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gf.csv", row.names = FALSE)
+
+  ## Stethojulis bandanensis - 
+
+Muñoz2006gg <- Munoz10 %>% select(-(4:9)) %>% select(-(5:12)) 
+Muñoz2006gg %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gg.csv", row.names = FALSE)
+
+  ## Stethojulis bandanensis - 
+
+Muñoz2006gh <- Munoz10 %>% select(-(4:10)) %>% select(-(5:11)) 
+Muñoz2006gh %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gh.csv", row.names = FALSE)
+
+  ## Stethojulis bandanensis - 
+
+Muñoz2006gi <- Munoz10 %>% select(-(4:11)) %>% select(-(5:10)) 
+Muñoz2006gi %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gi.csv", row.names = FALSE)
+
+  ## Stethojulis bandanensis -  
+
+Muñoz2006gj <- Munoz10 %>% select(-(4:12)) %>% select(-(5:9)) 
+Muñoz2006gj %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gj.csv", row.names = FALSE)
+
+  ## Stethojulis bandanensis - 
+
+Muñoz2006gk <- Munoz10 %>% select(-(4:13)) %>% select(-(5:8)) 
+Muñoz2006gk %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gk.csv", row.names = FALSE)
+
+  ## Stethojulis bandanensis - 
+
+Muñoz2006gl <- Munoz10 %>% select(-(4:14)) %>% select(-(5:7)) 
+Muñoz2006gl %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bgl.csv", row.names = FALSE)
+
+  ## Stethojulis bandanensis - 
+
+Muñoz2006gm <- Munoz10 %>% select(-(4:15)) %>% select(-(5:6)) 
+Muñoz2006gm %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gm.csv", row.names = FALSE)
+
+  ## Stethojulis bandanensis - 
+
+Muñoz2006gn <- Munoz10 %>% select(-(4:16)) %>% select(-(5)) 
+Muñoz2006gn %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gn.csv", row.names = FALSE)
+ 
+  ## Stethojulis bandanensis - 
+
+Muñoz2006go <- Munoz10 %>% select(-(4:17))
+Muñoz2006go %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006go.csv", row.names = FALSE)
+
+  ## Stethojulis strigiventer - 
+
+Muñoz2006gp <- Munoz11 %>% select(1:4) 
+Muñoz2006gp %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gp.csv", row.names = FALSE)
+
+  ## Stethojulis strigiventer - 
+
+Muñoz2006gq <- Munoz11 %>% select(-(4)) %>% select(-(5:18)) 
+Muñoz2006gq %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gq.csv", row.names = FALSE)
+
+  ## Stethojulis strigiventer - 
+
+Muñoz2006gr <- Munoz11 %>% select(-(4:5)) %>% select(-(5:17))
+Muñoz2006gr %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gr.csv", row.names = FALSE)
+
+  ## Stethojulis strigiventer - 
+
+Muñoz2006gs <- Munoz11 %>% select(-(4:6)) %>% select(-(5:16)) 
+Muñoz2006gs %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gs.csv", row.names = FALSE)
+
+  ## Stethojulis strigiventer - 
+
+Muñoz2006gt <- Munoz11 %>% select(-(4:7)) %>% select(-(5:15)) 
+Muñoz2006gt %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gt.csv", row.names = FALSE)
+
+  ## Stethojulis strigiventer - 
+
+Muñoz2006gu <- Munoz11 %>% select(-(4:8)) %>% select(-(5:14)) 
+Muñoz2006gu %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gu.csv", row.names = FALSE)
+
+  ## Stethojulis strigiventer - 
+
+Muñoz2006gv <- Munoz11 %>% select(-(4:9)) %>% select(-(5:13)) 
+Muñoz2006gv %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gv.csv", row.names = FALSE)
+
+  ## Stethojulis strigiventer - 
+
+Muñoz2006gw <- Munoz11 %>% select(-(4:10)) %>% select(-(5:12)) 
+Muñoz2006gw %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gw.csv", row.names = FALSE)
+
+  ## Stethojulis strigiventer - 
+
+Muñoz2006gx <- Munoz11 %>% select(-(4:11)) %>% select(-(5:11)) 
+Muñoz2006gx %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gx.csv", row.names = FALSE)
+
+  ## Stethojulis strigiventer -   
+
+Muñoz2006y <- Munoz11 %>% select(-(4:12)) %>% select(-(5:10)) 
+Muñoz2006gy %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gy.csv", row.names = FALSE)
+
+  ## Stethojulis strigiventer -  
+
+Muñoz2006gz <- Munoz11 %>% select(-(4:13)) %>% select(-(5:9)) 
+Muñoz2006gz %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006gz.csv", row.names = FALSE)
+
+  ## Stethojulis strigiventer - 
+
+Muñoz2006ha <- Munoz11 %>% select(-(4:14)) %>% select(-(5:8)) 
+Muñoz2006ha %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006bha.csv", row.names = FALSE)
+
+  ## Stethojulis strigiventer - 
+
+Muñoz2006hp <- Munoz11 %>% select(-(4:15)) %>% select(-(5:7)) 
+Muñoz2006hp %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hp.csv", row.names = FALSE)
+
+  ## Stethojulis strigiventer - 
+
+Muñoz2006hc <- Munoz11 %>% select(-(4:16)) %>% select(-(5:6)) 
+Muñoz2006hc %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hc.csv", row.names = FALSE)
+
+  ## Stethojulis strigiventer - 
+
+Muñoz2006hd <- Munoz11 %>% select(-(4:17)) %>% select(-(5)) 
+Muñoz2006hd %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hd.csv", row.names = FALSE)
+ 
+  ## Stethojulis strigiventer - 
+
+Muñoz2006he <- Munoz11 %>% select(-(4:18))
+Muñoz2006he %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006he.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hf <- Munoz12 %>% select(1:4) 
+Muñoz2006hf %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hf.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hg <- Munoz12 %>% select(-(4)) %>% select(-(5:27)) 
+Muñoz2006hg %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hg.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hh <- Munoz12 %>% select(-(4:5)) %>% select(-(5:26))
+Muñoz2006hh %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hh.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hi <- Munoz12 %>% select(-(4:6)) %>% select(-(5:25)) 
+Muñoz2006hi %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hi.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hj <- Munoz12 %>% select(-(4:7)) %>% select(-(5:24)) 
+Muñoz2006hj %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hj.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006dhk <- Munoz12 %>% select(-(4:8)) %>% select(-(5:23)) 
+Muñoz2006dhk %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hk.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hl <- Munoz12 %>% select(-(4:9)) %>% select(-(5:22)) 
+Muñoz2006hl %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hl.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hm <- Munoz12 %>% select(-(4:10)) %>% select(-(5:21)) 
+Muñoz2006hm %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hm.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hn <- Munoz12 %>% select(-(4:11)) %>% select(-(5:20)) 
+Muñoz2006hn %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hn.csv", row.names = FALSE)
+ 
+## Thalassoma hardwicke - 
+
+Muñoz2006ho <- Munoz12 %>% select(-(4:12)) %>% select(-(5:19)) 
+Muñoz2006ho %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ho.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hp <- Munoz12 %>% select(-(4:13)) %>% select(-(5:18)) 
+Muñoz2006hp %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hp.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hq <- Munoz12 %>% select(-(4:14)) %>% select(-(5:17)) 
+Muñoz2006hq %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hq.csv", row.names = FALSE)
+
+## Thalassoma hardwicke -  
+
+Muñoz2006hr <- Munoz12 %>% select(-(4:15)) %>% select(-(5:16)) 
+Muñoz2006hr %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hr.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hs <- Munoz12 %>% select(-(4:16)) %>% select(-(5:15)) 
+Muñoz2006hs %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hs.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006ht <- Munoz12 %>% select(-(4:17)) %>% select(-(5:14)) 
+Muñoz2006ht %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ht.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hu <- Munoz12 %>% select(-(4:18)) %>% select(-(5:13)) 
+Muñoz2006hu %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hu.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hv <- Munoz12 %>% select(-(4:19)) %>% select(-(5:12)) 
+Muñoz2006hv %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hv.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hw <- Munoz12 %>% select(-(4:20)) %>% select(-(5:11)) 
+Muñoz2006hw %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hw.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hx <- Munoz12 %>% select(-(4:21)) %>% select(-(5:10)) 
+Muñoz2006hx %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hx.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hy <- Munoz12 %>% select(-(4:22)) %>% select(-(5:9)) 
+Muñoz2006hy %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hy.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006hz <- Munoz12 %>% select(-(4:23)) %>% select(-(5:8)) 
+Muñoz2006hz %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006hz.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006ia <- Munoz12 %>% select(-(4:24)) %>% select(-(5:7)) 
+Muñoz2006ia %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ia.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006ib <- Munoz12 %>% select(-(4:25)) %>% select(-(5:6)) 
+Muñoz2006ib %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ib.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006ic <- Munoz12 %>% select(-(4:26)) %>% select(-(5)) 
+Muñoz2006ic %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ic.csv", row.names = FALSE)
+
+## Thalassoma hardwicke - 
+
+Muñoz2006id <- Munoz12 %>% select(-(4:27))
+Muñoz2006id %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006id.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006ie <- Munoz13 %>% select(1:4) 
+Muñoz2006ie %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ie.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006if <- Munoz13 %>% select(-(4)) %>% select(-(5:27)) 
+Muñoz2006if %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006if.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006ig <- Munoz13 %>% select(-(4:5)) %>% select(-(5:26))
+Muñoz2006ig %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ig.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006ih <- Munoz13 %>% select(-(4:6)) %>% select(-(5:25)) 
+Muñoz2006ih %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ih.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006ii <- Munoz13 %>% select(-(4:7)) %>% select(-(5:24)) 
+Muñoz2006ii %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ii.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006ij <- Munoz13 %>% select(-(4:8)) %>% select(-(5:23)) 
+Muñoz2006ij %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ij.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006ik <- Munoz13 %>% select(-(4:9)) %>% select(-(5:22)) 
+Muñoz2006ik %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ik.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006il <- Munoz13 %>% select(-(4:10)) %>% select(-(5:21)) 
+Muñoz2006il %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006il.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006im <- Munoz13 %>% select(-(4:11)) %>% select(-(5:20)) 
+Muñoz2006im %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006im.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006in <- Munoz13 %>% select(-(4:12)) %>% select(-(5:19)) 
+Muñoz2006in %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006in.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006io <- Munoz13 %>% select(-(4:13)) %>% select(-(5:18)) 
+Muñoz2006io %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006io.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006ip <- Munoz13 %>% select(-(4:14)) %>% select(-(5:17)) 
+Muñoz2006ip %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ip.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006iq <- Munoz13 %>% select(-(4:15)) %>% select(-(5:16)) 
+Muñoz2006iq %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006iq.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006ir <- Munoz13 %>% select(-(4:16)) %>% select(-(5:15)) 
+Muñoz2006ir %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ir.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006is <- Munoz13 %>% select(-(4:17)) %>% select(-(5:14)) 
+Muñoz2006is %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006is.csv", row.names = FALSE)
+
+## Thalassoma jansenii -  
+
+Muñoz2006it <- Munoz13 %>% select(-(4:18)) %>% select(-(5:13)) 
+Muñoz2006it %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006it.csv", row.names = FALSE)
+
+## Thalassoma jansenii -  
+
+Muñoz2006iu <- Munoz13 %>% select(-(4:19)) %>% select(-(5:12)) 
+Muñoz2006iu %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006iu.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006iv <- Munoz13 %>% select(-(4:20)) %>% select(-(5:11)) 
+Muñoz2006iv %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006iv.csv", row.names = FALSE)
+
+## Thalassoma jansenii -  
+
+Muñoz2006iw <- Munoz13 %>% select(-(4:21)) %>% select(-(5:10)) 
+Muñoz2006iw %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006iw.csv", row.names = FALSE)
+
+## Thalassoma jansenii -  
+
+Muñoz2006ix <- Munoz13 %>% select(-(4:22)) %>% select(-(5:9)) 
+Muñoz2006ix %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ix.csv", row.names = FALSE)
+
+## Thalassoma jansenii -  
+
+Muñoz2006iy <- Munoz13 %>% select(-(4:23)) %>% select(-(5:8)) 
+Muñoz2006iy %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006iy.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006iz <- Munoz13 %>% select(-(4:24)) %>% select(-(5:7)) 
+Muñoz2006iz %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006iz.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006ja <- Munoz13 %>% select(-(4:25)) %>% select(-(5:6)) 
+Muñoz2006ja %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ja.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006jb <- Munoz13 %>% select(-(4:26)) %>% select(-(5)) 
+Muñoz2006jb %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jb.csv", row.names = FALSE)
+
+## Thalassoma jansenii - 
+
+Muñoz2006jc <- Munoz13 %>% select(-(4:27))
+Muñoz2006jc %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jc.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jd <- Munoz14 %>% select(1:4) 
+Muñoz2006jd %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jd.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006je <- Munoz14 %>% select(-(4)) %>% select(-(5:27)) 
+Muñoz2006je %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006je.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jf <- Munoz14 %>% select(-(4:5)) %>% select(-(5:26))
+Muñoz2006jf %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jf.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jg <- Munoz14 %>% select(-(4:6)) %>% select(-(5:25)) 
+Muñoz2006jg %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jg.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jh <- Munoz14 %>% select(-(4:7)) %>% select(-(5:24)) 
+Muñoz2006jh %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jh.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006ji <- Munoz14 %>% select(-(4:8)) %>% select(-(5:23)) 
+Muñoz2006ji %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ji.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jj <- Munoz14 %>% select(-(4:9)) %>% select(-(5:22)) 
+Muñoz2006jj %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jj.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jk <- Munoz14 %>% select(-(4:10)) %>% select(-(5:21)) 
+Muñoz2006jk %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jk.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jl <- Munoz14 %>% select(-(4:11)) %>% select(-(5:20)) 
+Muñoz2006jl %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jl.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jm <- Munoz14 %>% select(-(4:12)) %>% select(-(5:19)) 
+Muñoz2006jm %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jm.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jn <- Munoz14 %>% select(-(4:13)) %>% select(-(5:18)) 
+Muñoz2006jn %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jn.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jo <- Munoz14 %>% select(-(4:14)) %>% select(-(5:17)) 
+Muñoz2006jo %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jo.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jp <- Munoz14 %>% select(-(4:15)) %>% select(-(5:16)) 
+Muñoz2006jp %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jp.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jq <- Munoz14 %>% select(-(4:16)) %>% select(-(5:15)) 
+Muñoz2006jq %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jq.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jr <- Munoz14 %>% select(-(4:17)) %>% select(-(5:14)) 
+Muñoz2006jr %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jr.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006js <- Munoz14 %>% select(-(4:18)) %>% select(-(5:13)) 
+Muñoz2006js %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006js.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jt <- Munoz14 %>% select(-(4:19)) %>% select(-(5:12)) 
+Muñoz2006jt %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jt.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006ju <- Munoz14 %>% select(-(4:20)) %>% select(-(5:11)) 
+Muñoz2006ju %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ju.csv", row.names = FALSE)
+
+## Thalassoma lunare -  
+
+Muñoz2006jv <- Munoz14 %>% select(-(4:21)) %>% select(-(5:10)) 
+Muñoz2006jv %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jv.csv", row.names = FALSE)
+
+## Thalassoma lunare -  
+
+Muñoz2006jw <- Munoz14 %>% select(-(4:22)) %>% select(-(5:9)) 
+Muñoz2006jw %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jw.csv", row.names = FALSE)
+
+## Thalassoma lunare -  
+
+Muñoz2006jx <- Munoz14 %>% select(-(4:23)) %>% select(-(5:8)) 
+Muñoz2006jx %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jx.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jy <- Munoz14 %>% select(-(4:24)) %>% select(-(5:7)) 
+Muñoz2006jy %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jy.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006jz <- Munoz14 %>% select(-(4:25)) %>% select(-(5:6)) 
+Muñoz2006jz %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006jz.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006ka <- Munoz14 %>% select(-(4:26)) %>% select(-(5)) 
+Muñoz2006ka %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006ka.csv", row.names = FALSE)
+
+## Thalassoma lunare - 
+
+Muñoz2006kb <- Munoz14 %>% select(-(4:27))
+Muñoz2006kb %>% rename("Count" = 4) %>% write.csv(.,"Poulin Macroparasite Data/Muñoz2006kb.csv", row.names = FALSE)
+```

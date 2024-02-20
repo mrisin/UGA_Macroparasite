@@ -1,0 +1,2575 @@
+---
+title: "Coefficient Correlation"
+output: html_document
+date: "2023-07-03"
+---
+
+```{r setup, include=FALSE}
+library(magrittr)
+library(tidyverse)
+library(readxl)
+library("ggplot2")                     
+library("GGally")
+```
+
+
+```{r Dezfuli analysis}
+Dezfuli %<>% mutate_at(c(3:4), as.numeric) %>% mutate_at(c(9:17), as.numeric)
+
+# Correlation coefficent (including zeros)
+correlation(Dezfuli,8,FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Dezfuli,8,TRUE)
+
+## Taxonomy
+Parasite_Taxonomy(Dezfuli, 8)
+
+#Adding "superspreading" count
+Dezfuli %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Dezfuli)) {
+    for(j in 9:(ncol(Dezfuli)-1)){
+      parasite <- pull(Dezfuli, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Dezfuli[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Dezfuli$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+#change to length (cm) and weight (g)
+Dezfuli %<>% rename("Length (cm)" = 3) %>% rename("Weight (g)" = 5)
+
+Dezfuli$Individual %<>% as.character()
+```
+
+```{r Dittmer1-2 analysis}
+##Dittmer1
+# Correlation coefficent (excluding zeros)
+correlation2(Dittmer1, 4, TRUE)
+
+# Correlation coefficent (including zeros)
+correlation2(Dittmer1, 5, FALSE)
+
+## Taxonomy
+Parasite_Taxonomy(Dittmer1,4)
+
+#Adding "superspreading" count
+Dittmer1 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Dittmer1)) {
+    for(j in 5:(ncol(Dittmer1)-1)){
+      parasite <- pull(Dittmer1, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Dittmer1[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Dittmer1$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+
+##Dittmer2
+# Correlation coefficent (excluding zeros)
+correlation2(Dittmer2, 4, TRUE)
+
+# Correlation coefficent (including zeros)
+correlation2(Dittmer2, 5, FALSE)
+
+## Taxonomy
+Parasite_Taxonomy(Dittmer2,4)
+
+#Adding "superspreading" count
+Dittmer2 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Dittmer2)) {
+    for(j in 5:(ncol(Dittmer2)-1)){
+      parasite <- pull(Dittmer2, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Dittmer2[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Dittmer2$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+#combine Dittmer
+Dittmer_all <- bind_rows(Dittmer1,Dittmer2)
+
+#change to length (cm)
+Dittmer_all %<>% rename("Length (cm)" = 4)
+Dittmer_all$`Length (cm)` <- (Dittmer_all$`Length (cm)`) / 10
+Dittmer_all %<>% mutate_at(c(4:8), as.numeric)
+
+Dittmer_all$Individual %<>% as.character()
+```
+
+```{r Giari analysis}
+Giari %<>% mutate_at(c(5:16), as.numeric)
+# Correlation coefficent (excluding zeros)
+correlation2(Giari, 6, TRUE)
+
+# Correlation coefficent (including zeros)
+correlation(Giari, 6)
+
+## Taxonomy
+Parasite_Taxonomy(Giari,6)
+
+#Adding "superspreading" count
+Giari %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Giari)) {
+    for(j in 7:(ncol(Giari)-1)){
+      parasite <- pull(Giari, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Giari[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Giari$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+#change to length (cm) and weight (g)
+Giari %<>% rename("Length (cm)" = 5) %>% rename("Weight (g)" = 6)
+
+Giari$Individual %<>% as.character()
+```
+
+```{r Heaphy analysis}
+Heaphy %<>% mutate_at(c(5:7), as.numeric)
+
+# Correlation coefficent (including zeros)
+correlation(Heaphy, 5)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Heaphy, 5, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Heaphy, 5, 6)
+
+#Adding "superspreading" count
+Heaphy[is.na(Heaphy)] <- 0
+Heaphy %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Heaphy)) {
+    for(j in 6:(ncol(Heaphy)-1)){
+      parasite <- pull(Heaphy, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Heaphy[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Heaphy$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+#change to length (cm)
+Heaphy %<>% rename("Length (cm)" = 5)
+Heaphy$`Length (cm)` <- (Heaphy$`Length (cm)`) / 10
+
+Heaphy$Individual %<>% as.character()
+```
+
+```{r Nichol analysis}
+Nichol %<>% mutate_at(c(3:6), as.numeric)
+
+# Correlation coefficent (including zeros)
+correlation(Nichol, 3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Nichol, 4, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Nichol, 3, 5)
+
+#Adding "superspreading" count
+Nichol[is.na(Nichol)] <- 0
+Nichol %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Nichol)) {
+    for(j in 4:(ncol(Nichol)-1)){
+      parasite <- pull(Nichol, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Nichol[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Nichol$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+#change to length (cm)
+Nichol %<>% rename("Length (cm)" = 3)
+Nichol$`Length (cm)` <- (Nichol$`Length (cm)`) / 10
+
+Nichol$Individual %<>% as.character()
+```
+
+```{r Peoples analysis}
+## Peoples1
+#Adding "superspreading" count
+Peoples2011a[is.na(Peoples2011a)] <- 0
+Peoples2011a %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Peoples2011a)) {
+    for(j in 5:(ncol(Peoples2011a)-1)){
+      parasite <- pull(Peoples2011a, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Peoples2011a[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Peoples2011a$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Peoples2
+#Adding "superspreading" count
+Peoples2011b[is.na(Peoples2011b)] <- 0
+Peoples2011b %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Peoples2011b)) {
+    for(j in 5:(ncol(Peoples2011b)-1)){
+      parasite <- pull(Peoples2011b, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Peoples2011b[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Peoples2011b$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+#change to length (cm)
+Peoples2011a %<>% rename("Max Thoracic Width (mm)" = 4)
+Peoples2011a %<>% rename("Length (cm)" = 3)
+Peoples2011a$`Length (cm)` <- (Peoples2011a$`Length (cm)`) / 10
+
+Peoples2011b %<>% rename("Length (cm)" = 3)
+Peoples2011b$`Length (cm)` <- (Peoples2011b$`Length (cm)`) / 10
+
+#combine Peoples
+Peoples_all <- bind_rows(Peoples2011a,Peoples2011b)
+
+Peoples_all$Individual %<>% as.character()
+```
+
+
+```{r Ruehle analysis}
+Ruehle1 %<>% rename("Eustrongylides sp" = `Eustrongylides sp.`)
+Ruehle3 %<>% select(-(2))
+Ruehle_all <- bind_rows(Ruehle1,Ruehle2,Ruehle3)
+Ruehle_all %<>% select(-(11))
+Ruehle_all %<>% mutate_at(c(4:10), as.numeric)
+
+# Correlation coefficent (including zeros)
+correlation(Ruehle_all, 5, FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Ruehle_all, 5, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Ruehle_all, 5)
+
+#Adding "superspreading" count
+Ruehle_all[is.na(Ruehle_all)] <- 0
+Ruehle_all %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Ruehle_all)) {
+    for(j in 6:(ncol(Ruehle_all)-1)){
+      parasite <- pull(Ruehle_all, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Ruehle_all[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Ruehle_all$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+#change to length (cm) and weight (g)
+Ruehle_all %<>% rename("Length (cm)" = 4)
+Ruehle_all %<>% rename("Weight (g)" = 5)
+
+Ruehle_all$Individual %<>% as.character()
+```
+
+```{r Valtonen analysis}
+## Valtonen 1
+Val1 %<>% mutate_at(c(3:4), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Val1,3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Val1,3,TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Val1, 3)
+
+#Adding "superspreading" count
+Val1[is.na(Val1)] <- 0
+Val1 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Val1)) {
+    for(j in 4:(ncol(Val1)-1)){
+      parasite <- pull(Val1, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Val1[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Val1$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Valtonen 2
+Val2 %<>% mutate_at(c(3:10), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Val2,3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Val2,3,TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Val2, 3)
+
+#Adding "superspreading" count
+Val2[is.na(Val2)] <- 0
+Val2 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Val2)) {
+    for(j in 4:(ncol(Val2)-1)){
+      parasite <- pull(Val2, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Val2[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Val2$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Valtonen 3
+Val3 %<>% mutate_at(c(3:5), as.numeric)
+# Correlation coefficent (including zeros)
+Val3 <- Val3 %>% mutate_if(is.character, as.numeric)
+correlation(Val3,3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Val3,3,TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Val3, 3)
+
+#Adding "superspreading" count
+Val3[is.na(Val3)] <- 0
+Val3 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Val3)) {
+    for(j in 4:(ncol(Val3)-1)){
+      parasite <- pull(Val3, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Val3[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Val3$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Valtonen 4
+Val4 %<>% mutate_at(c(3:7), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Val4,3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Val4,3,TRUE)
+
+Val4_cc <- Val4 %>% select(c(4,6)) %>% filter_if(., is.numeric, all_vars((.) != 0))
+
+cor.test(Val4_cc$`Neoechinorhynchus rutili`, Val4_cc$`Bunodera luciopercae`)
+
+correlation0(Val4,5)
+
+#Taxonomy
+Parasite_Taxonomy(Val4, 3)
+
+#Adding "superspreading" count
+Val4[is.na(Val4)] <- 0
+Val4 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Val4)) {
+    for(j in 4:(ncol(Val4)-1)){
+      parasite <- pull(Val4, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Val4[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Val4$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Valtonen 5
+Val5 %<>% mutate_at(c(3:5), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Val5,3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Val5,3,TRUE)
+
+#Adding "superspreading" count
+Val5[is.na(Val5)] <- 0
+Val5 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Val5)) {
+    for(j in 4:(ncol(Val5)-1)){
+      parasite <- pull(Val5, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Val5[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Val5$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Valtonen 6
+Val6 %<>% mutate_at(c(3:5), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Val6,3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Val6,3,TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Val6, 3)
+
+#Adding "superspreading" count
+Val6[is.na(Val6)] <- 0
+Val6 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Val6)) {
+    for(j in 4:(ncol(Val6)-1)){
+      parasite <- pull(Val6, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Val6[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Val6$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Valtonen 7
+Val7 %<>% mutate_at(c(3:12), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Val7,3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Val7,3,TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Val7, 3)
+
+#Adding "superspreading" count
+Val7[is.na(Val7)] <- 0
+Val7 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Val7)) {
+    for(j in 4:(ncol(Val7)-1)){
+      parasite <- pull(Val7, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Val7[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Val7$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Valtonen 8
+Val8 %<>% mutate_at(c(3:7), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Val8,3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Val8,3,TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Val8, 3)
+
+#Adding "superspreading" count
+Val8[is.na(Val8)] <- 0
+Val8 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Val8)) {
+    for(j in 4:(ncol(Val8)-1)){
+      parasite <- pull(Val8, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Val8[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Val8$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Valtonen 9
+Val9 %<>% mutate_at(c(3:7), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Val9,3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Val9,3,TRUE)
+
+Val9_cc <- Val9 %>% select(c(5,6)) %>% filter_if(., is.numeric, all_vars((.) != 0))
+
+cor.test(Val9_cc$`Camallanus lacustris`, Val9_cc$`Neoechinorhynchus rutili`)
+
+#Taxonomy
+Parasite_Taxonomy(Val9, 3)
+
+#Adding "superspreading" count
+Val9[is.na(Val9)] <- 0
+Val9 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Val9)) {
+    for(j in 4:(ncol(Val9)-1)){
+      parasite <- pull(Val9, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Val9[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Val9$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Valtonen 10
+Val10 %<>% mutate_at(c(3:6), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Val10,3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Val10,3,TRUE)
+
+Val10_cc <- Val10 %>% select(c(3,5)) %>% filter_if(., is.numeric, all_vars((.) != 0))
+
+cor.test(Val10_cc$`Bunodera luciopercae`, Val10_cc$`Neoechinorhynchus rutili`)
+
+#Taxonomy
+Parasite_Taxonomy(Val10, 3)
+
+#Adding "superspreading" count
+Val10[is.na(Val10)] <- 0
+Val10 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Val10)) {
+   for(j in 4:(ncol(Val10)-1)){
+      parasite <- pull(Val10, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Val10[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Val10$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Valtonen 11
+Val11 %<>% mutate_at(c(3:5), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Val11,3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Val11,3,TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Val11, 3)
+
+#Adding "superspreading" count
+Val11[is.na(Val11)] <- 0
+Val11 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Val11)) {
+    for(j in 4:(ncol(Val11)-1)){
+      parasite <- pull(Val11, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Val11[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Val11$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Valtonen 12
+Val12 %<>% mutate_at(c(3:4), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Val12,3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Val12,3,TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Val12, 3)
+
+#Adding "superspreading" count
+Val12[is.na(Val12)] <- 0
+Val12 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Val12)) {
+    for(j in 4:(ncol(Val12)-1)){
+      parasite <- pull(Val12, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Val12[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Val12$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Valtonen 13
+Val13 %<>% mutate_at(c(3:6), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Val13,3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Val13,3,TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Val13, 3)
+
+#Adding "superspreading" count
+Val13[is.na(Val13)] <- 0
+Val13 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Val13)) {
+    for(j in 4:(ncol(Val13)-1)){
+      parasite <- pull(Val13, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Val13[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Val13$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Valtonen 14
+Val14 %<>% mutate_at(c(3:8), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Val14,3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Val14,3,TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Val14, 3)
+
+#Adding "superspreading" count
+Val14[is.na(Val14)] <- 0
+Val14 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Val14)) {
+    for(j in 4:(ncol(Val14)-1)){
+      parasite <- pull(Val14, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Val14[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Val14$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Valtonen 15
+Val15 %<>% mutate_at(c(3:5), as.numeric)
+# Correlation coefficent (including zeros)
+Val15 <- Val15 %>% mutate_if(is.character, as.numeric)
+correlation(Val15,3)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Val15,3,TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Val15, 3)
+
+#Adding "superspreading" count
+Val15[is.na(Val15)] <- 0
+Val15 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Val15)) {
+    for(j in 4:(ncol(Val15)-1)){
+      parasite <- pull(Val15, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Val15[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Val15$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+#combine valtonen
+valtonen_all <- bind_rows(Val1,Val2,Val3,Val4,Val5,Val6,Val7,Val8,Val9,Val10,Val1,Val12,Val13,Val14,Val15) %>% relocate(`Superspreading Count`, .after = Individual)
+
+#change to length (cm)
+valtonen_all %<>% rename("Length (cm)" = 4)
+valtonen_all$`Length (cm)` <- (valtonen_all$`Length (cm)`) / 10
+
+valtonen_all$Individual %<>% as.character()
+```
+
+```{r Lagrue analysis}
+## Lagrue1
+Lagrue1 %<>% mutate_at(c(3:8), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Lagrue1,5)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Lagrue1, 6, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Lagrue1, 5)
+
+#Adding "superspreading" count
+Lagrue1[is.na(Lagrue1)] <- 0
+Lagrue1 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Lagrue1)) {
+    for(j in 6:(ncol(Lagrue1)-1)){
+      parasite <- pull(Lagrue1, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Lagrue1[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Lagrue1$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Lagrue2
+Lagrue2 %<>% mutate_at(c(3:9), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Lagrue2,5)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Lagrue2, 6, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Lagrue2, 5)
+
+#Adding "superspreading" count
+Lagrue2[is.na(Lagrue2)] <- 0
+Lagrue2 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Lagrue2)) {
+    for(j in 6:(ncol(Lagrue2)-1)){
+      parasite <- pull(Lagrue2, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Lagrue2[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Lagrue2$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Lagrue3
+Lagrue3 %<>% mutate_at(c(3:10), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Lagrue3,5)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Lagrue3, 6, TRUE)
+
+#Adding "superspreading" count
+Lagrue3[is.na(Lagrue3)] <- 0
+Lagrue3 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Lagrue3)) {
+    for(j in 6:(ncol(Lagrue3)-1)){
+      parasite <- pull(Lagrue3, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Lagrue3[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Lagrue3$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Lagrue4
+Lagrue4 %<>% mutate_at(c(3:8), as.numeric)
+# Correlation coefficent (including zeros)
+Lagrue4 %<>% mutate_if(is.character, as.numeric)
+correlation(Lagrue4,5)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Lagrue4, 6, TRUE)
+
+#Adding "superspreading" count
+Lagrue4[is.na(Lagrue4)] <- 0
+Lagrue4 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Lagrue4)) {
+    for(j in 6:(ncol(Lagrue4)-1)){
+      parasite <- pull(Lagrue4, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Lagrue4[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Lagrue4$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Lagrue5
+Lagrue5 %<>% mutate_at(c(3:8), as.numeric)
+# Correlation coefficent (including zeros)
+Lagrue5 %<>% mutate_if(is.character, as.numeric)
+correlation(Lagrue5,5)
+correlation(Lagrue5,6)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Lagrue5, 6, TRUE)
+
+#Adding "superspreading" count
+Lagrue5[is.na(Lagrue5)] <- 0
+Lagrue5 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Lagrue5)) {
+    for(j in 6:(ncol(Lagrue5)-1)){
+      parasite <- pull(Lagrue5, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Lagrue5[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Lagrue5$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Lagrue6
+Lagrue6 %<>% mutate_at(c(3:8), as.numeric)
+# Correlation coefficent (including zeros)
+Lagrue6 %<>% mutate_if(is.character, as.numeric)
+correlation2(Lagrue6,5,TRUE)
+
+#Adding "superspreading" count
+Lagrue6[is.na(Lagrue6)] <- 0
+Lagrue6 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Lagrue6)) {
+    for(j in 6:(ncol(Lagrue6)-1)){
+      parasite <- pull(Lagrue6, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Lagrue6[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Lagrue6$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+#combine Lagrue
+Lagrue_all <- bind_rows(Lagrue1, Lagrue2, Lagrue3, Lagrue4, Lagrue5, Lagrue6) %>% relocate(`Superspreading Count`, .after = Individual)
+
+#change to length (cm)
+Lagrue_all %<>% rename("Length (cm)" = 4) %>% rename("Weight (g)" = 5)
+Lagrue_all$`Length (cm)` <- (Lagrue_all$`Length (cm)`) / 10
+
+Lagrue_all$Individual %<>% as.character()
+```
+
+```{r Maceda_veiga analysis}
+## MacVe1
+MacVe1 %<>% mutate_at(c(8:14), as.numeric)
+# Correlation coefficent (no zeros in dataset)
+correlation2(MacVe1,8, exclude0 = TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(MacVe1, 8)
+
+#Adding "superspreading" count
+MacVe1[is.na(MacVe1)] <- 0
+MacVe1 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(MacVe1)) {
+    for(j in 8:(ncol(MacVe8)-1)){
+      parasite <- pull(MacVe1, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- MacVe1[[i, j]]
+      
+      if(n > 0 & n >= p){
+      MacVe1$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## MacVe2
+MacVe2 %<>% mutate_at(c(8:14), as.numeric)
+# Correlation coefficent (including zeros)
+MacVe2 %<>% mutate_if(is.character, as.numeric)
+
+correlation(MacVe2,8)
+
+# Correlation coefficent (excluding zeros)
+correlation2(MacVe2,8,TRUE)
+
+#Adding "superspreading" count
+MacVe2[is.na(MacVe2)] <- 0
+MacVe2 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(MacVe2)) {
+    for(j in 8:(ncol(MacVe8)-1)){
+      parasite <- pull(MacVe2, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- MacVe2[[i, j]]
+      
+      if(n > 0 & n >= p){
+      MacVe2$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## MacVe3
+MacVe3 %<>% mutate_at(c(8:14), as.numeric)
+# Correlation coefficent (No zeroes)
+MacVe3 %<>% mutate_if(is.character, as.numeric)
+
+correlation2(MacVe3,8,TRUE)
+
+#Adding "superspreading" count
+MacVe3[is.na(MacVe3)] <- 0
+MacVe3 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(MacVe3)) {
+    for(j in 8:(ncol(MacVe8)-1)){
+      parasite <- pull(MacVe3, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- MacVe3[[i, j]]
+      
+      if(n > 0 & n >= p){
+      MacVe3$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## MacVe4
+MacVe4 %<>% mutate_at(c(8:14), as.numeric)
+# Correlation coefficent (no zeroes)
+MacVe4 %<>% mutate_if(is.character, as.numeric)
+correlation2(MacVe4,8, exclude0 = TRUE)
+
+#Adding "superspreading" count
+MacVe4[is.na(MacVe4)] <- 0
+MacVe4 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(MacVe4)) {
+    for(j in 8:(ncol(MacVe8)-1)){
+      parasite <- pull(MacVe4, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- MacVe4[[i, j]]
+      
+      if(n > 0 & n >= p){
+      MacVe4$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## MacVe5
+MacVe5 %<>% mutate_at(c(8:14), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(MacVe5,8, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(MacVe5,8, exclude0 = TRUE)
+
+#Adding "superspreading" count
+MacVe5[is.na(MacVe5)] <- 0
+MacVe5 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(MacVe5)) {
+    for(j in 8:(ncol(MacVe8)-1)){
+      parasite <- pull(MacVe5, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- MacVe5[[i, j]]
+      
+      if(n > 0 & n >= p){
+      MacVe5$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+
+## MacVe6
+MacVe6 %<>% mutate_at(c(8:14), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(MacVe6,8, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(MacVe6,8, exclude0 = TRUE)
+
+#Adding "superspreading" count
+MacVe6[is.na(MacVe6)] <- 0
+MacVe6 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(MacVe6)) {
+    for(j in 8:(ncol(MacVe8)-1)){
+      parasite <- pull(MacVe6, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- MacVe6[[i, j]]
+      
+      if(n > 0 & n >= p){
+      MacVe6$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## MacVe7
+MacVe7 %<>% mutate_at(c(8:14), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(MacVe7,8, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(MacVe7,8, exclude0 = TRUE)
+
+#Adding "superspreading" count
+MacVe7[is.na(MacVe7)] <- 0
+MacVe7 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(MacVe7)) {
+    for(j in 8:(ncol(MacVe8)-1)){
+      parasite <- pull(MacVe7, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- MacVe7[[i, j]]
+      
+      if(n > 0 & n >= p){
+      MacVe7$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## MacVe8
+MacVe8 %<>% mutate_at(c(8:14), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(MacVe8,8, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(MacVe8,8, exclude0 = TRUE)
+
+#Adding "superspreading" count
+MacVe8[is.na(MacVe8)] <- 0
+MacVe8 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(MacVe8)) {
+    for(j in 8:(ncol(MacVe8)-1)){
+      parasite <- pull(MacVe8, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- MacVe8[[i, j]]
+      
+      if(n > 0 & n >= p){
+      MacVe8$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## MacVe9
+MacVe9 %<>% mutate_at(c(8:14), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(MacVe9,8, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(MacVe9,8, exclude0 = TRUE)
+
+#Adding "superspreading" count
+MacVe9[is.na(MacVe9)] <- 0
+MacVe9 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(MacVe9)) {
+    for(j in 8:(ncol(MacVe9)-1)){
+      parasite <- pull(MacVe9, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- MacVe9[[i, j]]
+      
+      if(n > 0 & n >= p){
+      MacVe9$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+#combine MacVe
+MacVe_all <- bind_rows(MacVe1, MacVe2, MacVe3, MacVe4, MacVe5, MacVe6, MacVe7, MacVe8, MacVe9) %>% relocate(`Superspreading Count`, .after = Individual)  %>% add_column("Host Species" = "Gobiomorphus cotidianus", .before ="Individual")
+MacVe_all%<>% rename("Length (cm)" = 4) %>% rename("Weight (g)" = 5) %>% mutate_at(c(4:5), as.numeric)
+MacVe_all$`Length (cm)` <- (MacVe_all$`Length (cm)`) / 10
+
+MacVe_all$Individual %<>% as.character()
+```
+
+```{r Munoz analysis}
+## Munoz1
+# Correlation coefficent (including zeros)
+correlation(Munoz1,4, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Munoz1,5, exclude0 = TRUE)
+
+#Taxonomy
+Munoz1 %>% select(-(19)) %>% select(-(22)) %>% Parasite_Taxonomy(., 4)
+
+#Adding "superspreading" count
+Munoz1[is.na(Munoz1)] <- 0
+Munoz1 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Munoz1)) {
+    for(j in 5:(ncol(Munoz1)-1)){
+      parasite <- pull(Munoz1, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Munoz1[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Munoz1$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Munoz2
+# Correlation coefficent (including zeros)
+correlation(Munoz2,4, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Munoz2,8, exclude0 = TRUE)
+
+#Taxonomy
+Munoz2 %>% rename("Transvena annulospinos" = `T.annulospinosa`) %>% rename("Argathona macronema" = `A. macronema`) %>% Parasite_Taxonomy(., 4)
+
+#Adding "superspreading" count
+Munoz2[is.na(Munoz2)] <- 0
+Munoz2 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Munoz2)) {
+    for(j in 5:(ncol(Munoz2)-1)){
+      parasite <- pull(Munoz2, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Munoz2[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Munoz2$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Munoz3
+# Correlation coefficent (including zeros)
+correlation(Munoz3,4, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Munoz3,8, exclude0 = TRUE)
+
+#Taxonomy
+Munoz3 %>% rename("Argathona macronema" = `A. macronema`) %>% Parasite_Taxonomy(., 4)
+
+#Adding "superspreading" count
+Munoz3[is.na(Munoz3)] <- 0
+Munoz3 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Munoz3)) {
+    for(j in 5:(ncol(Munoz3)-1)){
+      parasite <- pull(Munoz3, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Munoz3[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Munoz3$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Munoz4
+# Correlation coefficent (including zeros)
+correlation(Munoz4,4, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Munoz4,9, exclude0 = TRUE)
+
+#Adding "superspreading" count
+Munoz4[is.na(Munoz4)] <- 0
+Munoz4 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Munoz4)) {
+    for(j in 5:(ncol(Munoz4)-1)){
+      parasite <- pull(Munoz4, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Munoz4[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Munoz4$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Munoz5
+# Correlation coefficent (including zeros)
+correlation(Munoz5,4, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Munoz5,10, exclude0 = TRUE)
+
+#Adding "superspreading" count
+Munoz5[is.na(Munoz5)] <- 0
+Munoz5 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Munoz5)) {
+    for(j in 5:(ncol(Munoz5)-1)){
+      parasite <- pull(Munoz5, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Munoz5[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Munoz5$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Munoz6
+# Correlation coefficent (including zeros)
+correlation(Munoz6,4, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Munoz6,7, exclude0 = TRUE)
+
+#Adding "superspreading" count
+Munoz6[is.na(Munoz6)] <- 0
+Munoz6 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Munoz6)) {
+    for(j in 5:(ncol(Munoz6)-1)){
+      parasite <- pull(Munoz6, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Munoz6[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Munoz6$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Munoz7
+# Correlation coefficent (including zeros)
+correlation(Munoz7,4, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Munoz7,5, exclude0 = TRUE)
+
+#Adding "superspreading" count
+Munoz7[is.na(Munoz7)] <- 0
+Munoz7 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Munoz7)) {
+    for(j in 4:(ncol(Munoz7)-1)){
+      parasite <- pull(Munoz7, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Munoz7[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Munoz7$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Munoz8
+# Correlation coefficent (including zeros)
+correlation(Munoz8,4, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Munoz8,8, exclude0 = TRUE)
+
+#Adding "superspreading" count
+Munoz8[is.na(Munoz8)] <- 0
+Munoz8 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Munoz8)) {
+    for(j in 4:(ncol(Munoz8)-1)){
+      parasite <- pull(Munoz8, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Munoz8[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Munoz8$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Munoz9
+# Correlation coefficent (including zeros)
+correlation(Munoz9,4, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Munoz9,9, exclude0 = TRUE)
+
+#Adding "superspreading" count
+Munoz9[is.na(Munoz9)] <- 0
+Munoz9 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Munoz9)) {
+    for(j in 4:(ncol(Munoz9)-1)){
+      parasite <- pull(Munoz9, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Munoz9[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Munoz9$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Munoz10
+# Correlation coefficent (including zeros)
+correlation(Munoz10,4, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Munoz10,5, exclude0 = TRUE)
+
+#Adding "superspreading" count
+Munoz10[is.na(Munoz10)] <- 0
+Munoz10 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Munoz10)) {
+    for(j in 4:(ncol(Munoz10)-1)){
+      parasite <- pull(Munoz10, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Munoz10[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Munoz10$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Munoz11
+# Correlation coefficent (including zeros)
+correlation(Munoz11,4, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Munoz11,5, exclude0 = TRUE)
+
+#Adding "superspreading" count
+Munoz11[is.na(Munoz11)] <- 0
+Munoz11 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Munoz11)) {
+    for(j in 4:(ncol(Munoz11)-1)){
+      parasite <- pull(Munoz11, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Munoz11[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Munoz11$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Munoz12
+# Correlation coefficent (including zeros)
+correlation(Munoz12,4, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Munoz12,7, exclude0 = TRUE)
+
+#Adding "superspreading" count
+Munoz12[is.na(Munoz12)] <- 0
+Munoz12 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Munoz12)) {
+    for(j in 4:(ncol(Munoz12)-1)){
+      parasite <- pull(Munoz12, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Munoz12[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Munoz12$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Munoz13
+# Correlation coefficent (including zeros)
+correlation(Munoz13,4, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation(Munoz13,5, exclude0 = TRUE)
+
+#Adding "superspreading" count
+Munoz13[is.na(Munoz13)] <- 0
+Munoz13 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Munoz13)) {
+    for(j in 4:(ncol(Munoz13)-1)){
+      parasite <- pull(Munoz13, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Munoz13[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Munoz13$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Munoz14
+# Correlation coefficent (including zeros)
+correlation(Munoz14,4, exclude0 = FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Munoz14,5, exclude0 = TRUE)
+
+#Adding "superspreading" count
+Munoz14[is.na(Munoz14)] <- 0
+Munoz14 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Munoz14)) {
+    for(j in 4:(ncol(Munoz14)-1)){
+      parasite <- pull(Munoz14, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Munoz14[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Munoz14$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+#combine Munoz
+Munoz_all <- bind_rows(Munoz1, Munoz2, Munoz3, Munoz4, Munoz5, Munoz6, Munoz7, Munoz8, Munoz9, Munoz10, Munoz11, Munoz12, Munoz13, Munoz14) %>% relocate(`Superspreading Count`, .after = Individual)
+
+Munoz_all$Individual %<>% as.character()
+```
+
+```{r Luque Analysis}
+## Luque1
+Luq1 %<>% mutate_at(c(2:8), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Luq1, 3, FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Luq1, 3, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Luq1, 3)
+
+#Adding "superspreading" count
+Luq1[is.na(Luq1)] <- 0
+Luq1 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq1)) {
+    for(j in 4:(ncol(Luq1)-1)){
+      parasite <- pull(Luq1, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq1[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq1$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque2
+Luq2 %<>% mutate_at(c(2:8), as.numeric)
+# Correlation coefficent (including zeros)
+correlation(Luq2, 3, FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Luq2, 3, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Luq2, 3)
+
+#Adding "superspreading" count
+Luq2[is.na(Luq2)] <- 0
+Luq2 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq2)) {
+    for(j in 4:(ncol(Luq2)-1)){
+      parasite <- pull(Luq2, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq2[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq2$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque3
+# Correlation coefficent (including zeros)
+correlation(Luq3, 3, FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Luq3, 3, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Luq3, 3)
+
+#Adding "superspreading" count
+Luq3 %<>% mutate_at(c(2:14), as.numeric)
+Luq3[is.na(Luq3)] <- 0
+Luq3 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq3)) {
+    for(j in 4:(ncol(Luq3)-1)){
+      parasite <- pull(Luq3, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq3[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq3$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+
+## Luque4
+# Correlation coefficent (including zeros)
+correlation(Luq4, 3, FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Luq4, 3, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Luq4, 3)
+
+#Adding "superspreading" count
+Luq4 %<>% mutate_at(c(2:10), as.numeric)
+Luq4[is.na(Luq4)] <- 0
+Luq4 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq4)) {
+    for(j in 4:(ncol(Luq4)-1)){
+      parasite <- pull(Luq4, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq4[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq4$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque5
+# Correlation coefficent (including zeros)
+correlation(Luq5, 3, FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Luq5, 3, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Luq5, 3)
+
+#Adding "superspreading" count
+Luq5 %<>% mutate_at(c(2:9), as.numeric)
+Luq5[is.na(Luq5)] <- 0
+Luq5 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq5)) {
+    for(j in 4:(ncol(Luq5)-1)){
+      parasite <- pull(Luq5, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq5[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq5$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque6
+# Correlation coefficent (including zeros)
+correlation(Luq6, 3, FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Luq6, 3, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Luq6, 3)
+
+#Adding "superspreading" count
+Luq6 %<>% mutate_at(c(2:10), as.numeric)
+Luq6[is.na(Luq6)] <- 0
+Luq6 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq6)) {
+    for(j in 4:(ncol(Luq6)-1)){
+      parasite <- pull(Luq6, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq6[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq6$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque7
+# Correlation coefficent (including zeros)
+correlation(Luq7, 3, FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Luq7, 3, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Luq7, 3)
+
+#Adding "superspreading" count
+Luq7 %<>% mutate_at(c(2:7), as.numeric)
+Luq7[is.na(Luq7)] <- 0
+Luq7 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq7)) {
+    for(j in 4:(ncol(Luq7)-1)){
+      parasite <- pull(Luq7, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq7[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq7$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque8
+# Correlation coefficent (including zeros)
+correlation(Luq8, 3, FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Luq8, 3, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Luq8, 3)
+
+#Adding "superspreading" count
+Luq8 %<>% mutate_at(c(2:10), as.numeric)
+Luq8[is.na(Luq8)] <- 0
+Luq8 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq8)) {
+    for(j in 4:(ncol(Luq8)-1)){
+      parasite <- pull(Luq8, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq8[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq8$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque9
+Luq9 %<>% select(-(14))
+# Correlation coefficent (including zeros)
+correlation(Luq9, 3, FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Luq9, 3, TRUE)
+
+#Taxonomy
+Luq9 %>% rename(Abyssopedunculus = `Opecoelid (1)`) %>% rename(Anisoporus = `Opecoelid (2)`) %>% Parasite_Taxonomy(., 3)
+
+#Adding "superspreading" count
+Luq9 %<>% mutate_at(c(2:16), as.numeric)
+Luq9[is.na(Luq9)] <- 0
+Luq9 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq9)) {
+    for(j in 4:(ncol(Luq9)-1)){
+      parasite <- pull(Luq9, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq9[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq9$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque10
+# Correlation coefficent (including zeros)
+correlation(Luq10, 3, FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Luq10, 3, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Luq10, 3)
+
+#Adding "superspreading" count
+Luq10 %<>% mutate_at(c(2:9), as.numeric)
+Luq10[is.na(Luq10)] <- 0
+Luq10 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq10)) {
+    for(j in 4:(ncol(Luq10)-1)){
+      parasite <- pull(Luq10, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq10[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq10$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque11
+# Correlation coefficent (including zeros)
+correlation(Luq11, 3, FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Luq11, 3, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Luq11, 3)
+
+#Adding "superspreading" count
+Luq11 %<>% mutate_at(c(2:7), as.numeric)
+Luq11[is.na(Luq11)] <- 0
+Luq11 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq11)) {
+    for(j in 4:(ncol(Luq11)-1)){
+      parasite <- pull(Luq11, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq11[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq11$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque12
+# Correlation coefficent (including zeros)
+correlation(Luq12, 3, FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Luq12, 3, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Luq12, 3)
+
+#Adding "superspreading" count
+Luq12 %<>% mutate_at(c(2:8), as.numeric)
+Luq12[is.na(Luq12)] <- 0
+Luq12 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq12)) {
+    for(j in 4:(ncol(Luq12)-1)){
+      parasite <- pull(Luq12, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq12[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq12$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque13
+# Correlation coefficent (including zeros)
+correlation(Luq13, 3, FALSE)
+
+# Correlation coefficent (excluding zeros)
+correlation2(Luq13, 3, TRUE)
+
+#Taxonomy
+Parasite_Taxonomy(Luq13, 3)
+
+#Adding "superspreading" count
+Luq13 %<>% mutate_at(c(2:11), as.numeric)
+Luq13[is.na(Luq13)] <- 0
+Luq13 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq13)) {
+    for(j in 4:(ncol(Luq13)-1)){
+      parasite <- pull(Luq13, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq13[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq13$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque14
+correlation(Luq14, 3, FALSE) # Correlation coefficent (including zeros) 
+
+correlation(Luq14, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq14, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq14 %<>% mutate_at(c(2:10), as.numeric)
+Luq14[is.na(Luq14)] <- 0
+Luq14 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq14)) {
+    for(j in 4:(ncol(Luq14)-1)){
+      parasite <- pull(Luq14, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq14[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq14$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque15
+correlation(Luq15, 3, FALSE) # Correlation coefficent (including zeros) 
+correlation2(Luq15, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq15, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq15 %<>% mutate_at(c(2:12), as.numeric)
+Luq15[is.na(Luq15)] <- 0
+Luq15 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq15)) {
+    for(j in 4:(ncol(Luq15)-1)){
+      parasite <- pull(Luq15, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq15[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq15$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque16
+correlation(Luq16, 3, FALSE) # Correlation coefficent (including zeros) 
+
+correlation2(Luq16, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq16, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq16 %<>% mutate_at(c(2:13), as.numeric)
+Luq16[is.na(Luq16)] <- 0
+Luq16 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq16)) {
+    for(j in 4:(ncol(Luq16)-1)){
+      parasite <- pull(Luq16, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq16[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq16$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque17
+correlation(Luq17, 3, FALSE) # Correlation coefficent (including zeros)
+
+correlation2(Luq17, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq17, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq17 %<>% mutate_at(c(2:15), as.numeric)
+Luq17[is.na(Luq17)] <- 0
+Luq17 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq17)) {
+    for(j in 4:(ncol(Luq17)-1)){
+      parasite <- pull(Luq17, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq17[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq17$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque18
+correlation(Luq18, 3, FALSE) # Correlation coefficent (including zeros) 
+correlation2(Luq18, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq18, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq18 %<>% mutate_at(c(2:8), as.numeric)
+Luq18[is.na(Luq18)] <- 0
+Luq18 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq18)) {
+    for(j in 4:(ncol(Luq18)-1)){
+      parasite <- pull(Luq18, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq18[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq18$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque19
+correlation(Luq19, 3, FALSE) # Correlation coefficent (including zeros)
+
+correlation2(Luq19, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq19, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq19 %<>% mutate_at(c(2:8), as.numeric)
+Luq19[is.na(Luq19)] <- 0
+Luq19 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq19)) {
+    for(j in 4:(ncol(Luq19)-1)){
+      parasite <- pull(Luq19, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq19[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq19$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque20
+correlation(Luq20, 3, FALSE) # Correlation coefficent (including zeros)
+
+correlation2(Luq20, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq20, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq20 %<>% mutate_at(c(2:9), as.numeric)
+Luq20[is.na(Luq20)] <- 0
+Luq20 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq20)) {
+    for(j in 4:(ncol(Luq20)-1)){
+      parasite <- pull(Luq20, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq20[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq20$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque21
+correlation(Luq21, 3, FALSE) # Correlation coefficent (including zeros) 
+correlation2(Luq21, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq21, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq21 %<>% mutate_at(c(2:8), as.numeric)
+Luq21[is.na(Luq21)] <- 0
+Luq21 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq21)) {
+    for(j in 4:(ncol(Luq21)-1)){
+      parasite <- pull(Luq21, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq21[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq21$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque22
+correlation(Luq22, 3, FALSE) # Correlation coefficent (including zeros)
+
+correlation2(Luq22, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq22, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq22 %<>% mutate_at(c(2:9), as.numeric)
+Luq22[is.na(Luq22)] <- 0
+Luq22 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq22)) {
+    for(j in 4:(ncol(Luq22)-1)){
+      parasite <- pull(Luq22, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq22[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq22$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque23
+correlation(Luq23, 3, FALSE) # Correlation coefficent (including zeros) 
+correlation2(Luq23, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq23, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq23 %<>% mutate_at(c(2:12), as.numeric)
+Luq23[is.na(Luq23)] <- 0
+Luq23 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq23)) {
+    for(j in 4:(ncol(Luq23)-1)){
+      parasite <- pull(Luq23, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq23[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq23$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque24
+correlation(Luq24, 3, FALSE) # Correlation coefficent (including zeros) 
+correlation2(Luq24, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq24, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq24 %<>% mutate_at(c(2:8), as.numeric)
+Luq24[is.na(Luq24)] <- 0
+Luq24 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq24)) {
+    for(j in 4:(ncol(Luq24)-1)){
+      parasite <- pull(Luq24, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq24[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq24$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque25
+correlation(Luq25, 3, FALSE) # Correlation coefficent (including zeros) 
+correlation2(Luq25, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq25, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq25 %<>% mutate_at(c(2:9), as.numeric)
+Luq25[is.na(Luq25)] <- 0
+Luq25 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq25)) {
+    for(j in 4:(ncol(Luq25)-1)){
+      parasite <- pull(Luq25, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq25[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq25$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque26
+correlation(Luq26, 3, FALSE) # Correlation coefficent (including zeros) 
+correlation2(Luq26, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq26, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq26 %<>% mutate_at(c(2:7), as.numeric)
+Luq26[is.na(Luq26)] <- 0
+Luq26 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq26)) {
+    for(j in 4:(ncol(Luq26)-1)){
+      parasite <- pull(Luq26, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq26[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq26$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque27
+correlation(Luq27, 3, FALSE) # Correlation coefficent (including zeros) 
+correlation2(Luq27, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq27, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq27 %<>% mutate_at(c(2:7), as.numeric)
+Luq27[is.na(Luq27)] <- 0
+Luq27 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq27)) {
+    for(j in 4:(ncol(Luq27)-1)){
+      parasite <- pull(Luq27, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq27[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq27$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque28
+correlation(Luq28, 3, FALSE) # Correlation coefficent (including zeros)
+
+correlation2(Luq28, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq28, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq28 %<>% mutate_at(c(2:7), as.numeric)
+Luq28[is.na(Luq28)] <- 0
+Luq28 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq28)) {
+    for(j in 4:(ncol(Luq28)-1)){
+      parasite <- pull(Luq28, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq28[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq28$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque29
+correlation(Luq29, 3, FALSE) # Correlation coefficent (including zeros) 
+correlation2(Luq29, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq29, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq29 %<>% mutate_at(c(2:8), as.numeric)
+Luq29[is.na(Luq29)] <- 0
+Luq29 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq29)) {
+    for(j in 4:(ncol(Luq29)-1)){
+      parasite <- pull(Luq29, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq29[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq29$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque30
+correlation(Luq30, 3, FALSE) # Correlation coefficent (including zeros) 
+correlation2(Luq30, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq30, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq30 %<>% mutate_at(c(2:9), as.numeric)
+Luq30[is.na(Luq30)] <- 0
+Luq30 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq30)) {
+    for(j in 4:(ncol(Luq30)-1)){
+      parasite <- pull(Luq30, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq30[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq30$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque31
+correlation(Luq31, 3, FALSE) # Correlation coefficent (including zeros) 
+correlation2(Luq31, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq31, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq31 %<>% mutate_at(c(2:7), as.numeric)
+Luq31[is.na(Luq31)] <- 0
+Luq31 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq31)) {
+    for(j in 4:(ncol(Luq31)-1)){
+      parasite <- pull(Luq31, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq31[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq31$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque33
+correlation(Luq33, 3, FALSE) # Correlation coefficent (including zeros) 
+correlation2(Luq33, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq33, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq33 %<>% mutate_at(c(2:10), as.numeric)
+Luq33[is.na(Luq33)] <- 0
+Luq33 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq33)) {
+    for(j in 4:(ncol(Luq33)-1)){
+      parasite <- pull(Luq33, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq33[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq33$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque34
+correlation(Luq34, 3, FALSE) # Correlation coefficent (including zeros)
+
+correlation2(Luq34, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq34, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq34 %<>% mutate_at(c(2:8), as.numeric)
+Luq34[is.na(Luq34)] <- 0
+Luq34 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq34)) {
+    for(j in 4:(ncol(Luq34)-1)){
+      parasite <- pull(Luq34, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq34[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq34$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque35
+correlation(Luq35, 3, FALSE) # Correlation coefficent (including zeros)
+
+correlation(Luq35, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq35, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq35 %<>% mutate_at(c(2:10), as.numeric)
+Luq35[is.na(Luq35)] <- 0
+Luq35 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq35)) {
+    for(j in 4:(ncol(Luq35)-1)){
+      parasite <- pull(Luq35, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq35[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq35$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque36
+correlation(Luq36, 3, FALSE) # Correlation coefficent (including zeros) 
+correlation2(Luq36, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq36, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq36 %<>% mutate_at(c(2:12), as.numeric)
+Luq36[is.na(Luq36)] <- 0
+Luq36 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq36)) {
+    for(j in 4:(ncol(Luq36)-1)){
+      parasite <- pull(Luq36, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq36[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq36$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque37
+correlation(Luq37, 3, FALSE) # Correlation coefficent (including zeros) 
+correlation2(Luq37, 3, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq37, 3) #Taxonomy
+
+#Adding "superspreading" count
+Luq37 %<>% mutate_at(c(2:9), as.numeric)
+Luq37[is.na(Luq37)] <- 0
+Luq37 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq37)) {
+    for(j in 4:(ncol(Luq37)-1)){
+      parasite <- pull(Luq37, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq37[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq37$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+## Luque32
+correlation(Luq32, 4, FALSE) # Correlation coefficent (including zeros) 
+correlation2(Luq32, 4, TRUE) # Correlation coefficent (excluding zeros)
+
+Parasite_Taxonomy(Luq32, 4) #Taxonomy
+
+#Adding "superspreading" count
+Luq32 %<>% mutate_at(c(4:33), as.numeric) %>% mutate_at(c(2), as.numeric)
+Luq32[is.na(Luq32)] <- 0
+Luq32 %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(Luq32)) {
+    for(j in 5:(ncol(Luq32)-1)){
+      parasite <- pull(Luq32, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- Luq32[[i, j]]
+      
+      if(n > 0 & n >= p){
+      Luq32$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+
+#combine Luque
+Luq_all <- bind_rows(Luq1, Luq2, Luq3, Luq4, Luq5, Luq6, Luq7, Luq8, Luq9, Luq10, Luq11, Luq12, Luq13, Luq14, Luq15, Luq16, Luq17, Luq18, Luq19, Luq20, Luq21, Luq22, Luq23, Luq24, Luq25, Luq26, Luq27, Luq28, Luq29, Luq30, Luq31, Luq32, Luq33, Luq34, Luq35, Luq36, Luq37) %>% relocate(`Superspreading Count`, .after = Individual) %>% rename("Length (cm)" = 4)
+
+Luq_all$Individual %<>% as.character()
+```
+
+
+```{r pooled data analysis}
+#pool data for logistic regression
+
+logreg <- bind_rows(Dezfuli,Dittmer_all,Giari,Heaphy,Lagrue_all,Luq_all,MacVe_all,Munoz_all,Nichol,Peoples_all,Ruehle_all,valtonen_all)
+
+logreg$`Host Species` %<>% as.factor()
+
+logreg %<>% add_column(logreg.sc = NA) %>% relocate(`Superspreading Count`, .after = Individual) %>% relocate(logreg.sc, .after = `Superspreading Count`) %>% mutate(logreg.sc = ifelse(`Superspreading Count` == 0, 0, logreg.sc))  %>% mutate(logreg.sc = ifelse(`Superspreading Count` == 1, 1, logreg.sc)) %>% mutate(logreg.sc = ifelse(`Superspreading Count` == 2, 2, logreg.sc)) %>% mutate(logreg.sc = ifelse(`Superspreading Count` == 3, 3, logreg.sc)) %>% mutate(logreg.sc = ifelse(`Superspreading Count` >= 4, 4, logreg.sc))
+
+percentM <- table(logreg$logreg.sc)
+prop.table(percentM)
+
+logreg$logreg.sc %<>% as.factor()
+
+model <- glm(logreg.sc ~ `Length (cm)` + `Weight (g)`,family="binomial",data=logreg)
+summary(model)
+
+##Example quadrants
+percent1 <- quantile(Giari[9], probs = 0.8, na.rm = TRUE) %>% unname()
+percent2 <- quantile(Giari[10], probs = 0.8, na.rm = TRUE) %>% unname()
+
+pair <- Giari %>% select(9:10) 
+pair %<>% add_column(Superspreading = NA) %>% mutate(`Superspreading` = ifelse(`Deropristis inflata` >= percent1 & `Helicometra fasciata` => percent1, Both, `Superspreading`))
+
+#open datasets of correlation coefficients
+
+  #Dezfuli
+Dezfuli_analysis <- read_excel("data analysis.xlsx", sheet = "Dezfuli")%>% mutate_at(c(4:7), as.numeric) %>% add_column(Dataset = "Dezfuli")
+
+  #Dittmer
+Dittmer_analysis <- read_excel("data analysis.xlsx", sheet = "Dittmer1-2") %>% mutate_at(c(5:7), as.numeric)
+
+  #Giari
+Giari_analysis <- read_excel("data analysis.xlsx", sheet = "Giari") %>% mutate_at(c(4:7), as.numeric) %>% add_column(Dataset = "Giari")
+
+#Heaphy (one parasite pair)
+Heaphy_analysis <- read_excel("data analysis.xlsx", sheet = "Heaphy") %>% mutate_at(c(4:7), as.numeric) %>% add_column(Dataset = "Heaphy")
+
+  #Lagrue
+Lagrue_analysis <- read_excel("data analysis.xlsx", sheet = "Lagrue") %>% mutate_at(c(5:7), as.numeric) %>%  mutate_at(c('Dataset'), as.factor)
+
+  #Luque
+Luque_analysis <- read_excel("data analysis.xlsx", sheet = "Luque") %>% mutate_at(c(5:8), as.numeric) %>%  mutate_at(c('Dataset'), as.factor)
+
+  #Maceda_Veiga
+MacVe_analysis <- read_excel("data analysis.xlsx", sheet = "Maceda_Veiga") %>% mutate_at(c(5:7), as.numeric) %>%  mutate_at(c('Dataset'), as.factor) 
+
+  #Munoz
+Munoz_analysis <- read_excel("data analysis.xlsx", sheet = "Muñoz") %>% mutate_at(c(5:8), as.numeric) %>%  mutate_at(c('Dataset'), as.factor)
+
+  #Nichol
+Nichol_analysis <- read_excel("data analysis.xlsx", sheet = "Nichol") %>% mutate_at(c(4:7), as.numeric) %>% add_column(Dataset = "Nichol") %>% mutate_at(c('Dataset'), as.factor)
+
+  #Ruehle
+Ruehle_analysis <- read_excel("data analysis.xlsx", sheet = "Ruehle1+2+3") %>% mutate_at(c(4:7), as.numeric) %>% add_column(Dataset = "Ruehle") %>% mutate_at(c('Dataset'), as.factor)
+
+  #Valtonen
+Valtonen_analysis <- read_excel("data analysis.xlsx", sheet = "Valtonen 1-15") %>% mutate_at(c(5:7), as.numeric) %>% mutate_at(c('Dataset'), as.factor)
+
+##Pool Data and Create Boxplot grouped by Highest Taxonomic Rank
+total_coinfection_analysis <- bind_rows(Dezfuli_analysis,Dittmer_analysis,Giari_analysis,Heaphy_analysis,Lagrue_analysis,Luque_analysis,MacVe_analysis,Munoz_analysis,Ruehle_analysis,Valtonen_analysis) %>% relocate(Dataset, .before = `Parasite 1`) %>% rename("Highest Shared Taxonomic Rank" = highestSharedRank) %>% drop_na(`Highest Shared Taxonomic Rank`)
+
+total_coinfection_analysis$`Highest Shared Taxonomic Rank` <- factor(total_coinfection_analysis$`Highest Shared Taxonomic Rank` , levels=c("kingdom", "phylum", "class", "order", "family", "genus"))
+
+# only significant correlations
+total_coinfection_analysis %<>% filter(`Spearman's p-value (excluding zeros)` <= 0.05) %>% drop_na(`Highest Shared Taxonomic Rank`)
+
+summary(total_coinfection_analysis)
+
+total_coinfection_analysis %<>% add_column(n = "") %>% mutate(n = ifelse(`Highest Shared Taxonomic Rank` == "kingdom", "n = 38", `n`)) %>% mutate(n = ifelse(`Highest Shared Taxonomic Rank` == "phylum", "n = 8", `n`))  %>% mutate(n = ifelse(`Highest Shared Taxonomic Rank` == "class", "n = 18", `n`)) %>% mutate(n = ifelse(`Highest Shared Taxonomic Rank` == "order", "n = 48", `n`))  %>% mutate(n = ifelse(`Highest Shared Taxonomic Rank` == "family", "n = 1", `n`))  %>% mutate(n = ifelse(`Highest Shared Taxonomic Rank` == "genus", "n = 4", `n`))
+
+total_coinfection_analysis$`n` <- factor(total_coinfection_analysis$`n` , levels=c("n = 38", "n = 8", "n = 18", "n = 48", "n = 1", "n = 4"))
+
+x <- ggplot(total_coinfection_analysis, aes(x=`Highest Shared Taxonomic Rank`, y=`Spearman's Correlation Coefficent (excluding zeroes)`, fill = `n`)) + geom_boxplot() + labs(x="Highest Shared Taxonomic Rank", y = "Spearman's Correlation Coefficent") + theme_classic() + scale_fill_discrete(name = "Number of Observations")
+x
+
+x_aov <- aov(total_coinfection_analysis$`Spearman's Correlation Coefficent (excluding zeroes)`~total_coinfection_analysis$`Highest Shared Taxonomic Rank`)
+x_aov
+
+# all significant correlations
+
+total_coinfection_analysis %<>% drop_na(`Spearman's Correlation Coefficent (excluding zeroes)`)
+
+total_coinfection_analysis %<>% add_column(n = "") %>% mutate(n = ifelse(`Highest Shared Taxonomic Rank` == "kingdom", "n = 473", `n`)) %>% mutate(n = ifelse(`Highest Shared Taxonomic Rank` == "phylum", "n = 121", `n`))  %>% mutate(n = ifelse(`Highest Shared Taxonomic Rank` == "class", "n = 59", `n`)) %>% mutate(n = ifelse(`Highest Shared Taxonomic Rank` == "order", "n = 361", `n`))  %>% mutate(n = ifelse(`Highest Shared Taxonomic Rank` == "family", "n = 26", `n`))  %>% mutate(n = ifelse(`Highest Shared Taxonomic Rank` == "genus", "n = 12", `n`))
+
+total_coinfection_analysis$`n` <- factor(total_coinfection_analysis$`n` , levels=c("n = 473", "n = 121", "n = 59", "n = 361", "n = 26", "n = 12"))
+
+z <- ggplot(total_coinfection_analysis, aes(x=`Highest Shared Taxonomic Rank`, y=`Spearman's Correlation Coefficent (excluding zeroes)`, fill = `n`)) + geom_boxplot() + labs(x="Highest Shared Taxonomic Rank", y = "Spearman's Correlation Coefficent") + theme_classic() + scale_fill_discrete(name = "Number of Observations") + geom_hline(yintercept=0,linetype=2) + theme(axis.text=element_text(size=14),axis.title=element_text(size=14),legend.title=element_text(size=14),legend.text=element_text(size=13))
+z
+
+#ANOVA Test
+total_coinfection_analysis %<>% add_column(ANOVE = "") %>% mutate(`ANOVA` = ifelse(grepl("kingdom", total_coinfection_analysis$`Highest Shared Taxonomic Rank`) | grepl("phylum", total_coinfection_analysis$`Highest Shared Taxonomic Rank`)|grepl("class", total_coinfection_analysis$`Highest Shared Taxonomic Rank`) |grepl("order", total_coinfection_analysis$`Highest Shared Taxonomic Rank`), "Shared Higher Rank", `ANOVA`)) %>% mutate(`ANOVA` = ifelse(grepl("genus", total_coinfection_analysis$`Highest Shared Taxonomic Rank`),"Shared genus", `ANOVA`)) %>% mutate(`ANOVA` = ifelse(grepl("family", total_coinfection_analysis$`Highest Shared Taxonomic Rank`),"Shared family", `ANOVA`)) 
+
+total_coinfection_analysis$ANOVA %<>% as.factor()
+
+
+z_aov <- aov(`Spearman's Correlation Coefficent (excluding zeroes)` ~ `ANOVA` + `Highest Shared Taxonomic Rank`, data = total_coinfection_analysis)
+summary(z_aov)
+
+summary(total_coinfection_analysis)
+
+``` 
+
+
+
+
+
