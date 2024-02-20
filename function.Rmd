@@ -1,0 +1,264 @@
+---
+title: "function"
+output: html_document
+date: "2023-06-26"
+---
+
+```{r setup, include=FALSE}
+install.packages("ggplot2")       
+install.packages("GGally")
+library("ggplot2")                     
+library("GGally")
+```
+
+```{r function/loop practice}
+
+## creating a function that returns the plot for each parasite pair
+
+coinfection <- function(data, i, j, P1_cutoff, P2_cutoff){
+      
+      plot <- data %>% select(c(P1_index,j)) %>% filter_if(., is.numeric, all_vars((.) != 0))
+      %>% ggplot(., aes(get(names(data)[P1_index]), get(names(data)[P2_index]))) + geom_point(aes(color=`Superspreading`)) + xlab(colnames(data)[P1_index]) + ylab(colnames(data)[P2_index]) + geom_smooth()
+      print(plot)
+
+}
+
+
+## creating a function that calculates the correlation coefficent and associated p-value for each parasite pair
+  ## index = the index at which the parasite abundances start at
+  ## exclude0 = whether the zeros should be excluded from the calculations
+correlation <-function(data, index, exclude0){
+  for(i in index:ncol(data)){
+    for(j in i+1:ncol(data)){
+      tryCatch(
+      if (j != i & j <= ncol(data) & exclude0 == FALSE) {
+      
+      cat("Parasite 1:", colnames(data)[i], "\n")
+      cat("Parasite 2:", colnames(data)[j], "\n")
+      
+      P1 <- pull(data, i)
+      P2 <- pull(data, j)
+    
+      result <- cor.test(P1,P2, method = "spearman")
+      cat("The pearson's correlation coefficent is", result$estimate, "\n")
+      cat("The p-value is", result$p.value, "\n\n")
+      }
+      ,error=function(e){cat("ERROR: Not enough finite observations", "\n\n")})
+      tryCatch(
+      if (j != i & j <= ncol(data) & exclude0 == TRUE) {
+        
+      cat("Parasite 1:", colnames(data)[i], "\n")
+      cat("Parasite 2:", colnames(data)[j], "\n")
+      
+      data0 <- data %>% select(c(i,j)) %>% filter_if(., is.numeric, all_vars((.) != 0))
+      
+      P1 <- pull(data0, 1)
+      P2 <- pull(data0, 2)
+    
+      result <- cor.test(P1,P2, method = "spearman")
+      cat("The pearson's correlation coefficent is", result$estimate, "\n")
+      cat("The p-value is", result$p.value, "\n\n")
+      }
+      ,error=function(e){cat("ERROR: Not enough finite observations", "\n\n")})
+    }
+  }
+}
+
+percentile <- function(data, index, percentile){
+  myPairs <- tibble(Parasite1=character(0),Parasite2=character(0),Percentile.P1=numeric(0),Percentile.P2=numeric(0))
+ for(i in index:ncol(data)){
+   for(j in i+1:ncol(data)){
+     if (j != i & j <= ncol(data)) {
+    parasite1 <- pull(data, i) 
+    parasite2 <- pull(data, j) 
+    parasite1[parasite1 == 0] <- NA
+    parasite2[parasite2 == 0] <- NA
+    
+    result1 <- quantile(parasite1, probs = percentile, na.rm = TRUE)
+    result2 <- quantile(parasite2, probs = percentile, na.rm = TRUE)
+    
+    myPairs %<>% add_case(Parasite1 = colnames(data)[i],Parasite2 = colnames(data)[j],Percentile.P1 = result1, Percentile.P2 = result2)
+    
+     }
+   }
+ }
+  view(myPairs)
+}
+
+Parasite_Taxonomy <- function(data, index){
+para <- colnames(data[index:ncol(data)])
+
+paraTaxa <- taxize::classification(para,db="gbif")
+
+myTaxa <- tibble(kingdom=character(0),
+                 phylum=character(0),
+                 class=character(0),
+                 order=character(0),
+                 family=character(0),
+                 genus=character(0))
+
+for (i in 1:length(paraTaxa)){
+  thisDf <- paraTaxa[[i]]
+  kingdom <- thisDf$name[which(thisDf$rank=="kingdom")]
+  phylum <- thisDf$name[which(thisDf$rank=="phylum")]
+  class <- thisDf$name[which(thisDf$rank=="class")]
+  order <- thisDf$name[which(thisDf$rank=="order")]
+  family <- thisDf$name[which(thisDf$rank=="family")]
+  genus <- thisDf$name[which(thisDf$rank=="genus")]
+  species <- thisDf$name[which(thisDf$rank=="species")]
+ 
+  myTaxa %<>% add_case(kingdom=kingdom,phylum=phylum,class=class,order=order,family=family,genus=genus)
+}
+
+
+myPairs <- tibble(sp1=character(0),sp2=character(0),highestSharedRank=character(0))
+
+for (i in 1:dim(myTaxa)[1]){
+  for (j in i:dim(myTaxa)[1]){
+    if (i!=j){
+      sp1 <- myTaxa$genus[i]
+      sp2 <- myTaxa$genus[j]
+      rnkTF <- NULL
+      for (k in 1:6){#the 7 taxonomic ranks
+        rnkTF <- c(rnkTF,myTaxa[i,k]==myTaxa[j,k])
+      }
+      highestSharedRank <- colnames(myTaxa)[which(diff(rnkTF)==-1)]
+      myPairs %<>% add_case(sp1=sp1,sp2=sp2,highestSharedRank=highestSharedRank)
+    }
+  }
+}
+view(myPairs)
+view(myTaxa)
+}
+
+percentile2 <- function(data, index){
+  myPairs <- tibble(Parasite1=character(0),Parasite2=character(0),Percentile.P150=numeric(0),Percentile.P250=numeric(0),Percentile.P180=numeric(0),Percentile.P280=numeric(0))
+ for(i in index:ncol(data)){
+   for(j in i+1:ncol(data)){
+     if (j != i & j <= ncol(data)) {
+    parasite1 <- pull(data, i) 
+    parasite2 <- pull(data, j) 
+    parasite1[parasite1 == 0] <- NA
+    parasite2[parasite2 == 0] <- NA
+    
+    result1 <- quantile(parasite1, probs = 0.5, na.rm = TRUE)
+    result2 <- quantile(parasite2, probs = 0.5, na.rm = TRUE)
+    result3 <- quantile(parasite1, probs = 0.8, na.rm = TRUE)
+    result4 <- quantile(parasite2, probs = 0.8, na.rm = TRUE)
+    
+    myPairs %<>% add_case(Parasite1 = colnames(data)[i],Parasite2 = colnames(data)[j],Percentile.P150 = result1, Percentile.P250 = result2,Percentile.P180 = result3, Percentile.P280 = result4)
+    
+     }
+   }
+ }
+  view(myPairs)
+}
+
+correlation2 <-function(data, index, exclude0){
+cc_pairs <- tibble(sp1=character(0),sp2=character(0),cc=numeric(0), p.value=numeric(0))
+  for(i in index:ncol(data)){
+    for(j in i+1:ncol(data)){
+      tryCatch(
+      if (j != i & j <= ncol(data) & exclude0 == FALSE) {
+      
+      name1 <- colnames(data)[i]
+      name2 <- colnames(data)[j]
+      
+      P1 <- pull(data, i)
+      P2 <- pull(data, j)
+    
+      result <- cor.test(P1,P2, method = "spearman", exact = FALSE)
+      cc <-result$estimate %>% unname()
+      p.value <- result$p.value
+      cc_pairs %<>% add_case(sp1=name1,sp2=name2,cc=cc,p.value=p.value)
+      }
+      ,error=function(e){
+        cc_pairs %<>% add_case(sp1=name1,sp2=name2)
+      })
+      tryCatch(
+      if (j != i & j <= ncol(data) & exclude0 == TRUE) {
+        
+     name1 <-  colnames(data)[i]
+     name2 <-  colnames(data)[j]
+      
+      data0 <- data %>% select(c(i,j)) %>% filter_if(., is.numeric, all_vars((.) != 0))
+      
+      P1 <- pull(data0, 1)
+      P2 <- pull(data0, 2)
+    
+      result <- cor.test(P1,P2, method = "spearman", exact = FALSE)
+      cc <-result$estimate %>% unname()
+      p.value <- result$p.value
+      cc_pairs %<>% add_case(sp1=name1,sp2=name2,cc=cc,p.value=p.value)
+      }
+      ,error=function(e){
+      cc_pairs %<>% add_case(sp1=name1,sp2=name2)
+      })
+    }
+  }
+ view(cc_pairs)
+}
+
+superspreading <- function(data, index){
+  data %<>% add_column("Superspreading Count" = 0)
+  for(i in 1:nrow(data)) {
+    for(j in index:ncol(data)-1){
+      parasite <- pull(data, j)
+      parasite[parasite == 0] <- NA 
+      p <- quantile(parasite, probs = 0.8, na.rm = TRUE) %>% unname()
+      
+      n <- data[[i, j]]
+      
+      if(n > 0 & n >= p){
+      data$`Superspreading Count`[i] %<>% +1   
+      }
+    }
+  }
+  view(data)
+}
+```
+
+```{r plot examples}
+## superspreading plot
+
+    parasite1 <- pull(Ruehle_all, 6) 
+    parasite2 <- pull(Ruehle_all, 7) 
+    parasite1[parasite1 == 0] <- NA
+    parasite2[parasite2 == 0] <- NA
+    
+    result1 <- quantile(parasite1, probs = 0.8, na.rm = TRUE) %>% unname()
+    result2 <- quantile(parasite2, probs = 0.8, na.rm = TRUE) %>% unname()
+    
+example_plot <- Ruehle_all %>% select(6:7) %>% add_column("Superspreading"=NA) %>% mutate(Superspreading = ifelse(`Tylodelphys darbyi` >= result1 & `Apatemon jamiesoni` >= result2, "Both parasites", "Neither parasite")) %>% mutate(Superspreading = ifelse(`Tylodelphys darbyi` < result1 & `Apatemon jamiesoni` >= result2, "Apatemon jamiesoni", Superspreading)) %>% mutate(Superspreading = ifelse(`Tylodelphys darbyi` >= result1 & `Apatemon jamiesoni` < result2, "Tylodelphys darbyi", Superspreading)) %>% filter_if(., is.numeric, all_vars((.) != 0))
+example_plot$Superspreading <- factor(example_plot$Superspreading , levels=c("Neither parasite", "Apatemon jamiesoni", "Tylodelphys darbyi", "Both parasites"))
+
+example <- ggplot(example_plot, aes(`Tylodelphys darbyi`,`Apatemon jamiesoni`)) + geom_point(aes(color=`Superspreading`)) + xlab("Tylodelphys darbyi") + ylab("Apatemon jamiesoni") + geom_vline(xintercept=result1,linetype=2) + geom_hline(yintercept=result2,linetype=2) + theme(legend.position = c(0.8,0.35),axis.text=element_text(size=12),axis.title=element_text(size=14),legend.title=element_text(size=10),legend.text=element_text(size=10))
+
+example
+
+percentR <- table(Ruehle_all_plot$Superspreading)
+prop.table(percentR)
+
+#Tylodelphys sp. and Stegodexamene anguillae 
+MacVe2_plot <- MacVe2 %>% select(10,12) %>% add_column("Superspreading"=NA) %>% mutate(Superspreading = ifelse(`Tylodelphys sp.` >= 3 & `Stegodexamene anguillae` >= 6, "Both", "Neither")) %>% mutate(Superspreading = ifelse(`Tylodelphys sp.` < 3 & `Stegodexamene anguillae` >= 6, "Stegodexamene anguillae", Superspreading)) %>% mutate(Superspreading = ifelse(`Tylodelphys sp.` >= 3 & `Stegodexamene anguillae` < 6, "Tylodelphys sp.", Superspreading)) %>% filter_if(., is.numeric, all_vars((.) != 0))
+MacVe2_plot$Superspreading %<>% as.factor()
+
+ggplot(MacVe2_plot, aes(MacVe2_plot$`Tylodelphys sp.`, MacVe2_plot$`Stegodexamene anguillae`)) + geom_point(aes(color=`Superspreading`)) + xlab("Tylodelphys sp.") + ylab("Stegodexamene anguillae")
+
+percentM <- table(MacVe2_plot$Superspreading)
+prop.table(percentM)
+```
+
+```{r taxonomy}
+
+data0 <- Dezfuli %>% select(c(8,9)) %>% filter_if(., is.numeric, all_vars((.) != 0))
+      P1 <- pull(data0, 1)
+      P2 <- pull(data0, 2)
+    
+      result <- cor.test(P1,P2)
+      pc <- result$estimate
+      pc %<>% unname(pc)
+      pv <- result$p.value
+```
+
+
